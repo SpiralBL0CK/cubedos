@@ -4,19 +4,54 @@
 
 This chapter contains documentation about the sample programs provided with Cubed\-OS. These
 programs illustrate various aspects of using CubedOS in the real world that might not be
-covered by the more formal documenation presented so far. New users of CubedOS are encouraged to
+covered by the more formal documentation presented so far. New users of CubedOS are encouraged to
 study, build, execute, and modify the sample programs as a way of learning about the system and
 how it can be used.
 
 \section{Echo Sample}
 \label{sec:echo-sample}
 
-\todo{Finish Me!}
+This section describes the Echo Sample that can be found in the /samples/Echo folder. This sample 
+exemplifies a simple message/reply demo. These messages take place as simple pings back and forth
+between a Client module and a Server module. 
+
+The main.adb of this program has several with clauses to include |Echo_Client.Messages| and 
+|Echo_Server.Messages|. It also uses |Log_Server.Messages| in order for the modules to be capable
+of logging various errors or informational output. This main file contains a single procedure of 
+first priority with a single loop that has a small delay. This loop spends most of its time 
+sleeping, and the real work is done inside the Client and Server modules which are unreferenced in 
+the main itself. 
+
+Both |Echo_Client.ads| and |Echo_Server.ads| have with clauses for |Message_Manager|. These are of
+course unreferenced, but are very important. The package |Message_Manager| creates a new instance 
+with a domain number, module count, mailbox size, and maximum message size. This sets the environment
+for all future message sending. This file also elaborates |CubedOS.Generic_Message_Manager|, which 
+contains all necessary functions and procedures for managing messages. 
+
+|Echo_Client.Messages.adb| implements the main part of its module. At its core, this component sends 
+an initial request message to the server, and continues to send messages each time it gets a reply 
+back. There is a single task called |Message_Loop| in the body. This task first runs the initialize 
+procedure, and then loops while waiting for messages. Inside the initialize procedure is where the 
+first message gets sent. This procedure uses the |Echo_Server.API| to encode a ping request message. 
+The sender address is set to |Name_Resolver.Echo_Client|. The |Name_Resolver.ads| file contains the 
+message addresses for the Client, Server, and Log Server. After initializing, the task starts 
+looping. In each loop, it waits for a message. Once it receives a message, it processes that message
+and sends another.
+
+|Echo_Server.Messages.adb| Has a similar |Message_Loop|. This task does not send an initial message, 
+but instead, has just a loop. The loop waits for a message right away. When one is received, it 
+processes it and sends a reply message using |Echo_Server.API|. Then, it starts the Message loop 
+over again. 
+
+This goes on infinitely. The log server logs information every time a reply is received by the 
+Client. It also logs errors when a message goes wrong. This is to show the user the basic infinitely
+functionality of the log server, and how it can be used with the message manager. 
+
 
 \section{STM32F4 Sample}
 \label{sec:stm32f4-sample}
 
-This section describes the architecture of the the STM32F4 sample that can be found in a folder
+This section describes the architecture of the STM32F4 sample that can be found in a folder
 of the same name in the CubedOS repository. This sample makes use of a simple evaluation board
 from STMicroelectronics. The README file in the STM32F4 folder gives specifics about the board
 and about how to set up the build environment.
@@ -78,9 +113,9 @@ On a system where the base type of |Some_Type| has 32~bits, there is no possibil
 when computing |(B + C)/2| since, at most, |B + C| would be 40,000. However, if a 16~bit base
 type is used, as might be the case on a small microcontroller platform, |B + C| might go outside
 the range of 16~bit signed integers, and an overflow would be possible. The \SPARK\ tools know
-what base types are used by the Ada compiler, but that depends on the platform being targetted
+what base types are used by the Ada compiler, but that depends on the platform being targeted
 by that compiler. It is thus essential to inform the \SPARK\ tools about the target platform so
-that the proofs are relevant and correct for the target context. By default the \SPARK\ tools
+that the proofs are relevant and correct for the target context. By default, the \SPARK\ tools
 will assume the native platform's properties, which might not be appropriate when cross
 compiling.
 
