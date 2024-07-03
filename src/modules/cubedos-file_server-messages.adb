@@ -119,8 +119,10 @@ package body CubedOS.File_Server.Messages is
             exception
                when Octet_IO.End_Error =>
                   CubedOS.Log_Server.API.Log_Message(Name_Resolver.File_Server,
-                                            CubedOS.Log_Server.API.Error,
-                                            "Read request has not been decoded properly!");
+                                            CubedOS.Log_Server.API.Informational,
+                                                     "Less than "&
+                                                       API.Read_Size_Type'Image(Amount) &
+                                                       " octets available to read.");
             end;
             -- Send what we have (could be zero octets!).
             Message_Manager.Route_Message
@@ -158,8 +160,10 @@ package body CubedOS.File_Server.Messages is
             exception
                when Octet_IO.End_Error =>
                   CubedOS.Log_Server.API.Log_Message(Name_Resolver.File_Server,
-                                            CubedOS.Log_Server.API.Error,
-                                            "Write request has not been decoded properly!");
+                                            CubedOS.Log_Server.API.Informational,
+                                                     "Less than "&
+                                                       API.Read_Size_Type'Image(Amount) &
+                                                       " octets available to write.");
             end;
             Message_Manager.Route_Message
               (API.Write_Reply_Encode
