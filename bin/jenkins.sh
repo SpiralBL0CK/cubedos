@@ -49,16 +49,16 @@ echo -e "\nBuild Sample Programs"
 echo      "====================="
 echo -e "\nEcho"
 echo      "----"
-gprbuild -P samples/Echo/echo.gpr samples/Echo/main.adb
+gprbuild -P samples/echo/echo.gpr samples/echo/main.adb
 
 echo -e "\nMulti-Domain"
 echo      "------------"
-gprbuild -P samples/Networking/networking.gpr -XBUILD=DomainA samples/Networking/DomainA/main.adb
-gprbuild -P samples/Networking/networking.gpr -XBUILD=DomainB samples/Networking/DomainB/main.adb
+gprbuild -P samples/networking/networking.gpr -XBUILD=DomainA samples/networking/DomainA/main.adb
+gprbuild -P samples/networking/networking.gpr -XBUILD=DomainB samples/networking/DomainB/main.adb
 
 echo -e "\nPub/Sub Server"
 echo      "--------------"
-gprbuild -P samples/PubSub/pubsub.gpr samples/PubSub/main.adb
+gprbuild -P samples/pubsub/pubsub.gpr samples/pubsub/main.adb
 
 echo -e "\nSTM32F4"
 echo      "-------"
