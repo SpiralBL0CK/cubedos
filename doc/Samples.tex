@@ -11,80 +11,87 @@ how it can be used.
 \section{Echo Sample}
 \label{sec:echo-sample}
 
-This section describes the Echo Sample that can be found in the /samples/Echo folder. This sample 
-exemplifies a simple message/reply demo. These messages take place as simple pings back and forth
-between a Client module and a Server module. 
+This section describes the Echo Sample that can be found in the /samples/Echo folder. This
+sample exemplifies a simple message/reply demo. These messages take place as simple pings back
+and forth between a Client module and a Server module. 
 
-The main.adb of this program has several with clauses to include |Echo_Client.Messages| and 
-|Echo_Server.Messages|. It also uses |Log_Server.Messages| in order for the modules to be capable
-of logging various errors or informational output. This main file contains a single procedure of 
-first priority with a single loop that has a small delay. This loop spends most of its time 
-sleeping, and the real work is done inside the Client and Server modules which are unreferenced in 
-the main itself. 
+The main.adb of this program has several with clauses to include |Echo_Client.Messages| and
+|Echo_Server.Messages|. It also uses |Log_Server.Messages| in order for the modules to be
+capable of logging various errors or informational output. This main file contains a single
+procedure of first priority with a single loop that has a small delay. This loop spends most of
+its time sleeping, and the real work is done inside the Client and Server modules which are
+unreferenced in the main itself. 
 
-Both |Echo_Client.ads| and |Echo_Server.ads| have with clauses for |Message_Manager|. These are of
-course unreferenced, but are very important. The package |Message_Manager| creates a new instance 
-with a domain number, module count, mailbox size, and maximum message size. This sets the environment
-for all future message sending. This file also elaborates |CubedOS.Generic_Message_Manager|, which 
-contains all necessary functions and procedures for managing messages. 
+Both |Echo_Client.ads| and |Echo_Server.ads| have with clauses for |Message_Manager|. These are
+of course unreferenced, but are very important. The package |Message_Manager| creates a new
+instance with a domain number, module count, mailbox size, and maximum message size. This sets
+the environment for all future message sending. This file also elaborates
+|CubedOS.Generic_Message_Manager|, which contains all necessary functions and procedures for
+managing messages. 
 
-|Echo_Client.Messages.adb| implements the main part of its module. At its core, this component sends 
-an initial request message to the server, and continues to send messages each time it gets a reply 
-back. There is a single task called |Message_Loop| in the body. This task first runs the initialize 
-procedure, and then loops while waiting for messages. Inside the initialize procedure is where the 
-first message gets sent. This procedure uses the |Echo_Server.API| to encode a ping request message. 
-The sender address is set to |Name_Resolver.Echo_Client|. The |Name_Resolver.ads| file contains the 
-message addresses for the Client, Server, and Log Server. After initializing, the task starts 
-looping. In each loop, it waits for a message. Once it receives a message, it processes that message
-and sends another.
+|Echo_Client.Messages.adb| implements the main part of its module. At its core, this component
+sends an initial request message to the server, and continues to send messages each time it gets
+a reply back. There is a single task called |Message_Loop| in the body. This task first runs the
+initialize procedure, and then loops while waiting for messages. Inside the initialize procedure
+is where the first message gets sent. This procedure uses the |Echo_Server.API| to encode a ping
+request message. The sender address is set to |Name_Resolver.Echo_Client|. The
+|Name_Resolver.ads| file contains the message addresses for the Client, Server, and Log Server.
+After initializing, the task starts looping. In each loop, it waits for a message. Once it
+receives a message, it processes that message and sends another.
 
-|Echo_Server.Messages.adb| Has a similar |Message_Loop|. This task does not send an initial message, 
-but instead, has just a loop. The loop waits for a message right away. When one is received, it 
-processes it and sends a reply message using |Echo_Server.API|. Then, it starts the Message loop 
-over again. 
+|Echo_Server.Messages.adb| Has a similar |Message_Loop|. This task does not send an initial
+message, but instead, has just a loop. The loop waits for a message right away. When one is
+received, it processes it and sends a reply message using |Echo_Server.API|. Then, it starts the
+Message loop over again. 
 
-This goes on infinitely. The log server logs information every time a reply is received by the 
-Client. It also logs errors when a message goes wrong. This is to show the user the basic infinitely
-functionality of the log server, and how it can be used with the message manager. 
+This goes on infinitely. The log server logs information every time a reply is received by the
+Client. It also logs errors when a message goes wrong. This is to show the user the basic
+infinitely functionality of the log server, and how it can be used with the message manager. 
 
 
 \section{STM32F4 Sample}
 \label{sec:stm32f4-sample}
 
-This section describes the architecture of the STM32F4 sample that can be found in a folder
-of the same name in the CubedOS repository. This sample makes use of a simple evaluation board
-from STMicroelectronics. The README file in the STM32F4 folder gives specifics about the board
-and about how to set up the build environment.
+This section describes the architecture of the STM32F4 sample that can be found in a folder of
+the same name in the CubedOS repository. This sample makes use of a simple evaluation board from
+STMicroelectronics. The README file in the STM32F4 folder gives specifics about the board and
+about how to set up the development environment for it.
 
 The sample program is simple in effect, but written in a way as to illustrate some of CubedOS's
 structure and features. The program flashes the LEDs on the board in a rotating sequence, from
 green to orange to red to blue. The program also watches the user button on the board (the blue
-button). When pressed, the speed of the flashing increases in steps, from low to medium to high
-and then back to low. The program has no other features.
+button). When pressed, the speed of the flashing increases in steps, from low to medium to high.
+The program has no other features.
 
 This program illustrates several things.
 \begin{itemize}
-\item Using CubedOS with a non-native CPU. The sample was developed on a Linux desktop system
+
+  \item Using CubedOS with a non-native CPU. The sample was developed on a Linux desktop system
   running a 64~bit Intel processor. The project, however, is configured to generate code for an
   ARM Cortex M4 CPU. This affects not only the compiler being used, but also the \SPARK\
   configuration used to analyze the code.
-\item Using an embedded platform. The sample makes use of AdaCore's small footprint Ravenscar
-  runtime for the STM32F4 along with a few files provided by AdaCore for accessing the low level
+
+  \item Using a small, bare board embedded platform. The sample makes use of AdaCore's light
+  tasking runtime for the STM32F4 along with a few files provided by AdaCore for accessing the
   hardware on the board. It does not make use of any conventional operating system.
-\item Using CubedOS modules as drivers for onboard hardware. Although this simple application
+
+  \item Using CubedOS modules as drivers for onboard hardware. Although this simple application
   could be more easily programmed without creating driver modules, for purposes of illustration
   it includes two driver modules for the hardware used: an LED driver and a button driver.
-\item Using a CubedOS ``controller'' module as the main module of the program. The controller
-  module responds to events generated on the board by sending messages to other modules as
-  appropriate. The controller thus serves as the main part of the application and encodes the
-  high level application logic. The Ada main procedure contains no application functionality at
-  all. This is a typical for CubedOS applications.
-\item Using the publish/subscribe server, a core CubedOS module, for decoupling event sources
-  (as generated by the button driver) to even sinks (the controller module). This allows the
+
+  \item Using a CubedOS ``controller'' module as the main module of the program. The controller
+  module responds to events generated on the board by sending messages to other modules, as
+  appropriate. The controller serves as the main part of the application and encodes the high
+  level application logic. The Ada main procedure contains no application functionality at all.
+  This is a typical for CubedOS applications.
+
+  \item Using the publish-subscribe server, a core CubedOS module, for decoupling event sources
+  (as generated by the button driver) to event sinks (the controller module). This allows the
   driver modules to be reusable in other applications for this platform. Specifically the button
   driver does not directly interact with the application-specific controller. It could be
-  dropped into another application, along with the core publish/subscribe server module, without
+  dropped into another application, along with the core publish-subscribe server module, without
   modification.
+
 \end{itemize}
 
 In the subsections that follow more details are given about each of these points.
@@ -92,7 +99,7 @@ In the subsections that follow more details are given about each of these points
 \subsection{Non-Native CPU}
 
 The STM32F4 sample uses an ARM Cortex M4 processor. This entails installing the necessary Ada
-cross compiler from AdaCore. The project file specifies the tool chain to be used. The other
+cross-compiler from AdaCore. The project file specifies the tool chain to be used. The other
 important aspect of using a non-native CPU is configuring \SPARK\ to know about the target
 platform attributes. Since the sizes and ranges of the primitive types are often different on
 the embedded platform than on the native platform, the sizes and ranges of the Ada base types
@@ -112,7 +119,7 @@ end;
 On a system where the base type of |Some_Type| has 32~bits, there is no possibility of overflow
 when computing |(B + C)/2| since, at most, |B + C| would be 40,000. However, if a 16~bit base
 type is used, as might be the case on a small microcontroller platform, |B + C| might go outside
-the range of 16~bit signed integers, and an overflow would be possible. The \SPARK\ tools know
+the range of 16-bit signed integers, and an overflow would be possible. The \SPARK\ tools know
 what base types are used by the Ada compiler, but that depends on the platform being targeted
 by that compiler. It is thus essential to inform the \SPARK\ tools about the target platform so
 that the proofs are relevant and correct for the target context. By default, the \SPARK\ tools

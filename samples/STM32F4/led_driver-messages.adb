@@ -9,6 +9,8 @@ pragma SPARK_Mode(On);
 with LEDs;
 with LED_Driver.API;
 with Name_Resolver;
+with CubedOS.Log_Server.API;
+use  CubedOS;
 
 package body LED_Driver.Messages is
    use Message_Manager;
@@ -86,8 +88,8 @@ package body LED_Driver.Messages is
       elsif LED_Driver.API.Is_All_Off_Request(Message) then
          Handle_All_Off_Request(Message);
       else
-         -- An unknown message type has been received. What should be done about that?
-         null;
+         Log_Server.API.Log_Message
+           (Name_Resolver.LED_Driver, Log_Server.API.Warning, "Received unexpected message");
       end if;
    end Process;
 

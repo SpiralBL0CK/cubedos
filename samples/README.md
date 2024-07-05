@@ -35,7 +35,7 @@ CubedOS Samples
   implemented.]
 
 + `STM32F4`: This folder contains a simple demonstration of CubedOS running on the
-  STM32F4-discovery board.
+  STM32F4DISCOVERY board.
 
 + `tests`: I'm not sure what this is. I think it is just a holding area for CubedOS tests that
   need to be integrated into the test program. Once that integration is complete this folder
