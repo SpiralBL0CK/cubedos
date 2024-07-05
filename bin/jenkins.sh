@@ -84,13 +84,34 @@ pdflatex -file-line-error -halt-on-error CubedOS.tex > /dev/null
 pdflatex -file-line-error -halt-on-error CubedOS.tex > /dev/null
 cd ..
 
-echo -e "\nSPARK Analysis"
-echo      "=============="
+echo -e "\nSPARK Analysis (Core)"
+echo      "====================="
 gnatprove -P src/cubedos.gpr --level=2 --mode=silver -j2
+
+echo -e "\nSPARK Analysis (Sample Programs)"
+echo      "================================"
+echo -e "\nEcho"
+echo      "----"
+gnatprove -P samples/echo/echo.gpr --level=2 --mode=silver -j2
+
+echo -e "\nMulti-Domain"
+echo      "------------"
+gnatprove -P samples/networking/networking.gpr -XBUILD=DomainA --level=2 --mode=silver -j2
+gnatprove -P samples/networking/networking.gpr -XBUILD=DomainB --level=2 --mode=silver -j2
+
+echo -e "\nPub/Sub Server"
+echo      "--------------"
+gnatprove -P samples/pubsub/pubsub.gpr --level=2 --mode=silver -j2
+
+# Right now (2024-07-05), this program is not SPARK because it doesn't declare the external
+# hardware it uses correctly. This should be fixed, of course, but I'm commenting out this
+# analysis for the time being (pchapin).
+#
+#echo -e "\nSTM32F4"
+#echo      "-------"
+#gnatprove -P samples/STM32F4/stmdemo.gpr --level=2 --mode=silver -j2
 
 echo -e "\nCodePeer Analysis"
 echo      "================="
 gnatsas analyze -P src/cubedos.gpr --quiet -j2 --mode=deep --no-gnat -- inspector -quiet
 gnatsas report text -P src/cubedos.gpr --quiet -j2 --mode=deep
-
-# TODO: Copy documentation to the web site for public review.

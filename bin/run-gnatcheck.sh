@@ -31,6 +31,9 @@ codepeer-gnatcheck -P samples/pubsub/pubsub.gpr samples/pubsub/*.ads samples/pub
 # write. I'm not sure how to best handle this. For now, let's skip the style analysis of this
 # sample. (pchapin)
 #
+# NOTE: Perhaps there is a command line option to disable an individual rule that will override
+# the enabling of that rule in the global rules file.
+#
 #echo -e "\nSTM32F4"
 #echo      "-------"
 #codepeer-gnatcheck -P samples/STM32F4/stmdemo.gpr samples/STM32F4/*.ads samples/pubsub/*.adb
