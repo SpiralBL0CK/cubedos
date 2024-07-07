@@ -3,6 +3,7 @@ aggregate project Samples is
    for Project_Files use (
      "echo/echo.gpr",
      "networking/networking.gpr",
+     "pathfinder/pathfinder.gpr",
      "pubsub/pubsub.gpr",
      "STM32F4/stmdemo.gpr");
 

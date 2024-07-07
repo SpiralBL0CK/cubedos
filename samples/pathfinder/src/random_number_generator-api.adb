@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- FILE   : random_number_generator-api.adb
 -- SUBJECT: Body of a package that simplifies use of the module.
--- AUTHOR : (C) Copyright 2020 by Vermont Technical College
+-- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
 --------------------------------------------------------------------------------
 pragma SPARK_Mode(On);
@@ -16,9 +16,9 @@ package body Random_Number_Generator.API is
    -- Request
    ----------
    function Generate_Number_Request_Encode
-     (Sender_Address : Message_Address;
-      Request_ID     : Request_ID_Type;
-      Priority       : System.Priority := Pri) return Message_Record
+     (Sender_Address : in Message_Address;
+      Request_ID     : in Request_ID_Type;
+      Priority       : in System.Priority := Pri) return Message_Record
    is
       Message : constant Message_Record :=
         Make_Empty_Message
@@ -28,7 +28,6 @@ package body Random_Number_Generator.API is
            Message_Type'Pos(Generate_Number_Request),
            Priority);
    begin
-      --  Fill in the message by encoding the other parameters (not shown) as required.
       return Message;
    end Generate_Number_Request_Encode;
 
@@ -36,11 +35,10 @@ package body Random_Number_Generator.API is
    -- Reply
    --------
    function Generate_Number_Reply_Encode
-     (Receiver_Address : Message_Address;
-      Request_ID       : Request_ID_Type;
-      Priority         : System.Priority := Pri) return Message_Record
+     (Receiver_Address : in Message_Address;
+      Request_ID       : in Request_ID_Type;
+      Priority         : in System.Priority := Pri) return Message_Record
    is
-      -- The skeletal message knows its sender (this module).
       Message : Message_Record :=
         Make_Empty_Message
           (Name_Resolver.Random_Number_Generator,
@@ -88,12 +86,8 @@ package body Random_Number_Generator.API is
       Position := 0;
       Value    := 42;
 
-      --  Decode one parameter (encoding logic must be consistent).
-      --  Set position to get ready for next parameter.
       XDR.Decode(Data => Message.Payload, Position => Position, Value => Raw_Value, Last => Last);
 
-      --  Convert raw XDR primitive type into appropriate result. Note
-      --  runtime check needed!
       if Integer(Raw_Value) not in Positive then
          Decode_Status := Malformed;
       else

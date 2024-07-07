@@ -28,9 +28,8 @@ CubedOS Samples
   passing system. Roughly this sample replicates the issue that existed in the Mars Pathfinder
   mission, albeit as a limited demonstration. When (if) priority inheritance is implemented in
   CubedOS, this sample can be used to check that the implementation solves the inversion
-  problem. [This sample has only been partially updated to reflect the Name_Resolver
-  discipline.]
-  
+  problem.
+
 + `pubsub`: A sample application that demonstrates the Publish/Subscribe server. [Not yet
   implemented.]
 

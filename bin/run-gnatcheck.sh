@@ -22,6 +22,10 @@ echo      "------------"
 codepeer-gnatcheck -P samples/networking/networking.gpr -XBUILD=DomainA samples/networking/DomainA/*.ads samples/networking/DomainA/*.adb
 codepeer-gnatcheck -P samples/networking/networking.gpr -XBUILD=DomainB samples/networking/DomainB/*.ads samples/networking/DomainB/*.adb
 
+echo -e "\nPathfinder"
+echo      "----------"
+codepeer-gnatcheck -P samples/pathfinder/pathfinder.gpr samples/pathfinder/*.ads samples/pathfinder/*.adb
+
 echo -e "\nPub/Sub Server"
 echo      "--------------"
 codepeer-gnatcheck -P samples/pubsub/pubsub.gpr samples/pubsub/*.ads samples/pubsub/*.adb

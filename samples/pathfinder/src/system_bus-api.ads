@@ -1,15 +1,12 @@
 --------------------------------------------------------------------------------
 -- FILE   : system_bus-api.ads
 -- SUBJECT: Specification of a package that simplifies use of the module.
--- AUTHOR : (C) Copyright 2020 by Vermont Technical College
---
--- All the subprograms in this package must be task safe. They can be
--- simultaneously called from multiple tasks. If possible, make every
--- subprogram here a pure function.
+-- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
 --------------------------------------------------------------------------------
 pragma SPARK_Mode(On);
 
+with Name_Resolver;
 with Message_Manager; use Message_Manager;
 with System;
 
@@ -21,31 +18,34 @@ package System_Bus.API is
    -----------------
    -- Random Number
    -----------------
-   function Is_Random_Number_Request
-     (Message : Message_Record) return Boolean is
-     (Message.Receiver = ID and
-      Message.Message_ID = Message_Type'Pos (Random_Number_Request));
-
-   function Is_Random_Number_Reply (Message : Message_Record) return Boolean is
-     (Message.Sender = ID and
-      Message.Message_ID = Message_Type'Pos (Random_Number_Reply));
-
    function Random_Number_Request_Encode
-     (Sender_Domain : Domain_ID_Type; Sender : Module_ID_Type;
-      Request_ID    : Request_ID_Type; Priority : System.Priority := Pri)
-      return Message_Record with
+     (Sender_Address : in Message_Address;
+      Request_ID     : in Request_ID_Type;
+      Priority       : in System.Priority := Pri) return Message_Record
+     with
       Global => null;
 
    function Random_Number_Reply_Encode
-     (Receiver_Domain : Domain_ID_Type; Receiver : Module_ID_Type;
-      Request_ID : Request_ID_Type; Status : Status_Type := Success;
-      Priority : System.Priority := Pri)
-      return Message_Record with
+     (Receiver_Address : in Message_Address;
+      Request_ID       : in Request_ID_Type;
+      Status           : in Status_Type := Success;
+      Priority         : in System.Priority := Pri) return Message_Record
+     with
       Global => null;
 
+   function Is_Random_Number_Request(Message : in Message_Record) return Boolean is
+     (Message.Receiver_Address = Name_Resolver.System_Bus and
+        Message.Message_ID = Message_Type'Pos(Random_Number_Request));
+
+   function Is_Random_Number_Reply(Message : in Message_Record) return Boolean is
+     (Message.Sender_Address = Name_Resolver.System_Bus and
+        Message.Message_ID = Message_Type'Pos(Random_Number_Reply));
+
    procedure Random_Number_Reply_Decode
-     (Message : in     Message_Record; Decode_Status : out Message_Status_Type;
-      Value   :    out Positive) with
+     (Message       : in  Message_Record;
+      Decode_Status : out Message_Status_Type;
+      Value         : out Positive)
+     with
       Global  => null,
       Pre     => Is_Random_Number_Reply (Message),
       Depends => (Decode_Status => Message, Value => Message);
@@ -53,13 +53,17 @@ package System_Bus.API is
    -------------
    -- Telemetry
    -------------
-   function Is_Telemetry (Message : Message_Record) return Boolean is
-     (Message.Receiver = ID and
-      Message.Message_ID = Message_Type'Pos (Telemetry));
+   -- Why are these here and not in the Telemetry module's API?
 
    function Telemetry_Encode
-     (Sender_Domain : Domain_ID_Type; Sender : Module_ID_Type;
-      Request_ID    : Request_ID_Type; Priority : System.Priority := Pri)
-      return Message_Record with
+     (Sender_Address : in Message_Address;
+      Request_ID     : in Request_ID_Type;
+      Priority       : in System.Priority := Pri) return Message_Record
+     with
       Global => null;
+
+   function Is_Telemetry(Message : in Message_Record) return Boolean is
+     (Message.Receiver_Address = Name_Resolver.System_Bus and
+        Message.Message_ID = Message_Type'Pos (Telemetry));
+
 end System_Bus.API;

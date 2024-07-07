@@ -46,7 +46,50 @@ Message loop over again.
 
 This goes on infinitely. The log server logs information every time a reply is received by the
 Client. It also logs errors when a message goes wrong. This is to show the user the basic
-infinitely functionality of the log server, and how it can be used with the message manager. 
+functionality of the log server, and how it can be used with the message manager.
+
+
+\section{Pathfinder Sample}
+\label{sec:pathfinder-sample}
+
+This sample is intended to demonstrate the problem of priority inversion in CubedOS. It is
+loosely based on Mars Pathfinder, which had an actual issue with priority inversion during the
+mission.
+
+Section~\ref{section-message-priorities} describes the priority architecture of CubedOS.
+Briefly, every module has a statically assigned priority based on the priority given to the
+message loop that fetches and processes messages. There is currently no facility to change
+module (task) priorities once they are assigned. Priority inversion can happen in the following
+circumstances:
+
+\begin{itemize}
+
+\item A low priority module begins processing a message.
+
+\item A medium priority module becomes ready to run, and the runtime system suspends the low
+priority module in favor of the medium priority one.
+
+\item A high priority module becomes ready to run, and the runtime system suspends the medium
+priority module in favor of the high priority one.
+
+\item The high priority module sends a message to the low priority module. This message requires
+a reply, so the high priority module waits for that reply to arrive by blocking on fetching from
+its mailbox.
+
+\item The runtime system resumes the medium priority module which, unfortunately in this
+hypothetical case, runs for an indefinitely long time.
+
+\end{itemize}
+
+In this scenario, the low priority module is never given a chance to finish what it started,
+never sees the message from the high priority module, and never replies to that message. The
+high priority module is now waiting, in effect, on the medium priority module to finish, since
+that is what is holding up the low priority module from making progress. Yet high priority tasks
+should not be held up by the execution of any task with lower priority. This is priority
+inversion.
+
+\pet{Finish this! More needs to be said about the sample and how to interpret its output. It
+would also be good to include some citation(s) regarding the actual Pathfinder issue.}
 
 
 \section{STM32F4 Sample}

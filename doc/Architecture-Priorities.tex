@@ -41,10 +41,10 @@ priority message, just before it fetches the next message from the mailbox, its 
 returned to its original base priority level.
 
 When a module with priority $m$ is processing a message at priority $p < m$, the module's
-priority remains unchanged at its base priority. Thus a high priority module services low
-priority messages at its usual (high) priority. In contrast a low priority module services high
+priority remains unchanged at its base priority. Thus, a high priority module services low
+priority messages at its usual (high) priority. In contrast, a low priority module services high
 priority messages at a temporarily elevated priority. This \newterm{priority inheritance} is
-needed so a high priority client isn't slowed down when it requests service from a low priority
+needed, so a high priority client isn't slowed down when it requests service from a low priority
 module. When executing on behalf of a high priority client, a low priority server inherits the
 priority of the client temporarily.
 
@@ -58,7 +58,7 @@ of the sender.
 \subsection{Static Analysis}
 
 Unfortunately \SPARK\ does not currently support the dynamic modification of task priorities.
-Thus use of that feature in a CubedOS application must be specifically justified so as to avoid
+Thus, use of that feature in a CubedOS application must be specifically justified to avoid
 spurious \SPARK\ diagnostics. However, doing this means that \SPARK\ can no longer be relied
 upon to find all potential deadlocks or livelocks. It is therefor necessary to employ an
 additional form of analysis that can supplement \SPARK\ and statically show freedom from those

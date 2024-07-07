@@ -1,12 +1,7 @@
 ------------------------------------------------------------------------------
---
 --  FILE   : random_number_generator-api.ads
 --  SUBJECT: Specification of a package that simplifies use of the module.
---  AUTHOR : (C) Copyright 2020 by Vermont Technical College
---
---  All the subprograms in this package must be task safe. They can be
---  simultaneously called from multiple tasks.  If possible, make
---  every subprogram here a pure function.
+--  AUTHOR : (C) Copyright 2024 by Vermont State University
 --
 ------------------------------------------------------------------------------
 pragma SPARK_Mode(On);
@@ -23,35 +18,35 @@ package Random_Number_Generator.API is
    ----------
    -- Request
    ----------
-   function Is_Generate_Number_Request(Message : Message_Record) return Boolean is
+   function Generate_Number_Request_Encode
+     (Sender_Address : in Message_Address;
+      Request_ID     : in Request_ID_Type;
+      Priority       : in System.Priority := Pri) return Message_Record
+     with Global => null;
+
+   function Is_Generate_Number_Request(Message : in Message_Record) return Boolean is
      (Message.Receiver_Address = Name_Resolver.Random_Number_Generator and
       Message.Message_ID = Message_Type'Pos(Generate_Number_Request));
-
-   function Generate_Number_Request_Encode
-     (Sender_Address : Message_Address;
-      Request_ID     : Request_ID_Type;
-      Priority       : System.Priority := Pri) return Message_Record
-     with Global => null;
 
    --------
    -- Reply
    --------
-   function Is_Generate_Number_Reply(Message : Message_Record) return Boolean is
-     (Message.Sender_Address = Name_Resolver.Random_Number_Generator and
-      Message.Message_ID = Message_Type'Pos (Generate_Number_Reply));
-
    function Generate_Number_Reply_Encode
-     (Receiver_Address : Message_Address;
-      Request_ID       : Request_ID_Type;
-      Priority         : System.Priority := Pri) return Message_Record with
+     (Receiver_Address : in Message_Address;
+      Request_ID       : in Request_ID_Type;
+      Priority         : in System.Priority := Pri) return Message_Record with
      Global => null;
+
+   function Is_Generate_Number_Reply(Message : in Message_Record) return Boolean is
+     (Message.Sender_Address = Name_Resolver.Random_Number_Generator and
+      Message.Message_ID = Message_Type'Pos(Generate_Number_Reply));
 
    procedure Generate_Number_Reply_Decode
      (Message       : in     Message_Record;
       Decode_Status :    out Message_Status_Type;
       Value         :    out Positive)
      with Global  => null,
-      -- Pre     => Is_Generate_Number_Reply (Message),
+      -- Pre     => Is_Generate_Number_Reply(Message),
       Depends => (Decode_Status => Message, Value => Message);
 
 end Random_Number_Generator.API;

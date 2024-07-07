@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- FILE   : system_bus.ads
 -- SUBJECT: Top level package of a CubedOS SAMPLE MODULE.
--- AUTHOR : (C) Copyright 2020 by Vermont Technical College
+-- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
 -- System_Bus is intended to be the main interface for the Pathfinder sample program.
 --------------------------------------------------------------------------------
@@ -14,9 +14,9 @@ with Fibonacci;
 
 package System_Bus is
 
-   R_ID    : constant Message_Manager.Request_ID_Type  := 104;
-   FSeed   : constant Fibonacci.Fib_Seed               := 37;
-   Pri     : constant System.Priority                  := 40;
-   CPU_Num : constant System.Multiprocessors.CPU_Range := System.Multiprocessors.CPU'First;
+   R_ID           : constant Message_Manager.Request_ID_Type  := 104;
+   Fibonacci_Seed : constant Fibonacci.Fib_Seed               := 37;
+   Pri            : constant System.Priority                  := 40;
+   CPU_Number     : constant System.Multiprocessors.CPU_Range := System.Multiprocessors.CPU'First;
 
 end System_Bus;
