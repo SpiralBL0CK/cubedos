@@ -1,6 +1,6 @@
 
-\chapter{Samples}
-\label{chapt:samples}
+\section{Samples}
+\label{sec:samples}
 
 This chapter contains documentation about the sample programs provided with Cubed\-OS. These
 programs illustrate various aspects of using CubedOS in the real world that might not be
@@ -8,12 +8,12 @@ covered by the more formal documentation presented so far. New users of CubedOS 
 study, build, execute, and modify the sample programs as a way of learning about the system and
 how it can be used.
 
-\section{Echo Sample}
+\subsection{Echo Sample}
 \label{sec:echo-sample}
 
-This section describes the Echo Sample that can be found in the /samples/Echo folder. This
-sample exemplifies a simple message/reply demo. These messages take place as simple pings back
-and forth between a Client module and a Server module. 
+This section describes the Echo Sample that can be found in the \filename{samples/echo} folder.
+This sample exemplifies a simple message/reply demo. These messages take place as simple pings
+back and forth between a Client module and a Server module. 
 
 The main.adb of this program has several with clauses to include |Echo_Client.Messages| and
 |Echo_Server.Messages|. It also uses |Log_Server.Messages| in order for the modules to be
@@ -49,7 +49,13 @@ Client. It also logs errors when a message goes wrong. This is to show the user 
 functionality of the log server, and how it can be used with the message manager.
 
 
-\section{Pathfinder Sample}
+\subsection{LineRider Sample}
+\label{sec:linerider-sample}
+
+\todo{Finish Me!}
+
+
+\subsection{Pathfinder Sample}
 \label{sec:pathfinder-sample}
 
 This sample is intended to demonstrate the problem of priority inversion in CubedOS. It is
@@ -92,7 +98,7 @@ inversion.
 would also be good to include some citation(s) regarding the actual Pathfinder issue.}
 
 
-\section{STM32F4 Sample}
+\subsection{STM32F4 Sample}
 \label{sec:stm32f4-sample}
 
 This section describes the architecture of the STM32F4 sample that can be found in a folder of
@@ -139,7 +145,7 @@ This program illustrates several things.
 
 In the subsections that follow more details are given about each of these points.
 
-\subsection{Non-Native CPU}
+\subsubsection{Non-Native CPU}
 
 The STM32F4 sample uses an ARM Cortex M4 processor. This entails installing the necessary Ada
 cross-compiler from AdaCore. The project file specifies the tool chain to be used. The other
@@ -168,10 +174,5 @@ by that compiler. It is thus essential to inform the \SPARK\ tools about the tar
 that the proofs are relevant and correct for the target context. By default, the \SPARK\ tools
 will assume the native platform's properties, which might not be appropriate when cross
 compiling.
-
-\todo{Finish Me!}
-
-\section{LineRider Sample}
-\label{sec:linerider-sample}
 
 \todo{Finish Me!}
