@@ -46,15 +46,15 @@ package body DomainA_Client.Messages is
       Round_Trip_Time := Receive_Time - Send_Time;
 
       if Decode_Status /= Success then
-          CubedOS.Log_Server.API.Log_Message(Name_Resolver.DomainA_Client,
+         CubedOS.Log_Server.API.Log_Message(Name_Resolver.DomainA_Client,
                                             CubedOS.Log_Server.API.Error,
                                             "Unable to decode a Ping_Reply message!");
       elsif Status /= DomainB_Server.API.Success then
-          CubedOS.Log_Server.API.Log_Message(Name_Resolver.DomainA_Client,
+         CubedOS.Log_Server.API.Log_Message(Name_Resolver.DomainA_Client,
                                             CubedOS.Log_Server.API.Error,
                                             "Networking server reported a ping failure!");
       else
-          CubedOS.Log_Server.API.Log_Message(Name_Resolver.DomainA_Client,
+         CubedOS.Log_Server.API.Log_Message(Name_Resolver.DomainA_Client,
                                             CubedOS.Log_Server.API.Informational,
                                              "+++ Reply #" &
                                                Request_ID_Type'Image(Message.Request_ID) &
@@ -83,8 +83,9 @@ package body DomainA_Client.Messages is
       if DomainB_Server.API.Is_Ping_Reply(Message) then
          Handle_Ping_Reply(Message);
       else
-         -- An unknown message type has been received. What should be done about that?
-         null;
+         CubedOS.Log_Server.API.Log_Message(Name_Resolver.DomainA_Client,
+                                            CubedOS.Log_Server.API.Error,
+                                            "An unknown message type has been received");
       end if;
    end Process;
 

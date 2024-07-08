@@ -79,7 +79,7 @@ package body CubedOS.Lib.Generic_RID_Map is
       if Map.Used_Indices_Array(Index) then
          Value := Map.Value_Array(Index);
       else
-         null; -- This is a bad place to reach. need to do something about this error.
+         null; -- TO DO: This is a bad place to reach. need to do something about this error.
       end if;
 
       return Value;

@@ -37,13 +37,18 @@ package body CubedOS.File_Server.Messages is
 
       -- A linear search should be fine. This produces the lowest available handle.
       function Find_Free_Handle return API.File_Handle_Type is
+         Return_Handle : API.File_Handle_Type;
       begin
          for I in API.Valid_File_Handle_Type loop
             if not Octet_IO.Is_Open(Files(I).Underlying) then
-               return I;
+               Return_Handle := I;
+               Exit;
+            else
+               Return_Handle := API.Invalid_Handle;
             end if;
          end loop;
-         return API.Invalid_Handle;
+
+         return Return_Handle;
       end Find_Free_Handle;
 
       Mode       : API.Mode_Type;

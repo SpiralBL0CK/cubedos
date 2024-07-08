@@ -11,9 +11,9 @@ package body Echo_Server.API is
    use type XDR.XDR_Unsigned;
 
    function Ping_Request_Encode
-     (Sender_Address : Message_Address;
-      Request_ID    : Request_ID_Type;
-      Priority      : System.Priority := System.Default_Priority) return Message_Record
+     (Sender_Address : in Message_Address;
+      Request_ID     : in Request_ID_Type;
+      Priority       : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : constant Message_Record :=
         Make_Empty_Message
@@ -28,10 +28,10 @@ package body Echo_Server.API is
 
 
    function Ping_Reply_Encode
-     (Receiver_Address : Message_Address;
-      Request_ID : Request_ID_Type;
-      Status     : Status_Type;
-      Priority   : System.Priority := System.Default_Priority) return Message_Record
+     (Receiver_Address : in Message_Address;
+      Request_ID : in Request_ID_Type;
+      Status     : in Status_Type;
+      Priority   : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record :=
         Make_Empty_Message

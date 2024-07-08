@@ -16,25 +16,27 @@ package Echo_Server.API is
    type Message_Type is (Ping_Request, Ping_Reply);
 
    function Ping_Request_Encode
-     (Sender_Address : Message_Address;
-      Request_ID    : Request_ID_Type;
-      Priority      : System.Priority := System.Default_Priority) return Message_Record
+     (Sender_Address : in Message_Address;
+      Request_ID     : in Request_ID_Type;
+      Priority       : in System.Priority := System.Default_Priority) return Message_Record
      with
        Global => null;
 
    function Ping_Reply_Encode
-     (Receiver_Address : Message_Address;
-      Request_ID : Request_ID_Type;
-      Status     : Status_Type;
-      Priority   : System.Priority := System.Default_Priority) return Message_Record
+     (Receiver_Address : in Message_Address;
+      Request_ID : in Request_ID_Type;
+      Status     : in Status_Type;
+      Priority   : in System.Priority := System.Default_Priority) return Message_Record
      with
        Global => null;
 
-   function Is_Ping_Request(Message : Message_Record) return Boolean is
-     (Message.Receiver_Address = Name_Resolver.Echo_Server and Message.Message_ID = Message_Type'Pos(Ping_Request));
+   function Is_Ping_Request(Message : in Message_Record) return Boolean is
+     (Message.Receiver_Address = Name_Resolver.Echo_Server and
+        Message.Message_ID = Message_Type'Pos(Ping_Request));
 
-   function Is_Ping_Reply(Message : Message_Record) return Boolean is
-     (Message.Sender_Address = Name_Resolver.Echo_Server and Message.Message_ID = Message_Type'Pos(Ping_Reply));
+   function Is_Ping_Reply(Message : in Message_Record) return Boolean is
+     (Message.Sender_Address = Name_Resolver.Echo_Server and
+        Message.Message_ID = Message_Type'Pos(Ping_Reply));
 
    procedure Ping_Request_Decode
      (Message : in Message_Record;

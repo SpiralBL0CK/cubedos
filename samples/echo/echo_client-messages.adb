@@ -25,8 +25,8 @@ package body Echo_Client.Messages is
    procedure Initialize is
    begin
       -- Send the first message!
-     Send_Time := Ada.Real_Time.Clock;
-     Outgoing_Message := Echo_Server.API.Ping_Request_Encode
+      Send_Time := Ada.Real_Time.Clock;
+      Outgoing_Message := Echo_Server.API.Ping_Request_Encode
         (Sender_Address => Name_Resolver.Echo_Client,
          Request_ID    => Request_Number);
       Route_Message(Outgoing_Message);
@@ -75,7 +75,7 @@ package body Echo_Client.Messages is
          Route_Message(Outgoing_Message);
       end if;
 
-  end Handle_Ping_Reply;
+   end Handle_Ping_Reply;
 
    -----------------------------------
    -- Message Decoding and Dispatching
