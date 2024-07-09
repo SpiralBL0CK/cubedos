@@ -77,7 +77,7 @@ bin/run-gnatcheck.sh
 echo -e "\nAPI Documentation"
 echo      "================="
 # This has to be done after a successful build.
-gnatdoc -P src/cubedos.gpr
+gnatdoc3 -P src/cubedos.gpr -l
 
 echo -e "\nLaTeX Documentation"
 echo      "==================="

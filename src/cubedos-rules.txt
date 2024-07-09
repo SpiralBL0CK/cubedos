@@ -18,7 +18,6 @@
 +RStyle_Checks:i
 +RStyle_Checks:x
 +RImproperly_Located_Instantiations
-+RLibrary_Level_Subprograms
 +RAnnotated_Comments:$TODO
 +RBoolean_Relational_Operators
 +ROuter_Loop_Exits
@@ -27,7 +26,6 @@
 +RGOTO_Statements
 +RMisplaced_Representation_Items
 +RNull_Paths
-+RSingle_Value_Enumeration_Types
 -- +RHeaders:cubedos.hdr
 +RIdentifier_Casing:Type=mixed
 +RIdentifier_Casing:Others=mixed
