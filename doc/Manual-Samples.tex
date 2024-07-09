@@ -1,6 +1,6 @@
 
 \section{Samples}
-\label{sec:samples}
+\label{sec:manual-samples}
 
 This chapter contains documentation about the sample programs provided with Cubed\-OS. These
 programs illustrate various aspects of using CubedOS in the real world that might not be
@@ -9,7 +9,7 @@ study, build, execute, and modify the sample programs as a way of learning about
 how it can be used.
 
 \subsection{Echo Sample}
-\label{sec:echo-sample}
+\label{sec:manual-echo-sample}
 
 This section describes the Echo Sample that can be found in the \filename{samples/echo} folder.
 This sample exemplifies a simple message/reply demo. These messages take place as simple pings
@@ -50,21 +50,21 @@ functionality of the log server, and how it can be used with the message manager
 
 
 \subsection{LineRider Sample}
-\label{sec:linerider-sample}
+\label{sec:manual-linerider-sample}
 
 \todo{Finish Me!}
 
 
 \subsection{Pathfinder Sample}
-\label{sec:pathfinder-sample}
+\label{sec:manual-pathfinder-sample}
 
 This sample is intended to demonstrate the problem of priority inversion in CubedOS. It is
 loosely based on Mars Pathfinder, which had an actual issue with priority inversion during the
 mission.
 
-Section~\ref{section-message-priorities} describes the priority architecture of CubedOS.
-Briefly, every module has a statically assigned priority based on the priority given to the
-message loop that fetches and processes messages. There is currently no facility to change
+Section~\ref{sec:architecture-message-priorities} describes the priority architecture of
+CubedOS. Briefly, every module has a statically assigned priority based on the priority given to
+the message loop that fetches and processes messages. There is currently no facility to change
 module (task) priorities once they are assigned. Priority inversion can happen in the following
 circumstances:
 
@@ -99,7 +99,7 @@ would also be good to include some citation(s) regarding the actual Pathfinder i
 
 
 \subsection{STM32F4 Sample}
-\label{sec:stm32f4-sample}
+\label{sec:manual-stm32f4-sample}
 
 This section describes the architecture of the STM32F4 sample that can be found in a folder of
 the same name in the CubedOS repository. This sample makes use of a simple evaluation board from

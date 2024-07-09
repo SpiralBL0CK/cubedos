@@ -16,11 +16,13 @@ OOP-based IDLs, MXDR allows you to describe messages by the information they con
 message implies three subprograms:
 
 \begin{enumerate}
-\item A function that takes the message contents as typed \texttt{in} parameters and encodes the
+\item A function that takes the message contents as typed |in| parameters and encodes the
 message into a raw octet array for transmission.
-\item A procedure that decodes the message as a raw octet array back into typed \texttt{out}
+
+\item A procedure that decodes the message as a raw octet array back into typed |out|
 parameters.
-\item A function that verifies that a given octet array contains a instance of a particular
+
+\item A function that verifies that a given octet array contains an instance of a particular
 message.
 \end{enumerate}
 
@@ -33,14 +35,14 @@ We choose to base Mercury on XDR to simplify interoperability with other systems
 At the time of this writing, CubedOS only supports messages between modules in the same
 operating system process, all of which are written in SPARK. However, we anticipate extending
 the architecture to support message passing between processes, and even between machines. Using
-a standard wire protocol, such as XDR, may simplify that work. All of the extensions to XDR that
-we define are at the IDL source level only, and are used to guide the generation of provable
-SPARK. We specify no changes to the underlying XDR format.
+a standard wire protocol, such as XDR, may simplify that work. All the extensions to XDR that we
+define are at the IDL source level only, and are used to guide the generation of provable SPARK.
+We specify no changes to the underlying XDR format.
 
 This section of the Mercury documentation is a tutorial for Mercury users. When you are
 contemplating a new CubedOS module, you should first express the API to your module as a
-collection of messages it sends and received. Write an MXDR file that declares the structure of
+collection of messages it sends and receives. Write an MXDR file that declares the structure of
 those messages, and then use Mercury to generate the API package. You can then focus the bulk of
-your programming effort on the part of the module that implements the messages you defined
-without wasting time writing tedious and highly repetative message encoding and decoding
+your programming effort on the part of the module that processes the messages you defined
+without wasting time writing tedious and highly repetitive message encoding and decoding
 subprograms.

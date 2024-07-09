@@ -18,6 +18,7 @@
 % Preamble and global declarations
 %+++++++++++++++++++++++++++++++++
 \documentclass{scrreprt}
+\usepackage{scrhack}   % Avoids warnings from KOMA script
 \usepackage{listings}
 \usepackage{graphicx}
 \usepackage{url}
@@ -49,6 +50,7 @@
 \section*{Legal}
 \label{sec:legal}
 
+% TODO: Change the license to some sort of Creative Commons license.
 \textit{Permission is granted to copy, distribute and/or modify this document under the terms of
 the GNU Free Documentation License, Version 1.1 or any later version published by the Free
 Software Foundation; with no Invariant Sections, with no Front-Cover Texts, and with no
@@ -56,13 +58,8 @@ Back-Cover Texts. A copy of the license is included in the file \texttt{GFDL.txt
 with the \LaTeX\ source of this document.}
 
 \input{Introduction}
-\input{Requirements}
-\input{RelatedWork}
-\input{Architecture}
 \input{Design}
-\newpage
 \input{Manual}
-\newpage
 \input{Mercury}
 
 \lstDeleteShortInline|

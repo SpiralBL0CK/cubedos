@@ -21,8 +21,8 @@
 % If priorities ever become part of the main line of CubedOS development, that sample program
 % should be incorporated as well.
 
-\section{Message Priorities}
-\label{section-message-priorities}
+\subsection{Message Priorities}
+\label{sec:architecture-message-priorities}
 
 In this section we describe the architecture of message priorities in CubedOS. Priorities are
 built on top of the task priority system provided by the Ada runtime environment. CubedOS does
@@ -30,11 +30,11 @@ not directly interact with the underlying operating system's notion of prioritie
 portability to any system with a suitably capable Ada runtime environment. Specifically, message
 priorities are supported on selected bare board systems without an operating system.
 
-\subsection{Justification}
+\subsubsection{Justification}
 
 \pet{Why do we need this? Fill out this section when we know!}
 
-\subsection{Architecture}
+\subsubsection{Architecture}
 
 All modules are assigned a ``base priority'' statically using suitable Ada language pragmas
 applied to the module's server task. We define the server task of a module as the task that
@@ -77,7 +77,7 @@ original request message sent by the client). It is up the application developer
 it is desired. The default behavior is for all sent messages to be given the (dynamic) priority
 of the sender.
 
-\subsection{Static Analysis}
+\subsubsection{Static Analysis}
 
 Unfortunately \SPARK\ does not currently support the dynamic modification of task priorities.
 Thus, use of that feature in a CubedOS application must be specifically justified to avoid

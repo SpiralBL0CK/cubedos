@@ -6,17 +6,17 @@
 \subsection{System Goals}
 
 The goal of Mercury is to ease the implementation of CubedOS on its user. The user inputs a
-modified XDR file and receives as output verified SPARK 2014.
+modified XDR file and receives as output verified \SPARK.
 
 Client-side Mercury could very well insert an XDR file into the payload of a UDP or TCP/IP
 protocol packet and be sent across a network (or even the Internet) to then produce an
-executable outputted in SPARK 2014. This would require modification to the Scala used to write
-the ANTLR generated compiler and would result in a product like those mentioned in Competitive
+executable outputted in \SPARK. This would require modification to the Scala used to write the
+ANTLR generated compiler and would result in a product like those mentioned in Competitive
 Analysis of the Mercury Requirements document. This would also require intimate knowledge of the
 server to which the meta-packet is sent, including having Mercury set up server-side to accept
-an XDR file from the payload of a meta-packet and decompose the file into a SPARK executable
+an XDR file from the payload of a meta-packet and decompose the file into a \SPARK\ executable
 intended to be executed, typically, on that same server. Then Mercury server-side could
-reciprocate based on the instructions in the SPARK executable.
+reciprocate based on the instructions in the \SPARK\ executable.
 
 \subsection{Key Components}
 
@@ -54,15 +54,15 @@ makes sure that the sentence structure makes sense from the point-of-view of the
 \item \textbf{SPARK} SPARK 2014 is a subset language of Ada 2012 released April 30, 2014. This
 High Integrity Language incorporates parts of the Ada 2012 language that can be run through
 certain tools built into SPARK IDEs that run mathematical calculations on the provided code to
-ensure that the code meets the design objectives of SPARK: logical soundness, semantic
+ensure that the code meets the design objectives of \SPARK: logical soundness, semantic
 soundness, security, verifiability, bounded resource requirements, and runtime system
-requirements. The other design objective of SPARK 2014 was to find a meeting point between
+requirements. The other design objective of \SPARK\ was to find a meeting point between
 maintaining rigorous formal definition while not sacrificing its expressive and artistic power.
-The first version of SPARK was designed by University of Southampton Bernard Carre and Trevor
+The first version of \SPARK\ was designed by University of Southampton Bernard Carre and Trevor
 Jennings based on the original Ada '83. It has subsequently been revamped typically 2 to 3 years
 after each of Ada's revamping's.
 
-With SPARK 2014, contracts were added to the code to improve tools such as GNATprove in
+With \SPARK, contracts were added to the code to improve tools such as GNATprove in
 determining the designer's intentions by comparing the contract along with its pre, post and
 verification conditions against what the code is doing. This makes for the prevention of the
 hypothetical scenario where, even though the code is doing something legal and correct, it still
@@ -79,10 +79,10 @@ postcondition:
    		 begin
 \end{verbatim}
   
-Industrially, SPARK 2014 is currently ubiquitous, especially in the security and safety realms.
-Vermont Technical College (VTC) is currently using SPARK 2014 in its Lunar Ice Cube project.
+Industrially, \SPARK\ is currently ubiquitous, especially in the security and safety realms.
+Vermont State University (VTSU) is currently using \SPARK\ in its CubeSat missions.
 
-The most important line of any SPARK program in order that it be differentiated from original
+The most important line of any \SPARK\ program in order that it be differentiated from original
 Ada:
 \begin{verbatim}
 			pragma SPARK_Mode(On);
@@ -94,7 +94,7 @@ holds the complete functions and procedures of the project itself, and the main 
 manipulates public functions and procedures in the specification file), is in fact SPARK and not
 full Ada.
 
-What exactly separates Ada from SPARK? SPARK has no access types such as pointers, no
+What exactly separates Ada from \SPARK? \SPARK\ has no access types such as pointers, no
 unstructured control flow such as gotos, no exception handling, no aliasing of outputs from
 subprograms, and no side effects in expressions and functions. All these “normal things” found
 in many other languages make the formal reasoning and mathematical verifications much harder, at
@@ -206,10 +206,10 @@ to Mercury, if a certain module identification from Appendix B is used in the mo
 then one aspect of semantic analysis will be to make sure the inputted parameter list and any
 possible flags or identifiers associated are valid for that module type.
 
-\item \textbf{SPARK Skeletons} A generic SPARK template with exactly 5 types of messages to be
+\item \textbf{SPARK Skeletons} A generic \SPARK\ template with exactly 5 types of messages to be
 auto-generated into the file.
   
-\item \textbf{SPARK Output} What follows is an example SPARK 2014 output from Mercury for the
+\item \textbf{SPARK Output} What follows is an example \SPARK\ output from Mercury for the
   CubedOS publish-subscribe API (Application Programming Interface) based off the modified XDR
   presented previously. For each of the 5 provided message types, 2 functions and a procedure is
   generated: 1 function to encode messages, 1 function to check if the message is of the correct

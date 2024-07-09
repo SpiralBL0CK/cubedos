@@ -1,14 +1,14 @@
 
-\chapter{Requirements}
-\label{chapt:requirements}
+\section{Requirements}
+\label{sec:design-requirements}
 
-In this chapter we detail the requirements of the various CubedOS core modules. These
+In this section we detail the requirements of the various CubedOS core modules. These
 requirements are used to drive the architecture and design of the system. \pet{There are quite a
 few design aspects to the description here. It might be valuable to create a better separation
 between requirements and design.}
 
-\section{Core Requirements}
-\label{sec:core-requirements}
+\subsection{Core Requirements}
+\label{sec:requirements-core-requirements}
 
 At its heart CubedOS is a message passing microkernel. Conceptually, each component of the
 system is stored in a \newterm{module} consisting of one or more Ada packages arranged in a
@@ -80,8 +80,8 @@ want it and instead require that module ID numbers all be statically assigned.}
 ranging up to the number of modules in the system.
 \end{itemize}
 
-\section{Runtime Library}
-\label{sec:runtime-library}
+\subsection{Runtime Library}
+\label{sec:requirements-runtime-library}
 
 The CubedOS runtime library is a collection of packages containing general purpose components of
 interest to many CubedOS applications. Unlike the Ada standard library and many third party
@@ -133,15 +133,15 @@ also distinguishes the CubedOS runtime library from most other libraries. \pet{P
 be better for library components to never send messages. Maybe we should make that another
 aspect of our CubedOS coding conventions.}
 
-\section{Core Modules}
-\label{sec:core-modules}
+\subsection{Core Modules}
+\label{sec:requirements-core-modules}
 
 Any CubedOS based system shall contain certain \newterm{core modules} as a minimum. Note that it
 is possible that some core modules will not be required by some applications. In this section we
 describe these core modules.
 
-\subsection{Message Manager}
-\label{sec:message-manager}
+\subsubsection{Message Manager}
+\label{sec:requirements-message-manager}
 
 The message manager is not a proper CubedOS module but rather forms the CubedOS kernel. It thus
 does not have a module ID number. Instead, the message manager holds mailboxes used to facilitate
@@ -191,8 +191,8 @@ remember the status of all pending requests. \pet{The CubedOS library should pro
 assistance with this.} However, it also promotes a high degree of concurrency since, in effect,
 no requests are ever blocking.
 
-\subsection{Time Service}
-\label{sec:time-service}
+\subsubsection{Time Server}
+\label{sec:requirements-time-server}
 
 The Time Server module provides real-time clock services. However, due to the latency and
 overhead of message passing, modules that require high speed, real-time timing services may need
@@ -229,8 +229,8 @@ services. \pet{This needs to be investigated further. What can be specifically s
   important. This requirement should be considered low priority.}
 \end{itemize}
 
-\subsection{File Service}
-\label{sec:file-service}
+\subsubsection{File Server}
+\label{sec:requirements-file-server}
 
 Not all missions may require a file system, but many will. The core File Server module provides
 a simple file system interface, but the precise implementation is not specified here. It could
@@ -279,8 +279,8 @@ maximally sized messages.
 \pet{Do we want some kind of ``garbage collection'' of open file handles? Maybe have handles
   automatically closed if they are inactive too long?}
 
-\subsection{Interpreter Service}
-\label{sec:interpreter-service}
+\subsubsection{Interpreter}
+\label{sec:requirements-interpreter}
 
 The Interpreter module shall be able to run mission specific commands at a set time, expressed
 either as an absolute time or as a time interval relative to the previously issued command. It
@@ -312,8 +312,8 @@ work. The following requirements apply:
 The ScriptBuilder tool has its own requirements, design, and implementation, and is described
 elsewhere.
 
-\subsection{Log Service}
-\label{sec:log-service}
+\subsubsection{Log Server}
+\label{sec:requirements-log-server}
 
 The Log Server module is used to log messages from other modules. \footnote{Library components
 shouldn't attempt to log messages directly. They should return appropriate status indications to
@@ -359,10 +359,10 @@ human-readable. The following requirements apply:
       should it store? Should that be configurable?}
 \end{itemize}
 
-\section{Low Level Abstraction Layer}
-\label{sec:llal}
+\subsection{Hardware Abstraction Layer}
+\label{sec:requirements-hal}
 
 \pet{Need to talk about the modules that interface to standard busses and other low level
   hardware resources. The idea is that ``high level'' device drivers could be written in terms
   of low level operations making it possible to port a CubedOS application to a new platform by
-  only rewriting the LLAL modules.}
+  only rewriting the HAL modules.}

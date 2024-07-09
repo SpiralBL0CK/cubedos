@@ -1,10 +1,16 @@
 {
     "cSpell.words": [
+        "ANTLR",
         "Jorvik",
         "Merc",
         "messageable",
+        "microkernel",
         "multicasting",
-        "Ravenscar"
+        "MXDR",
+        "OSAL",
+        "postcondition",
+        "Ravenscar",
+        "RTEMS"
     ],
     "rewrap.wrappingColumn": 96,
     "latex-workshop.latex.autoBuild.run": "never"
