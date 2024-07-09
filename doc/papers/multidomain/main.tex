@@ -1,0 +1,76 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FILE    : main.tex
+% AUTHOR  : (C) Copyright 2023 by Sevan Golnazarian & Carl Brandon & Peter Chapin
+% SUBJECT : Paper on the CubedOS Message Service
+%
+% TODO: Write me! Add more specific items here as they become apparent.
+%
+% Send comments or bug reports to:
+%
+%    Carl Brandon
+%    Vermont Technical College
+%    Randolph Center, VT 05061
+%    cbrandon@vtc.edu
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%+++++++++++++++++++++++++++++++++
+% Preamble and global declarations
+%+++++++++++++++++++++++++++++++++
+\documentclass{llncs}
+\usepackage{listings}
+\usepackage{fancyvrb}
+\usepackage{gensymb}
+\usepackage{graphicx}
+%\usepackage{unicode-math}
+\usepackage{url}
+\usepackage{hyperref}
+
+\input{macros}
+
+%++++++++++++++++++++
+% The document itself
+%++++++++++++++++++++
+\begin{document}
+
+\title{CubedOS Message Service}
+\author{Sevan Golnazarian\inst{1} \and Peter Chapin\inst{2} \and Carl Brandon\inst{3} }
+
+\institute{
+  Vermont Technical College, Williston VT 05495, USA,\\
+  \email{sgolnazarian@vtc.edu} %,\\
+      % WWW home page: \texttt{http://web.vtc.edu/users/xyzzy}
+  \and
+  \email{pchapin@vtc.edu} %,\\
+      % WWW home page: \texttt{http://lemuria.cis.vtc.edu/~pchapin}
+  \and
+  Vermont Technical College, Randolph Center VT 05061, USA,\\
+  \email{cbrandon@vtc.edu} %,\\
+      % WWW home page: \texttt{http://web.vtc.edu/users/xyzzy}
+}
+
+\maketitle
+
+\begin{abstract}
+  % Summarize the contents of the paper using no more than 400 words (what is the FSW limit?)
+
+  This is the awesome abstract. Read it and weep at its beauty.
+
+  % My thought for this paper would be to compare CubedOS Message Service (CMS?) with the
+  % message passing facility in CFS. The Flight Software Workshop audience will be interested in
+  % this comparison.
+  %
+  % I also wonder if this work/paper can be combined with the CFS bridge idea that I've been
+  % wanting to pursue. Or perhaps two papers could be written. Just some ideas.
+  %
+  % pchapin
+
+  \keywords{SPARK, student project, CubeSat}
+\end{abstract}
+
+\input{introduction}
+\input{conclusion}
+
+\bibliographystyle{splncs03}
+\bibliography{../references-General,../references-SPARK,../references-CubeSat}
+
+\end{document}
