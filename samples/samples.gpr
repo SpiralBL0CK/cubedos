@@ -2,9 +2,9 @@ aggregate project Samples is
 
    for Project_Files use (
      "echo/echo.gpr",
+     "moonshot/moonshot.gpr",
      "networking/networking.gpr",
      "pathfinder/pathfinder.gpr",
-     "pubsub/pubsub.gpr",
      "STM32F4/stmdemo.gpr");
 
    for Object_Dir use "build";

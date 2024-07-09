@@ -20,6 +20,9 @@ CubedOS Samples
   lab assignment used in the electro-mechanical program at Vermont Technical College. [This code
   has *not* yet been updated to reflect the Name_Resolver discipline.]
   
++ `moonshot`: The complete Moonshot application described by the CubedOS tutorial in the
+  manual.
+
 + `networking`: A sample application that illustrates message passing across domains using UDP
   on a conventional TCP/IP network. This is essentially the Echo sample reworked as a
   multi-domain application.
@@ -29,9 +32,6 @@ CubedOS Samples
   mission, albeit as a limited demonstration. When (if) priority inheritance is implemented in
   CubedOS, this sample can be used to check that the implementation solves the inversion
   problem.
-
-+ `pubsub`: A sample application that demonstrates the Publish/Subscribe server. [Not yet
-  implemented.]
 
 + `STM32F4`: This folder contains a simple demonstration of CubedOS running on the
   STM32F4DISCOVERY board.

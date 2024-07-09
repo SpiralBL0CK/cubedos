@@ -51,6 +51,10 @@ echo -e "\nEcho"
 echo      "----"
 gprbuild -P samples/echo/echo.gpr samples/echo/main.adb
 
+echo -e "\nMoonshot"
+echo      "--------"
+gprbuild -P samples/moonshot/moonshot.gpr samples/moonshot/main.adb
+
 echo -e "\nMulti-Domain"
 echo      "------------"
 gprbuild -P samples/networking/networking.gpr -XBUILD=DomainA samples/networking/DomainA/main.adb
@@ -59,10 +63,6 @@ gprbuild -P samples/networking/networking.gpr -XBUILD=DomainB samples/networking
 echo -e "\nPathfinder"
 echo      "----------"
 gprbuild -P samples/pathfinder/pathfinder.gpr samples/pathfinder/src/main.adb
-
-echo -e "\nPub/Sub Server"
-echo      "--------------"
-gprbuild -P samples/pubsub/pubsub.gpr samples/pubsub/main.adb
 
 echo -e "\nSTM32F4"
 echo      "-------"
@@ -98,6 +98,10 @@ echo -e "\nEcho"
 echo      "----"
 gnatprove -P samples/echo/echo.gpr --level=2 --mode=silver -j2
 
+echo -e "\nMoonshot"
+echo      "--------"
+gnatprove -P samples/moonshot/moonshot.gpr --level=2 --mode=silver -j2
+
 echo -e "\nMulti-Domain"
 echo      "------------"
 gnatprove -P samples/networking/networking.gpr -XBUILD=DomainA --level=2 --mode=silver -j2
@@ -106,10 +110,6 @@ gnatprove -P samples/networking/networking.gpr -XBUILD=DomainB --level=2 --mode=
 echo -e "\nPathfinder"
 echo      "----------"
 gnatprove -P samples/pathfinder/pathfinder.gpr --level=2 --mode=silver -j2
-
-echo -e "\nPub/Sub Server"
-echo      "--------------"
-gnatprove -P samples/pubsub/pubsub.gpr --level=2 --mode=silver -j2
 
 # Right now (2024-07-05), this program is not SPARK because it doesn't declare the external
 # hardware it uses correctly. This should be fixed, of course, but I'm commenting out this

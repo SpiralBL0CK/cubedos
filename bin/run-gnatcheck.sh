@@ -17,6 +17,10 @@ echo -e "\nEcho"
 echo      "----"
 codepeer-gnatcheck -P samples/echo/echo.gpr samples/echo/*.ads samples/echo/*.adb
 
+echo -e "\nMoonshot"
+echo      "--------"
+codepeer-gnatcheck -P samples/moonshot/moonshot.gpr samples/moonshot/*.ads samples/moonshot/*.adb
+
 echo -e "\nMulti-Domain"
 echo      "------------"
 codepeer-gnatcheck -P samples/networking/networking.gpr -XBUILD=DomainA samples/networking/DomainA/*.ads samples/networking/DomainA/*.adb
@@ -25,10 +29,6 @@ codepeer-gnatcheck -P samples/networking/networking.gpr -XBUILD=DomainB samples/
 echo -e "\nPathfinder"
 echo      "----------"
 codepeer-gnatcheck -P samples/pathfinder/pathfinder.gpr samples/pathfinder/*.ads samples/pathfinder/*.adb
-
-echo -e "\nPub/Sub Server"
-echo      "--------------"
-codepeer-gnatcheck -P samples/pubsub/pubsub.gpr samples/pubsub/*.ads samples/pubsub/*.adb
 
 # The AdaCore-provided packages make heavy use of names with non-standardard casing. As a
 # result, analyzing the style of this sample produces a lot of warnings in packages we did not
