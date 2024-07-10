@@ -19,15 +19,15 @@ The subfolders are as follows:
 
 + `mercury`: The interface definition language compiler for CubedOS.
 
-+ `samples`: This folder contains various sample programs that illustrate CubedOS in action.
++ `samples`: Sample programs that illustrate CubedOS in action.
 
 + `scriptbuilder`: The command script editor for CubedOS.
 
-+ `src`: The CubedOS source code repository.
++ `src`: The CubedOS core modules and support library.
 
-+ `templates`: Various templates to facilitate the construction of CubedOS applications. The
-  developer can use these templates to simplify the programming of new applications, however
-  their use is not strictly required.
++ `templates`: Templates to facilitate the construction of CubedOS applications. The developer
+  can use these templates to simplify the programming of new applications, however their use is
+  not required.
   
   
 Development Environment
@@ -40,15 +40,16 @@ that target other platforms are also included.
 
 With generous support from AdaCore, we are able to use the GNAT Pro tool set (currently version
 24.1) for our development. Some experimentation with using Alire and the community tool chain
-has been done, but that build environment is not officially supported by us at this time.
+has been done, but that build environment is not officially supported at this time.
 
 In addition to GNATstudio for the SPARK/Ada components of the project, we also support using
 Visual Studio Code. The advantage of VSCode is that it supports development of the entire
 project from a single environment: Ada, Scala, Python, and LaTeX. We describe how to set up
-VSCode in more detail below.
+VSCode in more detail below. JetBrains IDEs (IntelliJ and PyCharm) can also be used for the
+Scala and Python portions of the project.
 
 The README files in the `mercury` and `scriptbuilder` folders give more information about those
-subprojects, including what tools we use with them and how to configure those tools.
+subprojects.
 
 
 Build & Test Instructions
@@ -71,8 +72,8 @@ GNATstudio. Various executables are defined as follows.
   
 These programs are all written to the `src/check/build` folder.
 
-The sample programs have their own project files. At this time there is no master project file
-defined for all CubedOS components.
+The sample programs have their own project files. An aggregate project for the samples is also
+available in `samples/samples.gpr`.
 
 
 Visual Studio Code
@@ -104,14 +105,14 @@ The following extensions are recommended:
 
 + **Scala (Metals)** by Scalameta. This extension provides Scala and SBT support for VSCode.
 
-+ **Todo Tree** by Gruntfuggly (Optional). This extension summarizes all "todo" items in the entire
-  workspace in one, easy-to-navigate location.
++ **Todo Tree** by Gruntfuggly (Optional). This extension summarizes all "todo" items in the
+  entire workspace in one, easy-to-navigate location.
 
 The configurations for some or all of these extensions may be committed to version control, so
-you may not have to adjust any configurations. Also, be aware that some of these extensions will
-install additional extensions as dependencies.
+you may not have to adjust the configurations (very much). Also, be aware that some of these
+extensions will install additional extensions as dependencies.
 
 The Ada & SPARK extension expects the Ada compiler and tools to be in the PATH environment when
-VSCode is started. This is true for recently releases of the Skynet virtual machine used by the
-CubeSat Laboratory team, but you may have to configure this separately if you are not using
-Skynet.
+VSCode is started. This is true for recent releases of the Skynet virtual machine that is used
+by the CubeSat Laboratory team, but you may have to configure this separately if you are not
+using Skynet.
