@@ -8,7 +8,6 @@ pragma Profile(Jorvik);
 pragma Partition_Elaboration_Policy(Sequential);
 pragma SPARK_Mode(On);
 
-
 package CubedOS is
    pragma Pure;
 end CubedOS;

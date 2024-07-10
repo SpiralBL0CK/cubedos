@@ -1,8 +1,7 @@
 --------------------------------------------------------------------------------
 -- FILE   : cubedos-lib-generic_rid_map.adb
--- SUBJECT: Implementation of a package for maps of Request IDs to some other data type
---          used to map Request IDs to senders, for instance.
--- AUTHOR : (C) Copyright 2018 by Vermont Technical College
+-- SUBJECT: Implementation of a package for maps of Request IDs to some other data type.
+-- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
 --------------------------------------------------------------------------------
 

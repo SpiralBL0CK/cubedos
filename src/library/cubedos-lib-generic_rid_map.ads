@@ -8,9 +8,8 @@
 
 generic
    type Value_Type is private;
-
 package CubedOS.Lib.Generic_RID_Map
-with SPARK_Mode => On
+  with SPARK_Mode => On
 is
    type Num_Entries_Type is new Natural range 0 .. 10000;
    type Key_Array_Type is array(Num_Entries_Type) of Natural;
