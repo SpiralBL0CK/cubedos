@@ -36,19 +36,12 @@ package CubedOS.Lib.Bounded_Strings is
    -- A convenient alias.
    function Size(Source : in Bounded_String) return Length_Type renames Length;
 
-   -- This function expresses the Bounded_String invariant. It is called explicitly at the
-   -- interface of the various operations below. Once type invariants are supported by SPARK
-   -- for child units, it should be possible to remove this function and use a type invariant.
-   function BSI(S : in Bounded_String) return Boolean is
-      (Length(S) <= S.Bound);
-
    -- Returns a bounded string with the given upper bound and set to the initializer.
    function Make(Upper_Bound : in Index_Type; Initializer : in Bounded_String) return Bounded_String
      with
        Global => null,
-       Pre => BSI(Initializer) and Length(Initializer) <= Upper_Bound,
+       Pre => Length(Initializer) <= Upper_Bound,
        Post =>
-         BSI(Make'Result) and then
          (Make'Result.Bound = Upper_Bound and Length(Make'Result) = Length(Initializer)) and then
          (for all I in 1 .. Length(Make'Result) =>
             Element(Make'Result, I) = Element(Initializer, I));
@@ -59,7 +52,6 @@ package CubedOS.Lib.Bounded_Strings is
        Global => null,
        Pre => Initializer'Length <= Upper_Bound,
        Post =>
-         BSI(Make'Result) and then
          (Make'Result.Bound = Upper_Bound and Length(Make'Result) = Initializer'Length) and then
          (for all I in 1 .. Length(Make'Result) =>
             Element(Make'Result, I) = Initializer(Initializer'First - 1 + I));
@@ -69,7 +61,6 @@ package CubedOS.Lib.Bounded_Strings is
      with
        Global => null,
        Post =>
-         BSI(Make'Result) and then
          (Make'Result.Bound = Upper_Bound and Length(Make'Result) = 1) and then
            Element(Make'Result, 1) = Initializer;
 
@@ -77,7 +68,7 @@ package CubedOS.Lib.Bounded_Strings is
    function Element(Source : in Bounded_String; Index : in Index_Type) return Character
      with
        Global => null,
-       Pre => BSI(Source) and Index <= Length(Source);
+       Pre => Index <= Length(Source);
 
    -- Replaces the character at position 'Index' with 'Item' in the given bounded string.
    procedure Replace_Element
@@ -85,15 +76,13 @@ package CubedOS.Lib.Bounded_Strings is
      with
        Global => null,
        Depends => (Target =>+ (Index, Item)),
-       Pre => BSI(Target) and Index <= Length(Target),
+       Pre => Index <= Length(Target),
        Post =>
-         BSI(Target) and
          Length(Target) = Length(Target)'Old and Element(Target, Index) = Item;
 
    function To_String(Source : in Bounded_String) return String
      with
        Global => null,
-       Pre => BSI(Source),
        Post =>
          To_String'Result'Length = Length(Source) and then
          (for all I in 1 .. Length(Source) =>
@@ -103,9 +92,8 @@ package CubedOS.Lib.Bounded_Strings is
      with
        Global => null,
        Depends => (Target =>+ Item),
-       Pre => BSI(Target) and BSI(Item) and Length(Target) + Length(Item) <= Target.Bound,
+       Pre => Length(Target) + Length(Item) <= Target.Bound,
        Post =>
-         BSI(Target) and
          Length(Target) = Length(Target)'Old + Length(Item) and
          (for all I in 1 .. Length(Target)'Old => Element(Target, I) = Element(Target'Old, I)) and
          (for all I in 1 .. Length(Item) =>
@@ -115,9 +103,8 @@ package CubedOS.Lib.Bounded_Strings is
      with
        Global => null,
        Depends => (Target =>+ Item),
-       Pre => BSI(Target) and Item'Length <= Target.Bound - Length(Target),
+       Pre => Item'Length <= Target.Bound - Length(Target),
        Post =>
-         BSI(Target) and
          Length(Target) = Length(Target)'Old + Item'Length and
          (for all I in 1 .. Length(Target)'Old => Element(Target, I) = Element(Target'Old, I)) and
          (for all I in 1 .. Item'Length =>
@@ -127,9 +114,8 @@ package CubedOS.Lib.Bounded_Strings is
      with
        Global => null,
        Depends => (Target =>+ Item),
-       Pre => BSI(Target) and Length(Target) + 1 <= Target.Bound,
+       Pre => Length(Target) + 1 <= Target.Bound,
        Post =>
-         BSI(Target) and
          Length(Target) = Length(Target)'Old + 1 and
          (for all I in 1 .. Length(Target)'Old => Element(Target, I) = Element(Target'Old, I)) and
          Element(Target, Length(Target)'Old + 1) = Item;
@@ -139,7 +125,7 @@ package CubedOS.Lib.Bounded_Strings is
      with
        Global => null,
        Depends => (Target =>+ null),
-       Post => BSI(Target) and Length(Target) = 0;
+       Post => Length(Target) = 0;
 
 private
 
@@ -147,9 +133,8 @@ private
       record
          Text : String(1 .. Bound) := [others => Ada.Characters.Latin_1.NUL];
          Length : Length_Type := 0;
-      end record;
-   -- Type_Invariants are not yet supported in child units.
-   -- with Type_Invariant => Bounded_String.Length <= Bounded_String.Bound;
+      end record
+     with Type_Invariant => Bounded_String.Length <= Bounded_String.Bound;
 
 
    -- NOTES
