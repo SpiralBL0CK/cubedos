@@ -40,10 +40,11 @@ package body CubedOS.Log_Server.Messages is
       -- TODO: We should also time stamp the messages.
       if Status = Success then
          Ada.Text_IO.Put_Line
-           (Level_Strings(Log_Level) & ": " & Duration'Image(Ada.Real_Time.To_Duration(Now)) &
-            ", FROM: ("  & Domain_ID_Type'Image(Message.Sender_Address.Domain_ID) &
-            ", "   & Module_ID_Type'Image(Message.Sender_Address.Module_ID) &
-            "): " & Text(1 .. Size));
+           (Level_Strings(Log_Level) & ": ("  &
+              Domain_ID_Type'Image(Message.Sender_Address.Domain_ID) &
+            ","   & Module_ID_Type'Image(Message.Sender_Address.Module_ID) &
+              "): " & Duration'Image(Ada.Real_Time.To_Duration(Now)) & ": " &
+              Text(1 .. Size));
       end if;
    end Handle_Log_Text;
 
@@ -62,8 +63,7 @@ package body CubedOS.Log_Server.Messages is
       else
          CubedOS.Log_Server.API.Log_Message(Name_Resolver.Log_Server,
                                             CubedOS.Log_Server.API.Alert,
-                                            "An unknown message type has been received from "&
-                                           Message_Address'Image(Message.Sender_Address));
+                                            "An unknown message type has been received!");
       end if;
    end Process;
 
