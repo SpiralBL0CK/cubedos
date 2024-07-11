@@ -8,7 +8,7 @@ with Message_Manager; use Message_Manager;
 
 package Name_Resolver is
 
-    -- Core Modules
+   -- Core Modules
 
    -- Application-Specific Modules
    Echo_Client             : constant Message_Address := (0,1);

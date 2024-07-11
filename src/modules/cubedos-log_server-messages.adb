@@ -60,9 +60,10 @@ package body CubedOS.Log_Server.Messages is
       if Log_Server.API.Is_A_Log_Text(Message) then
          Handle_Log_Text(Message);
       else
-         -- An unknown message type has been received. What should be done about that?
-         -- It seems like this should be logged somehow, but do we log to the logger while in the logger?
-         null;
+         CubedOS.Log_Server.API.Log_Message(Name_Resolver.Log_Server,
+                                            CubedOS.Log_Server.API.Alert,
+                                            "An unknown message type has been received from "&
+                                           Message_Address'Image(Message.Sender_Address));
       end if;
    end Process;
 

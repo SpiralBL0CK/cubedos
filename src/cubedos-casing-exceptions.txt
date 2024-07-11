@@ -8,6 +8,7 @@ BSI
 *TC*
 *XDR*
 *LED*
+CubedOS
 CubedOS_Check
 CubedLib_Suite
 DomainA_Client
@@ -18,3 +19,4 @@ DomainB_Addr
 DomainA_Port
 DomainB_Port
 CPU_Number
+PNumbers
