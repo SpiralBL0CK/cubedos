@@ -12,7 +12,7 @@ package Read_Number.Messages is
       Priority => Pri,
       CPU      => CPU_Number
    is
-   --pragma Storage_Size (4 * 1_024);
+   -- pragma Storage_Size (4 * 1_024);
    end Message_Loop;
 
 end Read_Number.Messages;

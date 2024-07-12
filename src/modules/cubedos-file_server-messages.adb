@@ -42,7 +42,7 @@ package body CubedOS.File_Server.Messages is
          for I in API.Valid_File_Handle_Type loop
             if not Octet_IO.Is_Open(Files(I).Underlying) then
                Return_Handle := I;
-               Exit;
+               exit;
             else
                Return_Handle := API.Invalid_Handle;
             end if;

@@ -217,16 +217,289 @@ Filling in the rest of the application requires the following steps:
   your application.
 \item Writing a name resolver package to assign addresses to the modules you will use, including
   the core modules.
-\item Writing a publish/subscribe channel definition package to define the channels you will use
-  in your application.
-\item Writing MXDR interface definition descriptions for the messages that will be sent between
-  modules, and using the Mercury tool to generate the Ada code for those message encoding and
-  decoding subprograms.
 \item Creating skeletons for the modules you will write by copying the templates from the
   CubedOS repository and editing them.
 \item Writing the Ada-required main procedure to ensure the modules you need will be compiled
   into your executable.
 \item Verifying that your completed skeleton application builds and runs.
+\item Writing a publish/subscribe channel definition package to define the channels you will use
+  in your application.
+\item Writing MXDR interface definition descriptions for the messages that will be sent between
+  modules, and using the Mercury tool to generate the Ada code for those message encoding and
+  decoding subprograms.
 \item Implementing the full logic of your application by filling in the skeletons you created
   earlier.
 \end{enumerate}
+
+\subsection{Instantiating the Message Manager}
+\label{sec:manual-tutorial-instantiating}
+
+Every domain in CubedOS requires a message manager to handle the message passing between
+modules. The message manager is a generic package that is instantiated with several arguments
+that define the number of modules in the domain and the dimensions of the mailboxes used by
+those modules.
+
+At the time of this writing, the generic instance \emph{must} be called |Message_Manager|. This
+name is hard-coded in the core modules. In a multi-domain application, you would have multiple
+instances of the generic message manager, one for each domain, but since every instance must
+have the same name, they must reside in different executable units. This is a limitation of the
+current CubedOS design that might be lifted in the future, if it proves to be problematic.
+
+Here is a suitable instantiation of the generic message manager for the Moonshot application:
+
+\begin{verbatim}
+  with CubedOS.Generic_Message_Manager;
+  pragma Elaborate_All(CubedOS.Generic_Message_Manager);
+  
+  package Message_Manager is
+    new CubedOS.Generic_Message_Manager
+      (Domain_Number =>  1,
+       Module_Count  =>  8,
+       Mailbox_Size  =>  8,
+       Maximum_Message_Size => 1024);
+\end{verbatim}
+
+The meaning of the generic arguments is as follows:
+
+\begin{description}
+  \item[Domain\_Number] The domain number is a unique identifier for the domain. It is a
+  positive integer. For a single domain application, such as Moonshot, the domain number should
+  always be 1.
+
+  \item[Module\_Count] The module count is the number of modules in the domain. For the Moonshot
+  application, we have four application-specific modules (Camera, Radio, Thruster, and
+  Controller) and four core modules (Log Server, Time Server, File Server, and Publish/Subscribe
+  Server). That makes a total of eight modules.
+
+  \item[Mailbox\_Size] The mailbox size is the number of messages that can be queued in a
+  module's mailbox (also called the ``depth'' of the mailbox). The mailbox size should be large
+  enough to hold all the messages that might be sent to a module before it can process them.
+
+  It can be difficult to decide the most appropriate value for this parameter. If a module can
+  always process messages quickly, or if messages arrive infrequently, a small mailbox size is
+  appropriate. However, if a module can be slow to process messages or if messages can sometimes
+  arrive quickly, a larger mailbox size is needed. A mailbox size that is too small can lead to
+  messages being dropped. However, a large mailbox size wastes memory.
+
+  Be aware that all modules in the same domain will use the same mailbox size. Choose a size
+  large enough to satisfy the needs of the module requiring the most depth of any in the domain.
+  A mailbox size of 8 is a reasonable default.
+
+  \item[Maximum\_Message\_Size] The maximum message size is the maximum number of 8-bit bytes
+  (also called ``Octets'') that can be sent in a single message. The maximum message size should
+  be large enough to hold the largest message that will ever be sent in the domain.
+\end{description}
+
+The total amount of memory (not counting certain overheads) required for the mailboxes is the
+product of |Module_Count|, |Mailbox_Size|, and |Maximum_Message_Size|. In the Moonshot
+application, the total memory required for the mailboxes is $8 \times 8 \times 1024 = 64$ KiB.
+Depending on the platform on which the application will run, this may be a significant amount of
+memory. Be sure to consider the memory requirements of your application when choosing these
+parameters.
+
+\subsection{Writing the Name Resolver}
+\label{sec:manual-tutorial-name-resolver}
+
+In CubedOS, every module has an address represented by a pair of integers (Domain ID, Module
+ID). In the Moonshot application, the domain ID is 1, and the module IDs are in the range from 1
+to 8 inclusive.
+
+You must assign these module IDs to the modules yourself, in any way you see fit (it could be
+arbitrary), but you must ensure that each module has a unique ID. The core modules do \emph{not}
+have predefined ID numbers. You must assign them as well.
+
+The ID assignments are made in a package called |Name_Resolver|. As with the message Manager
+package, the name resolve package must also have a specific name because references to it are
+hard coded in the core modules. Here is a suitable |Name_Resolver| package for the Moonshot
+application:
+
+\begin{verbatim}
+with Message_Manager; use Message_Manager;
+
+package Name_Resolver is
+
+   -- Core Modules
+   Log_Server              : constant Message_Address := (0, 1);
+   Time_Server             : constant Message_Address := (0, 2);
+   File_Server             : constant Message_Address := (0, 3);
+   Publish_Subscribe_Server: constant Message_Address := (0, 4);
+
+   -- Application-Specific Modules
+   Camera                  : constant Message_Address := (0, 5);
+   Radio                   : constant Message_Address := (0, 6);
+   Thruster                : constant Message_Address := (0, 7);
+   Controller              : constant Message_Address := (0, 8);
+
+end Name_Resolver;
+\end{verbatim}
+
+The |Message_Address| type is defined in the |Message_Manager| package. It is a record type with
+two components for the domain ID and module ID.
+
+Note that, although all the modules in our application are in domain 1, the value 0 is used for
+the domain ID in the |Name_Resolver|. This value is treated as ``this'' domain by the message
+passing system. If a module sends a message to domain 0, it is sending that message to a module
+in the same domain as the sender. The explicit value of 1 would also work in this case, but
+using 0 is a bit more general. The use of domain ID 0 is more important in a multi-domain
+application when you want to send a message to a module in the same domain without knowing your
+own domain ID.
+
+It is important that you assign unique module IDs to each module in your application. If two
+modules are given the same ID, they will both try to fetch messages from the same mailbox.
+Although, it is permitted under the Jorvik profile used by CubedOS for multiple tasks to queue
+on the same mailbox entry, it is unspecified which messages will be picked up by which tasks.
+This will result in the two conflicting modules receiving many messages intended for the other,
+producing many ``invalid message'' errors at runtime.
+
+It is also important that you don't accidentally assign a module ID outside the range of allowed
+ID values implied by the |Module_Count| parameter of the |Message_Manager| instantiation.
+However, in this case you will get compile-time errors, so it is less likely to be a problem.
+
+Finally, there is no requirement that the module IDs be contiguous or start at 1. For example,
+you could assign the core modules IDs 1 through 4 and the application-specific modules IDs 10
+through 13, leaving the range 5 through 9 reserved for future expansion without renumbering the
+existing modules. This does cause the mailboxes to use more memory than is necessary, since you
+are allocating mailboxes for modules you aren't using. Also, renumbering modules later in
+development is not necessarily a problem since the compiler will manage the module ID values for
+you when it rebuilds your application.
+
+At the time of this writing, module ID 2 is reserved for the inter-domain router used in
+multi-domain applications. This router is internal to CubedOS and not something application
+developers interact with directly. In a multi-domain application, module ID 2 cannot be used for
+either a core module or an application module. However, in a single domain application such as
+Moonshot, module ID 2 is available for use.
+
+\subsubsection{A Word About Addresses}
+\label{sec:manual-tutorial-addresses}
+
+As you have seen modules have two-dimensional addresses in CubedOS, consisting of domain ID,
+module ID pairs. Each module also has a collection of messages that it can send and receive, and
+those messages have IDs as well. The message IDs are local to the module. The module IDs are
+local to the domain. The domain IDs are globally unique.
+
+The full address of a message is a triple consisting of the domain ID, module ID, and message
+ID. For example: $(1, 3, 2)$ is the address of message 2 in module 3 of domain 1. This is a
+different message from $(1, 3, 3)$ in the same module, and different from $(1, 4, 2)$ in a
+different module in the same domain, and of course different from $(2, 3, 2)$ in a different
+domain altogether. In most cases, you do not need to work with message IDs directly. The CubedOS
+message passing system takes care of that for you. However, you should be aware of this
+addressing scheme in case you need to debug a problem or understand the CubedOS internals.
+
+\subsection{Creating Module Skeletons}
+\label{sec:manual-tutorial-skeletons}
+
+Now we are ready to start building the modules for the Moonshot application. To start,
+we will focus on the controller module. The controller module is the main control logic for the
+mission, and thus serves as the ``main'' program for the application.
+
+CubedOS modules are organized as a package hierarchy. The top-level package has the same name as
+the module, and is mostly used as a place to hang various child packages that implement the module's
+logic. Here is a complete top-level package for the controller module:
+
+\begin{verbatim}
+pragma SPARK_Mode(On);
+
+package Controller is
+  -- Empty
+end Controller;  
+\end{verbatim}
+
+This package only serves to form the root of the module's package hierarchy, and thus does not
+need to contain any functionality (or have a body). It might be reasonable to include some
+module-wide declarations here, such as types needed throughout the module, but in this case we
+have none.
+
+Recall that in Ada, child packages have visibility into their parents automatically (meaning
+without using |with| statements). The bulk of the module can be in child packages, or even in
+grandchild packages, and yet can see the module-global declarations in the top-level package
+without making those declarations global program-wide. This is a nice example of Ada's scope and
+visibility-management features in action.
+
+CubedOS modules have at least two child packages: |API| and |Messages|.
+
+The |API| package contains subprograms for creating messages from well-typed values, breaking
+messages back into well-typed values, and testing messages for validity. A more typical API is a
+collection of subprograms (functions, methods, etc.) that take well-typed parameters, perform
+some action, and return a result. In CubedOS, modules communicate by sending messages. The API
+is thus about which messages a module receives (called ``Requests'') and sends (called
+``Replies''). The API package provides subprograms that manipulate these messages.
+
+Characterizing messages as requests and replies follows from the view of message passing as a
+kind of client/server interaction where the client makes a request, and the server replies to
+it. However, in CubedOS, modules can act as both clients and servers, depending on what they are
+doing. Each module specifies in its API what requests it will accept and what replies it may
+produce. Also requests can be sent without expecting a reply, and replies can be sent without
+ever receiving a request (i.e., unsolicited replies).
+
+The CubedOS repository includes a folder \filename{templates} that contains template files for
+the |API| and |Messages| packages. You can copy these templates into your module's folder and
+edit them to suit your needs. They are heavily commented to help guide you. The expectation
+is that you will ultimately remove most, if not all, of the comments there and replacement
+them with application-specific comments as appropriate.
+
+The |Messages| package contains a task that fetches a message from the module's mailbox,
+processes that message, and then fetches the next message. This task is called the module's main
+task.
+
+The template files in the \filename{templates} folder show the recommended structure. The
+implementation of the main task (at the bottom) is very simple. It immediately passes each
+message it receives to procedure |Process|. That procedure, in turn, examines the message and
+calls the appropriate subprogram to handle that message.
+
+Handling a message entails using an API decoding procedure to first break the message into its
+well-typed components, and then acting on the message. Normally, this involves sending other
+messages to other modules, and ultimately sending a reply message back to the requester.
+
+Copy the sample module templates to your working folder, renaming the files as appropriate for
+the Controller module. Edit the templates to change names, as necessary. For now, don't try to
+implement any real logic. Let's get the skeleton to compile and run first.
+
+\subsection{Writing the Main Procedure}
+\label{sec:manual-tutorial-main-procedure}
+
+All Ada programs require a library-level main procedure. In a CubedOS application, this
+procedure does nothing, but it is where we will inform the compiler of the modules we want to
+include in the executable, so it knows what code to locate and compile. Here is a suitable main
+procedure for the Moonshot application so far:
+
+\begin{verbatim}
+-- Bring in the necessary modules.
+with CubedOS.Log_Server.Messages;
+with CubedOS.Time_Server.Messages;
+with CubedOS.File_Server.Messages;
+with CubedOS.Publish_Subscribe_Server.Messages;
+with Controller.Messages;
+
+pragma Unreferenced(CubedOS.Log_Server.Messages);
+pragma Unreferenced(CubedOS.Time_Server.Messages);
+pragma Unreferenced(CubedOS.File_Server.Messages);
+pragma Unreferenced(CubedOS.Publish_Subscribe_Server.Messages);
+pragma Unreferenced(Controller.Messages);
+
+procedure Main is
+begin
+   return;
+end Main;
+\end{verbatim}
+
+Although |Main| returns immediately, the process won't terminate until all the module tasks have
+terminated. However, the module tasks are all infinite loops (as required by the Jorvik profile)
+so the program never ends.
+
+The |with| statements bring the module tasks into the executable. The Ada compiler will form the
+transitive closure of package dependencies, locating all the necessary program components, based
+on these |with| statements and on |with| statements in the included packages, etc. Since no
+module directly interacts with the message loop of any other module, it is essential that you
+|with| the |Messages| packages here. Otherwise, a module's message loop will not be linked into
+your executable and that module's mailbox will never be serviced!
+
+The |pragma Unreferenced| directives suppress warnings about unused |with| statements, but have
+no other effect.
+
+Notice that we are including all the core modules we will use, but only the Controller
+skeleton module We made previously. We will add the other application-specific modules as we
+create them, editing |Main| to include them when we are ready.
+
+At this point the program should compile and run. When executed, all modules will block
+immediately trying to fetch a message from their mailboxes. Since no messages are ever sent,
+nothing more happens. We're off to a good start!\footnote{It didn't crash, did it?}

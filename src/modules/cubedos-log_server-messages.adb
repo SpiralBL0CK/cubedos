@@ -40,10 +40,11 @@ package body CubedOS.Log_Server.Messages is
       -- TODO: We should also time stamp the messages.
       if Status = Success then
          Ada.Text_IO.Put_Line
-           (Level_Strings(Log_Level) & ": " & Duration'Image(Ada.Real_Time.To_Duration(Now)) &
-            ", FROM: ("  & Domain_ID_Type'Image(Message.Sender_Address.Domain_ID) &
-            ", "   & Module_ID_Type'Image(Message.Sender_Address.Module_ID) &
-            "): " & Text(1 .. Size));
+           (Level_Strings(Log_Level) & ": ("  &
+              Domain_ID_Type'Image(Message.Sender_Address.Domain_ID) &
+            ","   & Module_ID_Type'Image(Message.Sender_Address.Module_ID) &
+              "): " & Duration'Image(Ada.Real_Time.To_Duration(Now)) & ": " &
+              Text(1 .. Size));
       end if;
    end Handle_Log_Text;
 
@@ -60,9 +61,9 @@ package body CubedOS.Log_Server.Messages is
       if Log_Server.API.Is_A_Log_Text(Message) then
          Handle_Log_Text(Message);
       else
-         -- An unknown message type has been received. What should be done about that?
-         -- It seems like this should be logged somehow, but do we log to the logger while in the logger?
-         null;
+         CubedOS.Log_Server.API.Log_Message(Name_Resolver.Log_Server,
+                                            CubedOS.Log_Server.API.Alert,
+                                            "An unknown message type has been received!");
       end if;
    end Process;
 

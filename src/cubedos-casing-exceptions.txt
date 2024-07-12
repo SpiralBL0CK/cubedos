@@ -19,3 +19,4 @@ DomainB_Addr
 DomainA_Port
 DomainB_Port
 CPU_Number
+PNumbers

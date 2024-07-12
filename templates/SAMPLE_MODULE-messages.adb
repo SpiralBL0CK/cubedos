@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- FILE   : SAMPLE_MODULE-messages.adb
 -- SUBJECT: Body of a package that implements the main part of the module.
--- AUTHOR : (C) Copyright 2022 by Vermont Technical College
+-- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
 --------------------------------------------------------------------------------
 pragma SPARK_Mode(On);
@@ -15,7 +15,7 @@ package body Sample_Module.Messages is
    
    -- The package initializer, if needed. This procedure might be called as the message loop
    -- (see below) is starting, or perhaps during package elaboration. If this procedure is not
-   -- needed, it should be removed to avoid SPARK flow issues.
+   -- needed, it should be removed to avoid SPARK flow warnings.
    --
    procedure Initialize is
    begin
@@ -32,7 +32,7 @@ package body Sample_Module.Messages is
    -- into a private sibling package. That would move the complex details of message handling to
    -- a different file and reduce clutter in this file. This file is really just about decoding
    -- and dispatching the messages. We recommend that if a single internal package is used that
-   -- it sould be called Sample_Module.Core (for example).
+   -- it should be called Sample_Module.Core (for example).
    
    procedure Handle_A_Request(Message : in Message_Record)
      with Pre => Sample_Module.API.Is_A_Request(Message)
@@ -47,7 +47,7 @@ package body Sample_Module.Messages is
    -- Message Decoding and Dispatching
    -----------------------------------
    
-   -- This procedure processes exactly one message.
+   -- This procedure processes exactly one message at a time.
    procedure Process(Message : in Message_Record) is
    begin
       if Sample_Module.API.Is_A_Request(Message) then
