@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- FILE   : SAMPLE_MODULE-messages.ads
 -- SUBJECT: Specification of a package that implements the main part of the module.
--- AUTHOR : (C) Copyright 2022 by Vermont Technical College
+-- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
 --------------------------------------------------------------------------------
 pragma SPARK_Mode(On);
@@ -33,16 +33,4 @@ package Sample_Module.Messages is
       pragma Priority(System.Default_Priority);
    end Message_Loop;
 
-   -- This justifcation is needed to silence a SPARK error related tasking. Each CubedOS module
-   -- reads from exactly one mailbox. However, since the mailboxes are stored in an array, SPARK
-   -- can't tell for sure which mailbox is being read by which task. SPARK therefor
-   -- conservatively assumes two tasks might be reading from the same mailbox, which is a
-   -- violation of SPARK rules. This justification should be satisfied as long as every module
-   -- has a unique module ID (since module IDs are used as mailbox identifiers).
-   pragma Annotate
-     (GNATprove,
-      Intentional,
-      "multiple tasks might suspend on protected object",
-      "Every module has a unique ID");
-   
 end Sample_Module.Messages;

@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- FILE   : SAMPLE_MODULE-api.adb
 -- SUBJECT: Body of a package that simplifies use of the module.
--- AUTHOR : (C) Copyright 2022 by Vermont Technical College
+-- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
 --------------------------------------------------------------------------------
 pragma SPARK_Mode(On);
@@ -26,9 +26,13 @@ package body Sample_Module.API is
       --
       Message : Message_Record :=
         Make_Empty_Message
-          (Sender_Address, Name_Resolver.Sample_Module, Request_ID, Message_Type'Pos(A_Request), Priority); 
+          (Sender_Address   => Sender_Address,
+           Receiver_Address => Name_Resolver.Sample_Module, -- Requests go to "this" module.
+           Request_ID       => Request_ID,
+           Message_ID       => Message_Type'Pos(A_Request),
+           Priority         => Priority); 
    begin
-      -- Fill in the message by encoding the other parameters (not shown) as required.
+      -- Fill in the message by encoding the other parameters using the XDR library (not shown).
       return Message;
    end A_Request_Encode;
    
@@ -42,7 +46,11 @@ package body Sample_Module.API is
       -- The skeletal message knows its sender (this module).
       Message : Message_Record :=
         Make_Empty_Message
-          (Name_Resolver.Sample_Module, Receiver_Address, Receiver, Request_ID, Message_Type'Pos(A_Reply), Priority); 
+          (Sender_Address   => Name_Resolver.Sample_Module,
+           Receiver_Address => Receiver_Address,
+           Request_ID       => Request_ID,
+           Message_ID       => Message_Type'Pos(A_Reply),
+           Priority         => Priority); 
       
       Position : Data_Index_Type;
       Last     : Data_Index_Type;
@@ -63,7 +71,7 @@ package body Sample_Module.API is
 
    procedure A_Request_Decode(Message : in  Message_Record; Decode_Status : out Message_Status_Type) is
    begin
-      -- Decode the given message and return via out parameters (not shown) the fields.
+      -- Decode the given message and return via out parameters using the XDR library (not shown)
       null;
    end A_Request_Decode;
    
