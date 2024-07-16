@@ -27,7 +27,7 @@ with Name_Resolver;
 
 use Message_Manager;
 
-package Sample_Module.API is
+package Controller.API is
    
    -- Define data types here that are only needed in this API (such as status codes). Data
    -- types that might also be used in the implementation should be in the top level package.
@@ -106,10 +106,10 @@ package Sample_Module.API is
    -- Message_Type enumeration).
    --
    function Is_A_Request(Message : in Message_Record) return Boolean is
-     (Message.Receiver_Address = Name_Resolver.Sample_Module and Message.Message_ID = Message_Type'Pos(A_Request));
+     (Message.Receiver_Address = Name_Resolver.Controller and Message.Message_ID = Message_Type'Pos(A_Request));
    
    function Is_A_Reply(Message : in Message_Record) return Boolean is
-     (Message.Sender_Address = Name_Resolver.Sample_Module and Message.Message_ID = Message_Type'Pos(A_Reply));
+     (Message.Sender_Address = Name_Resolver.Controller and Message.Message_ID = Message_Type'Pos(A_Reply));
    
    
    -- The decoding procedures take a message of the appropriate type and then decodes its
@@ -139,7 +139,7 @@ package Sample_Module.API is
    with
      Global => null,
      Pre => Is_A_Reply(Message),
-     Depends => (Decode_Status => Message
-                Status => Message);
+       Depends => (Decode_Status => Message,
+                  Status => Message);
 
-end Sample_Module.API;
+end Controller.API;

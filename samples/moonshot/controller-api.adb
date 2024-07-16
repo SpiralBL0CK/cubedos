@@ -9,7 +9,7 @@ pragma SPARK_Mode(On);
 with CubedOS.Lib.XDR;
 use  CubedOS.Lib;
 
-package body Sample_Module.API is
+package body Controller.API is
 
    function A_Request_Encode
      (Sender_Address : in Message_Address;
@@ -27,7 +27,7 @@ package body Sample_Module.API is
       Message : Message_Record :=
         Make_Empty_Message
           (Sender_Address   => Sender_Address,
-           Receiver_Address => Name_Resolver.Sample_Module, -- Requests go to "this" module.
+           Receiver_Address => Name_Resolver.Controller, -- Requests go to "this" module.
            Request_ID       => Request_ID,
            Message_ID       => Message_Type'Pos(A_Request),
            Priority         => Priority); 
@@ -38,7 +38,7 @@ package body Sample_Module.API is
    
    
    function A_Reply_Encode
-     (Receiver_Address : in Message_Address
+     (Receiver_Address : in Message_Address;
       Request_ID       : in Request_ID_Type;
       Status           : in Status_Type;
       Priority         : in System.Priority := System.Default_Priority) return Message_Record
@@ -46,7 +46,7 @@ package body Sample_Module.API is
       -- The skeletal message knows its sender (this module).
       Message : Message_Record :=
         Make_Empty_Message
-          (Sender_Address   => Name_Resolver.Sample_Module,
+          (Sender_Address   => Name_Resolver.Controller,
            Receiver_Address => Receiver_Address,
            Request_ID       => Request_ID,
            Message_ID       => Message_Type'Pos(A_Reply),
@@ -76,9 +76,7 @@ package body Sample_Module.API is
    end A_Request_Decode;
    
    
-   procedure A_Reply_Decode(Message : in  Message_Record;
-                            Status  : out Status_Type;
-                            Decode_Status : out Message_Status_Type) is
+   procedure A_Reply_Decode(Message : in  Message_Record; Status : out Status_Type; Decode_Status : out Message_Status_Type) is
       Position  : Data_Index_Type;
       Last      : Data_Index_Type;
       Raw_Value : XDR.XDR_Unsigned;
@@ -90,7 +88,6 @@ package body Sample_Module.API is
       -- Decode one parameter (encoding logic must be consistent).
       -- Set position to get ready for next parameter.
       XDR.Decode(Message.Payload, Position, Raw_Value, Last);
-      Position := Last + 1;
       
       -- Convert raw XDR primitive type into appropriate result. Note runtime check needed!
       if Integer(Raw_Value) not in Positive then
@@ -101,4 +98,4 @@ package body Sample_Module.API is
       end if;
    end A_Reply_Decode;
 
-end Sample_Module.API;
+end Controller.API;
