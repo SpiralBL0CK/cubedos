@@ -20,8 +20,8 @@ package body Controller.API is
       -- what domain and module ID will receive the message and knows what message ID is
       -- approriate (there are different functions for different messages) so it can fill in
       -- those values on its own.
-      -- 
-      -- In effect this creates the "header" of the message. The "body" is the octet array      
+      --
+      -- In effect this creates the "header" of the message. The "body" is the octet array
       -- contained inside the message holding the message-specific parameters.
       --
       Message : Message_Record :=
@@ -30,13 +30,12 @@ package body Controller.API is
            Receiver_Address => Name_Resolver.Controller, -- Requests go to "this" module.
            Request_ID       => Request_ID,
            Message_ID       => Message_Type'Pos(A_Request),
-           Priority         => Priority); 
+           Priority         => Priority);
    begin
       -- Fill in the message by encoding the other parameters using the XDR library (not shown).
       return Message;
    end A_Request_Encode;
-   
-   
+
    function A_Reply_Encode
      (Receiver_Address : in Message_Address;
       Request_ID       : in Request_ID_Type;
@@ -50,32 +49,30 @@ package body Controller.API is
            Receiver_Address => Receiver_Address,
            Request_ID       => Request_ID,
            Message_ID       => Message_Type'Pos(A_Reply),
-           Priority         => Priority); 
-      
+           Priority         => Priority);
+
       Position : Data_Index_Type;
       Last     : Data_Index_Type;
    begin
       -- Set a starting position.
       Position := 0;
-      
+
       -- Encode one parameter (decoding logic must be consistent).
       -- Set Position to get ready for the next parameter.
       XDR.Encode(XDR.XDR_Unsigned(Status_Type'Pos(Status)), Message.Payload, Position, Last);
       Position := Last + 1;
-      
+
       -- Set the message size.
       Message.Size := Last + 1;
       return Message;
    end A_Reply_Encode;
-   
 
    procedure A_Request_Decode(Message : in  Message_Record; Decode_Status : out Message_Status_Type) is
    begin
       -- Decode the given message and return via out parameters using the XDR library (not shown)
       null;
    end A_Request_Decode;
-   
-   
+
    procedure A_Reply_Decode(Message : in  Message_Record; Status : out Status_Type; Decode_Status : out Message_Status_Type) is
       Position  : Data_Index_Type;
       Last      : Data_Index_Type;
@@ -84,11 +81,11 @@ package body Controller.API is
    begin
       -- Set a starting position.
       Position := 0;
-      
+
       -- Decode one parameter (encoding logic must be consistent).
       -- Set position to get ready for next parameter.
       XDR.Decode(Message.Payload, Position, Raw_Value, Last);
-      
+
       -- Convert raw XDR primitive type into appropriate result. Note runtime check needed!
       if Integer(Raw_Value) not in Positive then
          Decode_Status := Malformed;

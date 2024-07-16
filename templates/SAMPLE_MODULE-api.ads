@@ -14,21 +14,21 @@ with System;
 -- Message_Manager. A distributed application composed of multiple domains must put each domain
 -- into a separate executable with its own Message_Manager package. The common name is required
 -- because that name is (currently) hard-coded in the CubedOS core modules as such.
---   
+--
 -- The message manager package contains the Mailboxes array that is used by CubedOS for inter-
--- module communication. 
+-- module communication.
 with Message_Manager;
 
 -- The Name_Resolver is a package created by the application developer that declares constant
 -- Message_Address values mapping module names to their (domain ID, module ID) pairs. The name
 -- Name_Resolver must be used.
--- 
+--
 with Name_Resolver;
 
 use Message_Manager;
 
 package Sample_Module.API is
-   
+
    -- Define data types here that are only needed in this API (such as status codes). Data
    -- types that might also be used in the implementation should be in the top level package.
    -- Note that status codes here are *different* from the status codes used by the message
@@ -36,7 +36,7 @@ package Sample_Module.API is
    -- here reflect possible statuses of the module's response to requests (i.e., if a request
    -- fails and the module wants to send back an indiciation of that error).
    type Status_Type is (Success, Failure);
-   
+
    -- Types defined here are intended to be of interest to the users of the module. We suggest
    -- creating an enumeration Message_Type that defines the different kinds of messages that can
    -- be received ("requests") or sent ("replies") by this module. Although users of the module
@@ -46,7 +46,7 @@ package Sample_Module.API is
    -- Note that not all requests necessarily need replies. In effect, the reply message is the
    -- return value of the API function defined by the request message; API procedures that
    -- return nothing don't have corresponding reply messages.
-   -- 
+   --
    type Message_Type is
      (A_Request,  -- Message requesting service.
       A_Reply,    -- Result of previous request (success/failure, or returned data).
@@ -85,21 +85,21 @@ package Sample_Module.API is
    --
    function A_Request_Encode
      (Sender_Address : in Message_Address;
-      Request_ID     : in Request_ID_Type;     
+      Request_ID     : in Request_ID_Type;
       -- This is where appropriate IN parameters are defined for additional items.
       Priority       : in System.Priority := System.Default_Priority) return Message_Record
    with Global => null;
-   
+
    function A_Reply_Encode
      (Receiver_Address : in Message_Address;
       Request_ID       : in Request_ID_Type;
-      Status           : in Status_Type; 
-      -- This is where appropriate IN parameters are defined for additional items.      
+      Status           : in Status_Type;
+      -- This is where appropriate IN parameters are defined for additional items.
       -- Not all replies necessarily need to return a Status value. However, that is common.
       Priority         : in System.Priority := System.Default_Priority) return Message_Record
    with Global => null;
-   
-   
+
+
    -- The following functions return True if the given message is of the indicated type. They
    -- simplify the expression of preconditions on the decoding subprograms. They also hide the
    -- details of how messages are distinguished (the business about the position in the
@@ -107,11 +107,11 @@ package Sample_Module.API is
    --
    function Is_A_Request(Message : in Message_Record) return Boolean is
      (Message.Receiver_Address = Name_Resolver.Sample_Module and Message.Message_ID = Message_Type'Pos(A_Request));
-   
+
    function Is_A_Reply(Message : in Message_Record) return Boolean is
      (Message.Sender_Address = Name_Resolver.Sample_Module and Message.Message_ID = Message_Type'Pos(A_Reply));
-   
-   
+
+
    -- The decoding procedures take a message of the appropriate type and then decodes its
    -- payload, writing the results into various out parameters (shown as comments below). The
    -- Decode_Status parameter indicates only if the message is malformed or not. It uses a
@@ -120,10 +120,9 @@ package Sample_Module.API is
    -- of an API-defined status type (or in some other way). Despite the precondition it is still
    -- possible for a message to be malformed; the precondition only checks the message header
    -- and not the details of the message format.
-   
-   --
+
    procedure A_Request_Decode
-     (Message : in  Message_Record;     
+     (Message : in  Message_Record;
       -- This is were appropriate OUT parameters are defined for the decided items.
       Decode_Status : out Message_Status_Type)
    with

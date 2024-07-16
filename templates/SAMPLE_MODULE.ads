@@ -10,9 +10,9 @@
 --------------------------------------------------------------------------------
 pragma SPARK_Mode(On);
 
-package Sample_Module is        
+package Sample_Module is
    pragma Pure;
-   
+
    -- Every module has a domain ID number and a module ID number. However, those numbers are
    -- assigned by the application programming in a package Name_Resolver. Modules are not
    -- directly aware of their own ID numbers but instead look them up from the Name_Resolver

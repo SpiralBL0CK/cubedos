@@ -9,7 +9,7 @@ pragma SPARK_Mode(On);
 with System;
 
 package Sample_Module.Messages is
-   
+
    -- Every module contains a message loop that receives messages from the module's mailbox and
    -- processes them. That loop is declared here with its attributes. Be mindful of priorities.
    -- We recommend giving every module a unique priority; the correct assignments need to be
