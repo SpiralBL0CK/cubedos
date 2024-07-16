@@ -433,9 +433,9 @@ ever receiving a request (i.e., unsolicited replies).
 
 The CubedOS repository includes a folder \filename{templates} that contains template files for
 the |API| and |Messages| packages. You can copy these templates into your module's folder and
-edit them to suit your needs. They are heavily commented to help guide you. The expectation
-is that you will ultimately remove most, if not all, of the comments there and replacement
-them with application-specific comments as appropriate.
+edit them to suit your needs. They are heavily commented to help guide you. The expectation is
+that you will ultimately remove most, if not all, of the provided comments and replacement them
+with application-specific comments as appropriate.
 
 The |Messages| package contains a task that fetches a message from the module's mailbox,
 processes that message, and then fetches the next message. This task is called the module's main
@@ -448,7 +448,8 @@ calls the appropriate subprogram to handle that message.
 
 Handling a message entails using an API decoding procedure to first break the message into its
 well-typed components, and then acting on the message. Normally, this involves sending other
-messages to other modules, and ultimately sending a reply message back to the requester.
+messages to other modules, and ultimately, in most cases, sending a reply message back to the
+requester.
 
 Copy the sample module templates to your working folder, renaming the files as appropriate for
 the Controller module. Edit the templates to change names, as necessary. For now, don't try to
@@ -484,22 +485,213 @@ end Main;
 
 Although |Main| returns immediately, the process won't terminate until all the module tasks have
 terminated. However, the module tasks are all infinite loops (as required by the Jorvik profile)
-so the program never ends.
+so the program never ends. This is common for embedded systems. The control program runs for as
+long as the machine it is controlling runs.
 
 The |with| statements bring the module tasks into the executable. The Ada compiler will form the
 transitive closure of package dependencies, locating all the necessary program components, based
 on these |with| statements and on |with| statements in the included packages, etc. Since no
 module directly interacts with the message loop of any other module, it is essential that you
 |with| the |Messages| packages here. Otherwise, a module's message loop will not be linked into
-your executable and that module's mailbox will never be serviced!
+your executable and that module's mailbox will never be serviced.
 
 The |pragma Unreferenced| directives suppress warnings about unused |with| statements, but have
 no other effect.
 
 Notice that we are including all the core modules we will use, but only the Controller
-skeleton module We made previously. We will add the other application-specific modules as we
+skeleton module we made previously. We will add the other application-specific modules as we
 create them, editing |Main| to include them when we are ready.
 
-At this point the program should compile and run. When executed, all modules will block
+At this point, the program should compile and run. When executed, all modules will block
 immediately trying to fetch a message from their mailboxes. Since no messages are ever sent,
 nothing more happens. We're off to a good start!\footnote{It didn't crash, did it?}
+
+\subsection{Using Mercury}
+\label{sec:manual-tutorial-mercury}
+
+If you spent much time studying the template API module, you probably noticed that it is
+intricate. Each encoding and decoding subprogram involves repeated calls to the XDR library to
+encode (or decode) individual message parameters into (or from) an array of raw octets. This is
+tedious and error-prone.
+
+To help with this, CubedOS includes a tool called Mercury that generates the encoding and
+decoding subprograms for you. Mercury reads a simple, human-readable description of the messages
+sent and received by a module, and it outputs a SPARK-provable API package for that module.
+
+Mercury is a work in progress, and it may not be able to handle all your API needs
+automatically. However, even when the API package it produces is incomplete or insufficient, you
+can still use Mercury as a starting point. It is much easier to make adjustments to the
+generated code than to write the entire API package from scratch.
+
+Like all message-passing systems, CubedOS is inherently distributed. In principle, messages can
+be passed from one module to another in the same process, in different processes on the same
+computer, or even on different computers connected by a network. From the point of view of one
+module, all other modules are ``remote'' code. Multi-domain CubedOS applications capitalize on
+this inherently distributed nature to allow applications to be spread across a network of
+spacecraft in a natural way.
+
+Many distributed application environments exist: COBRA, ONC RPC, SOAP, Ice, and gRPC, to name
+only a few. Essentially all of these environments use some  \newterm{interface definition
+language} (IDL) to describe the interface of remote code. That IDL is then compiled into
+client-side code (often called ``stubs'') that \newterm{marshal} the parameters of a remote
+procedure call into a message that can be sent over a network, and server-side code (often
+called ``skeletons'') that \newterm{unmarshal} the message back into parameters that can be
+passed to the actual remote code. These stubs and skeletons, together with the message-passing
+infrastructure connecting client and server form the \newterm{middleware} layer of the
+application.
+
+In CubedOS terms, the middleware layer is the message manager together with the API packages
+generated by Mercury. Marshaling is done by the encoding functions generated by Mercury, and
+unmarshaling is done by the decoding functions generated by Mercury. Because the API packages
+are part of the middleware layer provided by the system, it is unreasonable and inappropriate
+for application developers to be required to write them manually. Thus, Mercury is not just a
+convenience; it is an essential part of CubedOS's architecture.
+
+CubedOS currently uses XDR (eXternal Data Representation) \cite{rfc-4506} as its encoding
+format, but it could just as easily use some other approach such as ASN.1, Protocol Buffers, or
+even JSON. As a CubedOS application developer, switching to a different encoding format should
+be as simple as setting an option on Mercury's command line. You should not be required to
+manually rewrite the marshaling and unmarshaling code in your application (i.e., the API
+packages).
+
+\subsubsection{MXDR}
+
+The interface definition language used by Mercury is an extension of XDR \cite{rfc-4506} called
+MXDR (Modified XDR). MXDR includes features for specifying constraints on basic types, and for
+specifying messages and their direction of information flow. We will illustrate MXDR using the
+Moonshot application.
+
+Consider, for example, the Camera module. For simplicity, we will assume that it only knows
+about two messages: a request to take an image, and a reply containing the file name of where
+it stored the image in the file system. It would be reasonable for the Camera module to send
+the image data directly, but in this case it replies with what is, in effect, a pointer to
+where that data can be found. Here is the MXDR description of these two messages:
+
+\begin{verbatim}
+message struct -> Take_Image_Request {
+    void;
+}
+
+message struct <- Take_Image_Reply {
+    string file_name<128>;
+}
+\end{verbatim}
+
+The core of an MXDR description are the message definitions. Messages are conceptualized as
+structures with named fields for the message parameters. The direction of the arrow indicates
+the direction of information flow. An arrow pointing to the right is for messages that go from a
+client to the module being described. An arrow pointing to the left is for messages that go from
+the module being described to the client. Thus, an MXDR description is always from the point of
+view of the module being described as playing the role of a server. When a module acts as a
+client, it will use the API package of the other modules that services its requests.
+
+In this case the Camera module provides an operation ``Take Image'' and so accepts a message
+|Take_Image_Request| and replies with a message |Take_Image_Reply|. The names of the messages
+are arbitrary, but the use of ``Request'' and ``Reply'' is conventional. The names do not
+necessarily need to be related, i.e., the reply message could be named in some other way if
+desired.
+
+In this simple example, the request messages have no parameters. In a more realistic example, it
+is likely that additional parameters would be needed to specify exactly how the camera should
+capture the image. Those additional parameters would be fields in the message structure. The
+special field value |void| is used here to explicitly indicate that there are no other
+parameters. It is required to be used in such cases.
+
+The reply message contains a single parameter, a string of up to 128 characters. The string type
+maps to the usual Ada string type, but in this case, there will be an additional decoded
+value to indicate how much of the string is actually used.
+
+When Mercury compiles this MXDR description, it will generate the following six subprograms:
+
+\begin{verbatim}
+  function  Take_Image_Request_Encode(...) return Message_Record;
+  function  Is_Take_Image_Request(...) return Boolean;
+  procedure Take_Image_Request_Decode(...);
+
+  function  Take_Image_Reply_Encode(...) return Message_Record;
+  function  Is_Take_Image_Reply(...) return Boolean;
+  procedure Take_Image_Reply_Decode(...);
+\end{verbatim}
+
+For clarity, the details of the subprogram parameters are left out. However, all CubedOS
+messages include a |Request_ID| parameter that the sender can use to mark messages with An
+identifier meaningful to that sender. This is useful for correlating requests and replies.
+
+For example, the sender might command the camera to take several images, perhaps using different
+parameters (in general, but not shown here). The sender can mark each request with a unique
+|Request_ID|. When the Camera module replies, it will copy the sender's |Request_ID| into the
+reply. The sender can then use that information to match the reply with a particular request. If
+there is no need for a sender to correlate requests and replies, the |Request_ID| can be set to
+zero and ignored.
+
+Keep in mind that the sender might send multiple requests before receiving any replies, allowing
+it to tend to other matters while the camera acquires the images and writes them to storage.
+This highly asynchronous behavior is typical of CubedOS applications.
+
+Mercury uses the name of the MXDR file to construct the name of the generated Ada package. In
+this case, the MXDR file should be named \filename{Camera.mxdr}, with the indicated casing.
+Mercury will create the package |Camera.API| in the files \filename{camera-api.ads} and
+\filename{camera-api.adb}, as required by the GNAT Ada compiler.
+
+To understand how to use a module, you only need to read the MXDR for that module, resorting to
+the generated API package only when you need to know the exact subprogram signatures. For
+example, if the Controller module wants to access the image file created by the Camera module,
+it will need to send messages to the file server module. Here is a part of the file server's
+MXDR:
+
+\begin{verbatim}
+enum Mode_Type { Read, Write };
+
+// The special value 0 is used for invalid files.
+typedef unsigned int File_Handle_Type range 0 .. 64;
+typedef File_Handle_Type Valid_File_Handle_Type range 1 .. File_Handle_Type'Last;
+  
+// Types to count the number of octets read/written.
+const Maximum_Read_Size  = 256;
+typedef unsigned int Read_Result_Size_Type range 0 .. Maximum_Read_Size;
+typedef unsigned int Read_Size_Type range 1 .. Read_Result_Size_Type'Last;
+  
+// Open the named file in the given mode.
+message struct -> Open_Request {
+    Mode_Type Mode;
+    string    Name<>;
+};
+  
+// Returns the invalid handle if the open operation failed.
+message struct <- Open_Reply {
+    File_Handle_Type Handle;
+};
+  
+// Request that Amount octets be read from the indicated file.
+message struct -> Read_Request {
+    Valid_File_Handle_Type Handle;
+    Read_Size_Type         Amount;
+};
+
+// Returns data from the file.
+message struct <- Read_Reply {
+  Valid_File_Handle_Type Handle;
+  Read_Result_Size_TYpe  Amount;
+  opaque                 File_Data<>;
+};
+\end{verbatim}
+
+The protocol speaks for itself. First a module must send an |Open_Request| message to the file
+server, specifying the desired file name. The server responds with an |Open_Reply| message containing
+a ``handle'' to the file (or zero if the open failed). The module then sends repeated |Read_Request|
+messages to the file server specifying the previously opened handle. The server responds with a
+|Read_Reply| messages containing the requested data.
+
+The full interface to the file server also includes messages for writing files, closing files,
+and some other operations. The file server implementation provided with CubedOS uses the file
+system on your development system. In a real mission, the implementation (i.e., the |Messages|
+package) could be replaced with a version that works with whatever storage is available on the
+spacecraft without changing the interface or the modules that rely on that interface. In this
+way, CubedOS supports a limited object-oriented-like programming style.
+
+Notice how various types are defined before the message structures can be declared. Mercury will
+generate corresponding Ada type definitions into the API package accordingly. As an extension to
+XDR, Mercury allows you to specify constrained ranges on the types, following the usual Ada
+style. This is essential. Mercury attempts to generate SPARK-provable code, and SPARK's proofs
+are greatly facilitated by the use of constrained types. This feature sets Mercury apart from
+most other IDL compilers.

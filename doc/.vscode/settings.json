@@ -10,7 +10,8 @@
         "OSAL",
         "postcondition",
         "Ravenscar",
-        "RTEMS"
+        "RTEMS",
+        "unmarshaling"
     ],
     "rewrap.wrappingColumn": 96,
     "latex-workshop.latex.autoBuild.run": "never"
