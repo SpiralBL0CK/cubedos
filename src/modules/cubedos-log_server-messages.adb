@@ -55,7 +55,7 @@ package body CubedOS.Log_Server.Messages is
    -- This procedure processes exactly one message.
    procedure Process(Message : in Message_Record)
      with Global => (Input => (Boot_Time, Current_Time),
-                     In_Out => Ada.Text_IO.File_System)
+                     In_Out => (Ada.Text_IO.File_System, Message_Manager.Mailboxes))
    is
    begin
       if Log_Server.API.Is_A_Log_Text(Message) then
