@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- FILE   : cubedos-m0002-api.adb
--- SUBJECT: Body of a package that implements the m0002 API
--- AUTHOR : (C) Copyright 2021 by Vermont Technical College
+-- SUBJECT: Body of a package that implements the CubedOS.m0002 API
+-- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
 -- All the subprograms in this package are task safe.
 --

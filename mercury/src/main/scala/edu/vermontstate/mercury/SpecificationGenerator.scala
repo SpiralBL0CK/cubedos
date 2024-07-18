@@ -8,6 +8,7 @@ import edu.vermontstate.mercury.MXDRParser.*
 class SpecificationGenerator(
   templateFolder : String,
   nameOfFile     : String,
+  nameOfModule   : String,
   symbolTable    : BasicSymbolTable,
   out            : java.io.PrintStream,
   reporter       : Reporter) extends MXDRBaseVisitor[Void] {
@@ -65,11 +66,15 @@ class SpecificationGenerator(
   }
 
   override def visitSpecification(ctx: MXDRParser.SpecificationContext): Void = {
-    val replacementString = nameOfFile
     val lines = processTemplate()
     for (line <- lines) {
-      val newLine = line.replace("%MODULENAME%", replacementString)
-      if (line.contains("%BULK%")) {
+      val newLine = line.replace("%MODULENAME%", nameOfModule)
+
+      if(line.contains("%FILENAME%")){
+        val newLineTwo = line.replace("%FILENAME%", nameOfFile)
+        out.println(newLineTwo)
+      }
+      else if (line.contains("%BULK%")) {
         indentationLevel += 1
         doIndentation()
         out.println("type Message_Type is")
@@ -102,7 +107,7 @@ class SpecificationGenerator(
         visitChildren(ctx)
         indentationLevel -= 1
       }
-      else {
+      else{
         out.println(newLine)
       }
     }

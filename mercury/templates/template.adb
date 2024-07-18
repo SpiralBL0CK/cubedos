@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
--- FILE   : cubedos-%MODULENAME%-api.adb
+-- FILE   : %FILENAME%-api.adb
 -- SUBJECT: Body of a package that implements the %MODULENAME% API
--- AUTHOR : (C) Copyright 2021 by Vermont Technical College
+-- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
 -- All the subprograms in this package are task safe.
 --
@@ -14,8 +14,8 @@ with CubedOS.Lib;
 use  CubedOS.Lib;
 use  CubedOS.Lib.XDR;
 
-package body CubedOS.%MODULENAME%.API is
+package body %MODULENAME%.API is
 
    %BULK%
 
-end CubedOS.%MODULENAME%.API;
+end %MODULENAME%.API;

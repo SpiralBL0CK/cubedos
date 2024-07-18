@@ -37,10 +37,10 @@ class CodeGeneratorSpec extends UnitSpec {
 
   "The CodeGenerator" should "process MXDR files into SPARK packages" in {
     val testCases = Array(
-      TestCase("m0001.mxdr", "expected-m0001.ads", "expected-m0001.adb"),
-      TestCase("m0002.mxdr", "expected-m0002.ads", "expected-m0002.adb"),
-      TestCase("m0003.mxdr", "expected-m0003.ads", "expected-m0003.adb"),
-      TestCase("m0004.mxdr", "expected-m0004.ads", "expected-m0004.adb"))
+      TestCase("CubedOS-m0001.mxdr", "expected-m0001.ads", "expected-m0001.adb"),
+      TestCase("CubedOS-m0002.mxdr", "expected-m0002.ads", "expected-m0002.adb"),
+      TestCase("CubedOS-m0003.mxdr", "expected-m0003.ads", "expected-m0003.adb"),
+      TestCase("CubedOS-m0004.mxdr", "expected-m0004.ads", "expected-m0004.adb"))
 
     for (testCase <- testCases) {
       val TestCase(sourceName, expectedSpecification, expectedBody) = testCase
@@ -65,10 +65,13 @@ class CodeGeneratorSpec extends UnitSpec {
       // Relative to the project root where this test is run.
       val templateFolder = "templates"
 
-      val baseFileName = sourceName.substring(0, sourceName.lastIndexOf('.'))
-      val baseFileNameLower = baseFileName.toLowerCase
-      val fullSpecificationName = folderName + "cubedos-" + baseFileNameLower + "-api.ads"
-      val fullBodyName = folderName + "cubedos-" + baseFileNameLower + "-api.adb"
+      val baseName = sourceName.substring(0, sourceName.lastIndexOf('.'))
+      val baseFileName = baseName.toLowerCase
+      val fullSpecificationName = folderName + baseFileName + "-api.ads"
+      val fullBodyName = folderName + baseFileName + "-api.adb"
+
+      val parts = baseName.split("-")
+      val baseModuleName = parts(0) + "." + parts(1)
 
       // Open the output files.
       val specificationFile = new PrintStream(fullSpecificationName)
@@ -76,11 +79,11 @@ class CodeGeneratorSpec extends UnitSpec {
 
       // Do the code generation...
       val mySpecificationGenerator =
-        new SpecificationGenerator(templateFolder, baseFileName, symbolTable, specificationFile, reporter)
+        new SpecificationGenerator(templateFolder, baseFileName, baseModuleName, symbolTable, specificationFile, reporter)
       mySpecificationGenerator.visit(tree)
 
       val myBodyGenerator =
-        new BodyGenerator(templateFolder, baseFileName, symbolTable, bodyFile, reporter)
+        new BodyGenerator(templateFolder, baseFileName, baseModuleName, symbolTable, bodyFile, reporter)
       myBodyGenerator.visit(tree)
 
       // Close the output files.

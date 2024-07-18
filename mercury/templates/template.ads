@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
--- FILE   : cubedos-%MODULENAME%-api.ads
+-- FILE   : %FILENAME%-api.ads
 -- SUBJECT: Specification of a package that defines the %MODULENAME% API
--- AUTHOR : (C) Copyright 2021 by Vermont Technical College
+-- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
 -- All the subprograms in this package are task safe.
 --
@@ -13,8 +13,8 @@ with CubedOS.Lib;
 with Message_Manager;  use Message_Manager;
 with System;
 
-package CubedOS.%MODULENAME%.API is
+package %MODULENAME%.API is
 
    %BULK%
 
-end CubedOS.%MODULENAME%.API;
+end %MODULENAME%.API;

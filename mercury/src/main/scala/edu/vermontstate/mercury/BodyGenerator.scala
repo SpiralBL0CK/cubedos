@@ -5,6 +5,7 @@ import java.io.File
 class BodyGenerator(
   templateFolder : String,
   nameOfFile     : String,
+  nameOfModule   : String,
   symbolTable    : BasicSymbolTable,
   out            : java.io.PrintStream,
   reporter       : Reporter) extends MXDRBaseVisitor[Void] {
@@ -63,10 +64,13 @@ class BodyGenerator(
 
   override def visitSpecification(ctx: MXDRParser.SpecificationContext): Void = {
     val lines = processTemplate()
-    val replacementString = nameOfFile
     for (line <- lines) {
-      val newLine = line.replace("%MODULENAME%", replacementString)
-      if (line.contains("%BULK%")) {
+      val newLine = line.replace("%MODULENAME%", nameOfModule)
+      if(line.contains("%FILENAME%")){
+        val newLineTwo = line.replace("%FILENAME%", nameOfFile)
+        out.println(newLineTwo)
+      }
+      else if (line.contains("%BULK%")) {
         indentationLevel += 1
         visitChildren(ctx)
         indentationLevel -= 1

@@ -90,17 +90,20 @@ object Main {
       println("Generating API package...")
 
       // TODO: This won't work for paths without dots. Should that be ruled out earlier?
-      val baseFileName = sourceName.substring(0, sourceName.lastIndexOf('.'))
-      val baseFileNameLower = baseFileName.toLowerCase
-      val specificationFile = new PrintStream("cubedos-" + baseFileNameLower + "-api.ads")
-      val bodyFile = new PrintStream("cubedos-" + baseFileNameLower + "-api.adb")
+      val baseName = sourceName.substring(0, sourceName.lastIndexOf('.'))
+      val baseFileName = baseName.toLowerCase
+      val specificationFile = new PrintStream(baseFileName + "-api.ads")
+      val bodyFile = new PrintStream(baseFileName + "-api.adb")
+
+      val parts = baseName.split("-")
+      val baseModuleName = parts(0) + "." + parts(1)
 
       val mySpecificationGenerator =
-        new SpecificationGenerator(templateFolder, baseFileName, symbolTable, specificationFile, reporter)
+        new SpecificationGenerator(templateFolder, baseFileName, baseModuleName, symbolTable, specificationFile, reporter)
       mySpecificationGenerator.visit(tree)
 
       val myBodyGenerator =
-        new BodyGenerator(templateFolder, baseFileName, symbolTable, bodyFile, reporter)
+        new BodyGenerator(templateFolder, baseFileName, baseModuleName, symbolTable, bodyFile, reporter)
       myBodyGenerator.visit(tree)
 
       specificationFile.close()

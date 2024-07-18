@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- FILE   : cubedos-m0002-api.ads
--- SUBJECT: Specification of a package that defines the m0002 API
--- AUTHOR : (C) Copyright 2021 by Vermont Technical College
+-- SUBJECT: Specification of a package that defines the CubedOS.m0002 API
+-- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
 -- All the subprograms in this package are task safe.
 --
