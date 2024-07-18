@@ -73,8 +73,7 @@ package CubedOS.m0004.API is
    type s1 is array (0 .. 2) of s1_Intermediary;
 
    function ms_Encode
-      (Receiver_Domain : Domain_ID_Type;
-      Receiver  : Module_ID_Type;
+      (Receiver_Address : Message_Address;
       Request_ID : Request_ID_Type;
       mss1 : s1;
       e3 : e1;
@@ -85,7 +84,7 @@ package CubedOS.m0004.API is
       Global => null;
 
    function Is_ms(Message : Message_Record) return Boolean is
-      (Message.Sender = ID and Message.Message_ID = Message_Type'Pos(ms));
+      (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(ms));
 
    procedure ms_Decode
       (Message : in  Message_Record;
@@ -101,8 +100,7 @@ package CubedOS.m0004.API is
 
 
    function ms1_Encode
-      (Receiver_Domain : Domain_ID_Type;
-      Receiver  : Module_ID_Type;
+      (Receiver_Address : Message_Address;
       Request_ID : Request_ID_Type;
       --TODO
       Priority : System.Priority := System.Default_Priority) return Message_Record
@@ -110,7 +108,7 @@ package CubedOS.m0004.API is
       Global => null;
 
    function Is_ms1(Message : Message_Record) return Boolean is
-      (Message.Sender = ID and Message.Message_ID = Message_Type'Pos(ms1));
+      (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(ms1));
 
 
 

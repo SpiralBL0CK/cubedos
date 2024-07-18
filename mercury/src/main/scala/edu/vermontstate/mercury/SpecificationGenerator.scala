@@ -489,16 +489,12 @@ class SpecificationGenerator(
     doIndentation()
     out.print("(")
     if (arrowFlag == 0) {
-      out.println("Sender_Domain : Domain_ID_Type;")
-      doIndentation()
-      out.println("Sender  : Module_ID_Type;")
+      out.println("Sender_Address : Message_Address;")
       doIndentation()
       out.println("Request_ID : Request_ID_Type;")
     }
     else if (arrowFlag == 1) {
-      out.println("Receiver_Domain : Domain_ID_Type;")
-      doIndentation()
-      out.println("Receiver  : Module_ID_Type;")
+      out.println("Receiver_Address : Message_Address;")
       doIndentation()
       out.println("Request_ID : Request_ID_Type;")
     }
@@ -600,10 +596,10 @@ class SpecificationGenerator(
     indentationLevel += 1
     doIndentation()
     if (arrowFlag == 0) {
-      out.print("(Message.Receiver")
+      out.print("(Message.Receiver_Address")
     }
     else if (arrowFlag == 1) {
-      out.print("(Message.Sender")
+      out.print("(Message.Sender_Address")
     }
     out.println(" = ID and Message.Message_ID = Message_Type'Pos(" + id + "));")
     out.println("")

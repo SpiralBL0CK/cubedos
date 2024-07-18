@@ -3905,16 +3905,12 @@ class BodyGenerator(
     indentationLevel += 1
     doIndentation()
     if (arrowFlag == 0) {
-      out.println("(Sender_Domain : Domain_ID_Type;")
-      doIndentation()
-      out.println("Sender : Module_ID_Type;")
+      out.println("(Sender_Address : Message_Address;")
       doIndentation()
       out.println("Request_ID : Request_ID_Type;")
     }
     else if (arrowFlag == 1) {
-      out.println("(Receiver_Domain : Domain_ID_Type;")
-      doIndentation()
-      out.println("Receiver : Module_ID_Type;")
+      out.println("(Receiver_Address : Message_Address;")
       doIndentation()
       out.println("Request_ID : Request_ID_Type;")
     }
@@ -3975,13 +3971,9 @@ class BodyGenerator(
       out.println("Message : Message_Record := Make_Empty_Message(")
       indentationLevel += 1
       doIndentation()
-      out.println("Sender_Domain   => Domain_ID,")
+      out.println("Sender_Address   => ID,")
       doIndentation()
-      out.println("Receiver_Domain => Receiver_Domain,")
-      doIndentation()
-      out.println("Sender     => ID,")
-      doIndentation()
-      out.println("Receiver   => Receiver,")
+      out.println("Receiver_Address => Receiver_Address,")
       doIndentation()
       out.println("Request_ID   => Request_ID,")
       doIndentation()
@@ -4017,13 +4009,9 @@ class BodyGenerator(
       out.println("Message := Make_Empty_Message(")
       indentationLevel += 1
       doIndentation()
-      out.println("Sender_Domain   => Sender_Domain,")
+      out.println("Sender_Address   => Sender_Address,")
       doIndentation()
-      out.println("Receiver_Domain => Domain_ID,")
-      doIndentation()
-      out.println("Sender     => Sender,")
-      doIndentation()
-      out.println("Receiver   => ID,")
+      out.println("Receiver_Address => ID,")
       doIndentation()
       out.println("Request_ID   => Request_ID,")
       doIndentation()

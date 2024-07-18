@@ -273,8 +273,7 @@ package CubedOS.m0003.API is
    type v74 is new tai_kwon_doo_wop;
 
    function v75_Encode
-      (Sender_Domain : Domain_ID_Type;
-      Sender  : Module_ID_Type;
+      (Sender_Address : Message_Address;
       Request_ID : Request_ID_Type;
       --TODO
       Priority : System.Priority := System.Default_Priority) return Message_Record
@@ -282,12 +281,11 @@ package CubedOS.m0003.API is
       Global => null;
 
    function Is_v75(Message : Message_Record) return Boolean is
-      (Message.Receiver = ID and Message.Message_ID = Message_Type'Pos(v75));
+      (Message.Receiver_Address = ID and Message.Message_ID = Message_Type'Pos(v75));
 
 
    function v76_Encode
-      (Receiver_Domain : Domain_ID_Type;
-      Receiver  : Module_ID_Type;
+      (Receiver_Address : Message_Address;
       Request_ID : Request_ID_Type;
       --TODO
       Priority : System.Priority := System.Default_Priority) return Message_Record
@@ -295,12 +293,11 @@ package CubedOS.m0003.API is
       Global => null;
 
    function Is_v76(Message : Message_Record) return Boolean is
-      (Message.Sender = ID and Message.Message_ID = Message_Type'Pos(v76));
+      (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(v76));
 
 
    function v79_Encode
-      (Sender_Domain : Domain_ID_Type;
-      Sender  : Module_ID_Type;
+      (Sender_Address : Message_Address;
       Request_ID : Request_ID_Type;
       sv1 : v1;
       sv2 : v2;
@@ -393,7 +390,7 @@ package CubedOS.m0003.API is
       Pre => (0 < sv90'Length and sv90'Length <= XDR_Size_Type'Last - 12);
 
    function Is_v79(Message : Message_Record) return Boolean is
-      (Message.Receiver = ID and Message.Message_ID = Message_Type'Pos(v79));
+      (Message.Receiver_Address = ID and Message.Message_ID = Message_Type'Pos(v79));
 
    procedure v79_Decode
       (Message : in  Message_Record;
@@ -494,8 +491,7 @@ package CubedOS.m0003.API is
 
 
    function v80_Encode
-      (Receiver_Domain : Domain_ID_Type;
-      Receiver  : Module_ID_Type;
+      (Receiver_Address : Message_Address;
       Request_ID : Request_ID_Type;
       msav1 : av1;
       sv1 : v1;
@@ -589,7 +585,7 @@ package CubedOS.m0003.API is
       Pre => (0 < sv89'Length and sv89'Length <= XDR_Size_Type'Last - 12);
 
    function Is_v80(Message : Message_Record) return Boolean is
-      (Message.Sender = ID and Message.Message_ID = Message_Type'Pos(v80));
+      (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(v80));
 
    procedure v80_Decode
       (Message : in  Message_Record;

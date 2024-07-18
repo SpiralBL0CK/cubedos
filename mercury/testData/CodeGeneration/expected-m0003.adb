@@ -20,8 +20,7 @@ use  CubedOS.Lib.XDR;
 package body CubedOS.m0003.API is
 
    function v75_Encode
-      (Sender_Domain : Domain_ID_Type;
-      Sender : Module_ID_Type;
+      (Sender_Address : Message_Address;
       Request_ID : Request_ID_Type;
       --TODO
       Priority : System.Priority := System.Default_Priority) return Message_Record
@@ -30,10 +29,8 @@ package body CubedOS.m0003.API is
       Position : Data_Index_Type;
    begin
       Message := Make_Empty_Message(
-         Sender_Domain   => Sender_Domain,
-         Receiver_Domain => Domain_ID,
-         Sender     => Sender,
-         Receiver   => ID,
+         Sender_Address   => Sender_Address,
+         Receiver_Address => ID,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(v75),
          Priority   => Priority);
@@ -45,17 +42,14 @@ package body CubedOS.m0003.API is
 
 
    function v76_Encode
-      (Receiver_Domain : Domain_ID_Type;
-      Receiver : Module_ID_Type;
+      (Receiver_Address : Message_Address;
       Request_ID : Request_ID_Type;
       --TODO
       Priority : System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record := Make_Empty_Message(
-         Sender_Domain   => Domain_ID,
-         Receiver_Domain => Receiver_Domain,
-         Sender     => ID,
-         Receiver   => Receiver,
+         Sender_Address   => ID,
+         Receiver_Address => Receiver_Address,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(v76),
          Priority   => Priority);
@@ -69,8 +63,7 @@ package body CubedOS.m0003.API is
 
 
    function v79_Encode
-      (Sender_Domain : Domain_ID_Type;
-      Sender : Module_ID_Type;
+      (Sender_Address : Message_Address;
       Request_ID : Request_ID_Type;
       sv1 : v1;
       sv2 : v2;
@@ -167,10 +160,8 @@ package body CubedOS.m0003.API is
       Fraction : Ada.Real_Time.Time_Span;
    begin
       Message := Make_Empty_Message(
-         Sender_Domain   => Sender_Domain,
-         Receiver_Domain => Domain_ID,
-         Sender     => Sender,
-         Receiver   => ID,
+         Sender_Address   => Sender_Address,
+         Receiver_Address => ID,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(v79),
          Priority   => Priority);
@@ -3837,8 +3828,7 @@ package body CubedOS.m0003.API is
    end v79_Decode;
 
    function v80_Encode
-      (Receiver_Domain : Domain_ID_Type;
-      Receiver : Module_ID_Type;
+      (Receiver_Address : Message_Address;
       Request_ID : Request_ID_Type;
       msav1 : av1;
       sv1 : v1;
@@ -3929,10 +3919,8 @@ package body CubedOS.m0003.API is
       Priority : System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record := Make_Empty_Message(
-         Sender_Domain   => Domain_ID,
-         Receiver_Domain => Receiver_Domain,
-         Sender     => ID,
-         Receiver   => Receiver,
+         Sender_Address   => ID,
+         Receiver_Address => Receiver_Address,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(v80),
          Priority   => Priority);

@@ -17,8 +17,7 @@ use  CubedOS.Lib.XDR;
 package body CubedOS.m0002.API is
 
    function Reddish_Encode
-      (Sender_Domain : Domain_ID_Type;
-      Sender : Module_ID_Type;
+      (Sender_Address : Message_Address;
       Request_ID : Request_ID_Type;
       i : Color;
       y : Integer;
@@ -32,10 +31,8 @@ package body CubedOS.m0002.API is
       Last : Data_Index_Type;
    begin
       Message := Make_Empty_Message(
-         Sender_Domain   => Sender_Domain,
-         Receiver_Domain => Domain_ID,
-         Sender     => Sender,
-         Receiver   => ID,
+         Sender_Address   => Sender_Address,
+         Receiver_Address => ID,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(Reddish),
          Priority   => Priority);
@@ -128,8 +125,7 @@ package body CubedOS.m0002.API is
    end Reddish_Decode;
 
    function Bluish_Encode
-      (Receiver_Domain : Domain_ID_Type;
-      Receiver : Module_ID_Type;
+      (Receiver_Address : Message_Address;
       Request_ID : Request_ID_Type;
       r : Other_Colors;
       g : grape;
@@ -139,10 +135,8 @@ package body CubedOS.m0002.API is
       Priority : System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record := Make_Empty_Message(
-         Sender_Domain   => Domain_ID,
-         Receiver_Domain => Receiver_Domain,
-         Sender     => ID,
-         Receiver   => Receiver,
+         Sender_Address   => ID,
+         Receiver_Address => Receiver_Address,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(Bluish),
          Priority   => Priority);
@@ -248,8 +242,7 @@ package body CubedOS.m0002.API is
    end Bluish_Decode;
 
    function Example_Encode
-      (Sender_Domain : Domain_ID_Type;
-      Sender : Module_ID_Type;
+      (Sender_Address : Message_Address;
       Request_ID : Request_ID_Type;
       thing : Width_Type;
       cube : sat;
@@ -261,10 +254,8 @@ package body CubedOS.m0002.API is
       Last : Data_Index_Type;
    begin
       Message := Make_Empty_Message(
-         Sender_Domain   => Sender_Domain,
-         Receiver_Domain => Domain_ID,
-         Sender     => Sender,
-         Receiver   => ID,
+         Sender_Address   => Sender_Address,
+         Receiver_Address => ID,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(Example),
          Priority   => Priority);

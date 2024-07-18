@@ -80,8 +80,7 @@ package CubedOS.m0002.API is
       violet);
 
    function Reddish_Encode
-      (Sender_Domain : Domain_ID_Type;
-      Sender  : Module_ID_Type;
+      (Sender_Address : Message_Address;
       Request_ID : Request_ID_Type;
       i : Color;
       y : Integer;
@@ -93,7 +92,7 @@ package CubedOS.m0002.API is
       Global => null;
 
    function Is_Reddish(Message : Message_Record) return Boolean is
-      (Message.Receiver = ID and Message.Message_ID = Message_Type'Pos(Reddish));
+      (Message.Receiver_Address = ID and Message.Message_ID = Message_Type'Pos(Reddish));
 
    procedure Reddish_Decode
       (Message : in  Message_Record;
@@ -110,8 +109,7 @@ package CubedOS.m0002.API is
 
 
    function Bluish_Encode
-      (Receiver_Domain : Domain_ID_Type;
-      Receiver  : Module_ID_Type;
+      (Receiver_Address : Message_Address;
       Request_ID : Request_ID_Type;
       r : Other_Colors;
       g : grape;
@@ -123,7 +121,7 @@ package CubedOS.m0002.API is
       Global => null;
 
    function Is_Bluish(Message : Message_Record) return Boolean is
-      (Message.Sender = ID and Message.Message_ID = Message_Type'Pos(Bluish));
+      (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(Bluish));
 
    procedure Bluish_Decode
       (Message : in  Message_Record;
@@ -140,8 +138,7 @@ package CubedOS.m0002.API is
 
 
    function Example_Encode
-      (Sender_Domain : Domain_ID_Type;
-      Sender  : Module_ID_Type;
+      (Sender_Address : Message_Address;
       Request_ID : Request_ID_Type;
       thing : Width_Type;
       cube : sat;
@@ -151,7 +148,7 @@ package CubedOS.m0002.API is
       Global => null;
 
    function Is_Example(Message : Message_Record) return Boolean is
-      (Message.Receiver = ID and Message.Message_ID = Message_Type'Pos(Example));
+      (Message.Receiver_Address = ID and Message.Message_ID = Message_Type'Pos(Example));
 
    procedure Example_Decode
       (Message : in  Message_Record;
