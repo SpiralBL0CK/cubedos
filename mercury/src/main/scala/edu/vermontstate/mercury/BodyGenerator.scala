@@ -3905,14 +3905,14 @@ class BodyGenerator(
     indentationLevel += 1
     doIndentation()
     if (arrowFlag == 0) {
-      out.println("(Sender_Address : Message_Address;")
+      out.println("(Sender_Address : in Message_Address;")
       doIndentation()
-      out.println("Request_ID : Request_ID_Type;")
+      out.println("Request_ID : in Request_ID_Type;")
     }
     else if (arrowFlag == 1) {
-      out.println("(Receiver_Address : Message_Address;")
+      out.println("(Receiver_Address : in Message_Address;")
       doIndentation()
-      out.println("Request_ID : Request_ID_Type;")
+      out.println("Request_ID : in Request_ID_Type;")
     }
     val structStuff = ctx.declaration().size()
     for (i <- 0 until structStuff) {
@@ -3925,39 +3925,39 @@ class BodyGenerator(
         val idd = ctx.declaration(i).IDENTIFIER.getText
         doIndentation()
         if (t == "opaque") {
-          out.println(idd + " : CubedOS.Lib.Octet_Array;")
+          out.println(idd + " : in CubedOS.Lib.Octet_Array;")
         }
         else if (t == "int") {
-          out.println(idd + " : Integer;")
+          out.println(idd + " : in Integer;")
         }
         else if (t == "unsignedhyper") {
-          out.println(id + " : Lib.U_Hyper_Type;")
+          out.println(id + " : in Lib.U_Hyper_Type;")
         }
         else if (t == "unsignedint") {
-          out.println(id + " : Lib.Quadruple_Octet;")
+          out.println(id + " : in Lib.Quadruple_Octet;")
         }
         else if (t == "double") {
-          out.println(idd + " : Double;")
+          out.println(idd + " : in Double;")
         }
         else if (t == "float") {
-          out.println(idd + " : Float;")
+          out.println(idd + " : in Float;")
         }
         else if (t == "hyper") {
-          out.println(idd + " : Lib.Hyper_Type;")
+          out.println(idd + " : in Lib.Hyper_Type;")
         }
         else if (t == "bool") {
-          out.println(idd + " : Boolean;")
+          out.println(idd + " : in Boolean;")
         }
         else if (t == "string") {
-          out.println(idd + " : String;")
+          out.println(idd + " : in String;")
         }
         else {
-          out.println(idd + " : " + ctx.declaration(i).type_specifier.getText + ";")
+          out.println(idd + " : in " + ctx.declaration(i).type_specifier.getText + ";")
         }
       }
     }
     doIndentation()
-    out.println("Priority : System.Priority := System.Default_Priority) return Message_Record")
+    out.println("Priority : in System.Priority := System.Default_Priority) return Message_Record")
     indentationLevel -= 1
     doIndentation()
     out.println("is")
@@ -4350,7 +4350,7 @@ class BodyGenerator(
             out.println(idd + " : out Boolean;")
           }
           else if (t == "string") {
-            out.println(idd + " : String;")
+            out.println(idd + " : in String;")
           }
           else {
             out.println(idd + " : out " + ctx.declaration(i).type_specifier.getText + ";")

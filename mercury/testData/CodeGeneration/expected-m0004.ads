@@ -73,17 +73,17 @@ package CubedOS.m0004.API is
    type s1 is array (0 .. 2) of s1_Intermediary;
 
    function ms_Encode
-      (Receiver_Address : Message_Address;
-      Request_ID : Request_ID_Type;
-      mss1 : s1;
-      e3 : e1;
-      b2 : b1;
-      h1 : Integer;
-      Priority : System.Priority := System.Default_Priority) return Message_Record
+      (Receiver_Address : in Message_Address;
+      Request_ID : in Request_ID_Type;
+      mss1 : in s1;
+      e3 : in e1;
+      b2 : in b1;
+      h1 : in Integer;
+      Priority : in System.Priority := System.Default_Priority) return Message_Record
    with
       Global => null;
 
-   function Is_ms(Message : Message_Record) return Boolean is
+   function Is_ms(Message : in Message_Record) return Boolean is
       (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(ms));
 
    procedure ms_Decode
@@ -100,14 +100,14 @@ package CubedOS.m0004.API is
 
 
    function ms1_Encode
-      (Receiver_Address : Message_Address;
-      Request_ID : Request_ID_Type;
+      (Receiver_Address : in Message_Address;
+      Request_ID : in Request_ID_Type;
       --TODO
-      Priority : System.Priority := System.Default_Priority) return Message_Record
+      Priority : in System.Priority := System.Default_Priority) return Message_Record
    with
       Global => null;
 
-   function Is_ms1(Message : Message_Record) return Boolean is
+   function Is_ms1(Message : in Message_Record) return Boolean is
       (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(ms1));
 
 

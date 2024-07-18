@@ -489,14 +489,14 @@ class SpecificationGenerator(
     doIndentation()
     out.print("(")
     if (arrowFlag == 0) {
-      out.println("Sender_Address : Message_Address;")
+      out.println("Sender_Address : in Message_Address;")
       doIndentation()
-      out.println("Request_ID : Request_ID_Type;")
+      out.println("Request_ID : in Request_ID_Type;")
     }
     else if (arrowFlag == 1) {
-      out.println("Receiver_Address : Message_Address;")
+      out.println("Receiver_Address : in Message_Address;")
       doIndentation()
-      out.println("Request_ID : Request_ID_Type;")
+      out.println("Request_ID : in Request_ID_Type;")
     }
     val structStuff = ctx.declaration().size()
     for (i <- 0 until structStuff) {
@@ -509,45 +509,45 @@ class SpecificationGenerator(
         val t = ctx.declaration(i).children.get(0).getText
         val id = ctx.declaration(i).IDENTIFIER.getText
         if (t == "string") {
-          out.println(id + " : String;")
+          out.println(id + " : in String;")
           stringFlag = id
         }
         else if (t == "CubedOS.Lib.Octet_Array") {
-          out.println(id + " : " + ctx.declaration(i).type_specifier.getText + ";")
+          out.println(id + " : in " + ctx.declaration(i).type_specifier.getText + ";")
           dataFlag = id
         }
         else if (t == "opaque") {
-          out.println(id + " : CubedOS.Lib.Octet_Array;")
+          out.println(id + " : in CubedOS.Lib.Octet_Array;")
           dataFlag = id
         }
         else if (t == "int") {
-          out.println(id + " : Integer;")
+          out.println(id + " : in Integer;")
         }
         else if (t == "unsignedhyper") {
-          out.println(id + " : Lib.U_Hyper_Type;")
+          out.println(id + " : in Lib.U_Hyper_Type;")
         }
         else if (t == "unsignedint") {
-          out.println(id + " : Lib.Quadruple_Octet;")
+          out.println(id + " : in Lib.Quadruple_Octet;")
         }
         else if (t == "double") {
-          out.println(id + " : Double;")
+          out.println(id + " : in Double;")
         }
         else if (t == "float") {
-          out.println(id + " : Float;")
+          out.println(id + " : in Float;")
         }
         else if (t == "hyper") {
-          out.println(id + " : Lib.Hyper_Type;")
+          out.println(id + " : in Lib.Hyper_Type;")
         }
         else if (t == "bool") {
-          out.println(id + " : Boolean;")
+          out.println(id + " : in Boolean;")
         }
         else {
-          out.println(id + " : " + ctx.declaration(i).type_specifier.getText + ";")
+          out.println(id + " : in " + ctx.declaration(i).type_specifier.getText + ";")
         }
       }
     }
     doIndentation()
-    out.println("Priority : System.Priority := System.Default_Priority) return Message_Record")
+    out.println("Priority : in System.Priority := System.Default_Priority) return Message_Record")
     indentationLevel -= 1
     doIndentation()
     out.println("with")
@@ -592,7 +592,7 @@ class SpecificationGenerator(
   def doCheck(id: String, arrowFlag: Int): Void = {
     val checkString = "Is_"
     doIndentation()
-    out.println("function " + checkString + id + "(Message : Message_Record) return Boolean is")
+    out.println("function " + checkString + id + "(Message : in Message_Record) return Boolean is")
     indentationLevel += 1
     doIndentation()
     if (arrowFlag == 0) {

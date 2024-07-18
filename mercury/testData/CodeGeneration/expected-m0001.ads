@@ -20,14 +20,14 @@ package CubedOS.m0001.API is
       Trivial_Request);
 
    function Trivial_Request_Encode
-      (Sender_Address : Message_Address;
-      Request_ID : Request_ID_Type;
-      M1 : Integer;
-      Priority : System.Priority := System.Default_Priority) return Message_Record
+      (Sender_Address : in Message_Address;
+      Request_ID : in Request_ID_Type;
+      M1 : in Integer;
+      Priority : in System.Priority := System.Default_Priority) return Message_Record
    with
       Global => null;
 
-   function Is_Trivial_Request(Message : Message_Record) return Boolean is
+   function Is_Trivial_Request(Message : in Message_Record) return Boolean is
       (Message.Receiver_Address = ID and Message.Message_ID = Message_Type'Pos(Trivial_Request));
 
    procedure Trivial_Request_Decode
@@ -41,14 +41,14 @@ package CubedOS.m0001.API is
 
 
    function Trivial_Reply_Encode
-      (Receiver_Address : Message_Address;
-      Request_ID : Request_ID_Type;
-      M1 : Integer;
-      Priority : System.Priority := System.Default_Priority) return Message_Record
+      (Receiver_Address : in Message_Address;
+      Request_ID : in Request_ID_Type;
+      M1 : in Integer;
+      Priority : in System.Priority := System.Default_Priority) return Message_Record
    with
       Global => null;
 
-   function Is_Trivial_Reply(Message : Message_Record) return Boolean is
+   function Is_Trivial_Reply(Message : in Message_Record) return Boolean is
       (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(Trivial_Reply));
 
    procedure Trivial_Reply_Decode

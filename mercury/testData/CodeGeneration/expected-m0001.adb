@@ -17,10 +17,10 @@ use  CubedOS.Lib.XDR;
 package body CubedOS.m0001.API is
 
    function Trivial_Request_Encode
-      (Sender_Address : Message_Address;
-      Request_ID : Request_ID_Type;
-      M1 : Integer;
-      Priority : System.Priority := System.Default_Priority) return Message_Record
+      (Sender_Address : in Message_Address;
+      Request_ID : in Request_ID_Type;
+      M1 : in Integer;
+      Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record;
       Position : Data_Index_Type;
@@ -65,10 +65,10 @@ package body CubedOS.m0001.API is
    end Trivial_Request_Decode;
 
    function Trivial_Reply_Encode
-      (Receiver_Address : Message_Address;
-      Request_ID : Request_ID_Type;
-      M1 : Integer;
-      Priority : System.Priority := System.Default_Priority) return Message_Record
+      (Receiver_Address : in Message_Address;
+      Request_ID : in Request_ID_Type;
+      M1 : in Integer;
+      Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record := Make_Empty_Message(
          Sender_Address   => ID,

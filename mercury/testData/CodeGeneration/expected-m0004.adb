@@ -17,13 +17,13 @@ use  CubedOS.Lib.XDR;
 package body CubedOS.m0004.API is
 
    function ms_Encode
-      (Receiver_Address : Message_Address;
-      Request_ID : Request_ID_Type;
-      mss1 : s1;
-      e3 : e1;
-      b2 : b1;
-      h1 : Integer;
-      Priority : System.Priority := System.Default_Priority) return Message_Record
+      (Receiver_Address : in Message_Address;
+      Request_ID : in Request_ID_Type;
+      mss1 : in s1;
+      e3 : in e1;
+      b2 : in b1;
+      h1 : in Integer;
+      Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record := Make_Empty_Message(
          Sender_Address   => ID,
@@ -313,10 +313,10 @@ package body CubedOS.m0004.API is
    end ms_Decode;
 
    function ms1_Encode
-      (Receiver_Address : Message_Address;
-      Request_ID : Request_ID_Type;
+      (Receiver_Address : in Message_Address;
+      Request_ID : in Request_ID_Type;
       --TODO
-      Priority : System.Priority := System.Default_Priority) return Message_Record
+      Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record := Make_Empty_Message(
          Sender_Address   => ID,

@@ -80,18 +80,18 @@ package CubedOS.m0002.API is
       violet);
 
    function Reddish_Encode
-      (Sender_Address : Message_Address;
-      Request_ID : Request_ID_Type;
-      i : Color;
-      y : Integer;
-      b : banana;
-      bo : boo;
-      hypey2 : hyp2;
-      Priority : System.Priority := System.Default_Priority) return Message_Record
+      (Sender_Address : in Message_Address;
+      Request_ID : in Request_ID_Type;
+      i : in Color;
+      y : in Integer;
+      b : in banana;
+      bo : in boo;
+      hypey2 : in hyp2;
+      Priority : in System.Priority := System.Default_Priority) return Message_Record
    with
       Global => null;
 
-   function Is_Reddish(Message : Message_Record) return Boolean is
+   function Is_Reddish(Message : in Message_Record) return Boolean is
       (Message.Receiver_Address = ID and Message.Message_ID = Message_Type'Pos(Reddish));
 
    procedure Reddish_Decode
@@ -109,18 +109,18 @@ package CubedOS.m0002.API is
 
 
    function Bluish_Encode
-      (Receiver_Address : Message_Address;
-      Request_ID : Request_ID_Type;
-      r : Other_Colors;
-      g : grape;
-      a : arnold;
-      schwarz : Float;
-      s : seed;
-      Priority : System.Priority := System.Default_Priority) return Message_Record
+      (Receiver_Address : in Message_Address;
+      Request_ID : in Request_ID_Type;
+      r : in Other_Colors;
+      g : in grape;
+      a : in arnold;
+      schwarz : in Float;
+      s : in seed;
+      Priority : in System.Priority := System.Default_Priority) return Message_Record
    with
       Global => null;
 
-   function Is_Bluish(Message : Message_Record) return Boolean is
+   function Is_Bluish(Message : in Message_Record) return Boolean is
       (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(Bluish));
 
    procedure Bluish_Decode
@@ -138,16 +138,16 @@ package CubedOS.m0002.API is
 
 
    function Example_Encode
-      (Sender_Address : Message_Address;
-      Request_ID : Request_ID_Type;
-      thing : Width_Type;
-      cube : sat;
-      hypey : hyp;
-      Priority : System.Priority := System.Default_Priority) return Message_Record
+      (Sender_Address : in Message_Address;
+      Request_ID : in Request_ID_Type;
+      thing : in Width_Type;
+      cube : in sat;
+      hypey : in hyp;
+      Priority : in System.Priority := System.Default_Priority) return Message_Record
    with
       Global => null;
 
-   function Is_Example(Message : Message_Record) return Boolean is
+   function Is_Example(Message : in Message_Record) return Boolean is
       (Message.Receiver_Address = ID and Message.Message_ID = Message_Type'Pos(Example));
 
    procedure Example_Decode
