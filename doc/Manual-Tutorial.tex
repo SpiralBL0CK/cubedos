@@ -677,10 +677,10 @@ message struct <- Read_Reply {
 \end{verbatim}
 
 The protocol speaks for itself. First a module must send an |Open_Request| message to the file
-server, specifying the desired file name. The server responds with an |Open_Reply| message containing
-a ``handle'' to the file (or zero if the open failed). The module then sends repeated |Read_Request|
-messages to the file server specifying the previously opened handle. The server responds with a
-|Read_Reply| messages containing the requested data.
+server, specifying the desired file name. The server responds with an |Open_Reply| message
+containing a ``handle'' to the file (or zero if the open failed). The module then sends repeated
+|Read_Request| messages to the file server specifying the previously opened handle. The server
+responds with a |Read_Reply| messages containing the requested data.
 
 The full interface to the file server also includes messages for writing files, closing files,
 and some other operations. The file server implementation provided with CubedOS uses the file
@@ -695,3 +695,129 @@ XDR, Mercury allows you to specify constrained ranges on the types, following th
 style. This is essential. Mercury attempts to generate SPARK-provable code, and SPARK's proofs
 are greatly facilitated by the use of constrained types. This feature sets Mercury apart from
 most other IDL compilers.
+
+\subsubsection{Invoking Mercury}
+
+Mercury is included in the CubedOS repository in the \filename{mercury} folder. It must be built
+before it can be used. Fortunately, this is easy to do. However, since Mercury is written in
+Scala, it may require that you install some additional tools. Specifically:
+
+\begin{enumerate}
+\item You must install a Java runtime. Mercury requires Java 21 or later. Download Java from
+  \url{https://www.oracle.com/java/technologies/downloads/}.
+
+\item You must also install SBT. Download SBT from \url{https://www.scala-sbt.org/}. Any recent
+  version of SBT will be fine. It fetches and caches the precise version required by a project
+  when you first build that project. SBT is a build tool for Scala, similar to Maven or Gradle
+  for Java projects.
+\end{enumerate}
+
+Significantly, you do not need to explicitly install Scala. SBT will fetch the correct version
+of Scala for you, along with any other required libraries and plug-ins, when you build Mercury
+for the first time.
+
+Next, open a command prompt or terminal session, and change to the \filename{mercury} folder of
+the repository. Execute the command \command{sbt assembly}. This will build Mercury and create a
+standalone executable JAR file containing the tool. Although not required, you might also want
+to use the command \command{sbt test} to run the test suite for Mercury.
+
+There is a shell script named \filename{mercury.sh} in the \filename{bin} folder off the root of
+the repository. This script is a convenience wrapper around the Java command to run Mercury. A
+symbolic link to this wrapper script can be created wherever you find convenient.
+
+Mercury requires template files that it uses during code generation. These templates are located
+in the \filename{mercury/templates} folder of the repository. The \filename{mercury.sh} script
+specifies this location to Mercury as a command line option. Unless you want to use different
+templates (which you almost never will), you do not need to worry about this.
+
+Once Mercury is ready, apply the shell script wrapper to your MXDR file to generate the API
+packages as follows:
+
+\begin{verbatim}
+  $ mercury.sh Camera.mxdr
+\end{verbatim}
+
+Note that this only produces \filename{camera-api.ads} and \filename{camera-api.adb}. It does
+not produce the top level package itself (\filename{camera.ads} in this case). When configuring
+the build of your application, you must arrange for Mercury to be run on the MXDR files, if
+necessary, before the Ada compiler is invoked.
+
+Mercury is intended to produce files that can be provided free of runtime errors with \SPARK.
+Thus, you can (and should) use the \SPARK\ tools to verify the generated code along with your
+handwritten code. If a bug in Mercury causes it to generate buggy code, you will want to give
+SPARK an opportunity to find that error!
+
+Also, the files produced by Mercury are intended to be human-readable and human-editable.
+Ideally you would not need to edit them, but it might be necessary in some cases. Those cases
+could reasonably be described as exhibiting a deficiency in Mercury, but the tool is still
+useful even when it cannot completely automate the generation of the API packages in all
+situations.
+
+There is much more that can be said about MXDR and using Mercury. We will describe additional
+features as we encounter them in the Moonshot application. A complete tutorial for Mercury is in
+Section~\ref{sec:manual-tutorial-mercury}.
+
+\subsection{Moonshot MXDR}
+\label{sec:manual-tutorial-moonshot-mxdr}
+
+Now we are ready to write the MXDR for the application-specific modules in the Moonshot application.
+In a real application we would likely have detailed requirements to help guide us in this task.
+However, in this tutorial we will use highly simplified interfaces since we are only trying to
+illustrate the application development process.
+
+\subsubsection{Camera Module}
+
+The MXDR for the Camera module presented in Section~\ref{sec:manual-tutorial-mercury} is good
+enough for our purposes. We repeat it here for convenience:
+
+\begin{verbatim}
+  // FILE: Camera.mxdr
+
+  message struct -> Take_Image_Request {
+      void;
+  }
+  
+  message struct <- Take_Image_Reply {
+      string file_name<128>;
+  }
+\end{verbatim}
+
+\subsubsection{Radio Module}
+  
+\todo{Finish Me!}
+
+\subsubsection{Thruster Module}
+
+\todo{Finish Me!}
+
+\subsubsection{Controller Module}
+
+\todo{Finish Me!}
+
+\subsection{Writing the Application}
+\label{sec:manual-tutorial-writing}
+
+Now that we have the skeletons of the modules and the MXDR descriptions of the messages, we can
+begin to write the application logic. Let's build this application from the bottom up, starting
+with the Camera module.
+
+\subsubsection{Camera Module}
+
+We have only one message to implement, |Take_Image_Request|. In this tutorial we will always
+return one of two hard-coded images. The file \filename{Image-Copernicus.jpg} is a picture of
+the Copernicus crater \cite{Copernicus}, and the file \filename{Image-Korolev.jpg} is a picture
+of the Korolev crater \cite{Korolev} (on the far side of the Moon).
+
+In a real application this module would need to control the camera hardware, capture an image,
+and store it in a file. For demonstration, however, we will just alternate between the two
+images when a request is received, sending first the Copernicus image and then the Korolev
+image.
+
+Once we decide what image to return, we simply send a |Take_Image_Reply| message to the sender
+using the |Route_Message| procedure provided by the CubedOS message manager. Normally, we would
+need to decode the |Take_Image_Request| message to extract any desired parameters from it.
+However, in this application the message is empty so no decoding is required. However, we will
+still need to encode the reply using a suitable encoder from the API package generated by
+Mercury.
+
+\todo{Finish Me!}
