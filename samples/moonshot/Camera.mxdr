@@ -1,0 +1,8 @@
+// FILE: Camera.mxdr
+message struct -> Take_Image_Request {
+    void;
+};
+message struct <- Take_Image_Reply {
+    string file_name<128>;
+};
+

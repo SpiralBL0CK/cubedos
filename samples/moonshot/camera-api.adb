@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
--- FILE   : cubedos-m0001-api.adb
--- SUBJECT: Body of a package that implements the CubedOS.m0001 API
+-- FILE   : camera-api.adb
+-- SUBJECT: Body of a package that implements the Camera API
 -- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
 -- All the subprograms in this package are task safe.
@@ -14,102 +14,82 @@ with CubedOS.Lib;
 use  CubedOS.Lib;
 use  CubedOS.Lib.XDR;
 
-package body CubedOS.m0001.API is
+package body Camera.API is
 
-   function Trivial_Request_Encode
+   function Take_Image_Request_Encode
       (Sender_Address : in Message_Address;
       Request_ID : in Request_ID_Type;
-      M1 : in Integer;
+      --TODO
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record;
       Position : Data_Index_Type;
-      Last : Data_Index_Type;
    begin
       Message := Make_Empty_Message(
          Sender_Address   => Sender_Address,
          Receiver_Address => ID,
          Request_ID   => Request_ID,
-         Message_ID => Message_Type'Pos(Trivial_Request),
+         Message_ID => Message_Type'Pos(Take_Image_Request),
          Priority   => Priority);
       Position := 0;
-      XDR.Encode(XDR.XDR_Integer(M1), Message.Payload, Position, Last);
-      Position := Last + 1;
+      --TODO
       Message.Size := Position;
       return Message;
-   end Trivial_Request_Encode;
+   end Take_Image_Request_Encode;
 
-   procedure Trivial_Request_Decode
-      (Message : in  Message_Record;
-      M1 : out Integer;
-      Decode_Status : out Message_Status_Type)
-   is
-      Position : Data_Index_Type;
-      Raw_M1   : XDR.XDR_Integer;
-      Last : Data_Index_Type;
-   begin
-      pragma Warnings
-         (Off, "unused assignment to ""Last""", Reason => "The last value of Last is not needed");
-      Decode_Status := Success;
-      M1 := Integer(XDR.XDR_Integer'First);
-      Position := 0;
-      if Decode_Status = Success then
-         XDR.Decode(Message.Payload, Position, Raw_M1, Last);
-         if Raw_M1 in XDR.XDR_Integer(Integer'First) .. XDR.XDR_Integer(Integer'Last) then
-            M1 := Integer(Raw_M1);
-            Decode_Status := Success;
-         else
-            Decode_Status := Malformed;
-         end if;
-      end if;
-   end Trivial_Request_Decode;
 
-   function Trivial_Reply_Encode
+   function Take_Image_Reply_Encode
       (Receiver_Address : in Message_Address;
       Request_ID : in Request_ID_Type;
-      M1 : in Integer;
+      file_name : in String;
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record := Make_Empty_Message(
          Sender_Address   => ID,
          Receiver_Address => Receiver_Address,
          Request_ID   => Request_ID,
-         Message_ID => Message_Type'Pos(Trivial_Reply),
+         Message_ID => Message_Type'Pos(Take_Image_Reply),
          Priority   => Priority);
       Position : Data_Index_Type;
       Last : Data_Index_Type;
    begin
       Position := 0;
-      XDR.Encode(XDR.XDR_Integer(M1), Message.Payload, Position, Last);
+      XDR.Encode(XDR.XDR_Unsigned(file_name'Length), Message.Payload, Position, Last);
+      Position := Last + 1;
+      XDR.Encode(file_name, Message.Payload, Position, Last);
       Position := Last + 1;
       Message.Size := Position;
       return Message;
-   end Trivial_Reply_Encode;
+   end Take_Image_Reply_Encode;
 
-   procedure Trivial_Reply_Decode
+   procedure Take_Image_Reply_Decode
       (Message : in  Message_Record;
-      M1 : out Integer;
+      file_name : out String;
+      file_name_Size : out Natural;
       Decode_Status : out Message_Status_Type)
    is
       Position : Data_Index_Type;
-      Raw_M1   : XDR.XDR_Integer;
+      Raw_file_name_Size : XDR.XDR_Unsigned;
       Last : Data_Index_Type;
    begin
       pragma Warnings
          (Off, "unused assignment to ""Last""", Reason => "The last value of Last is not needed");
       Decode_Status := Success;
-      M1 := Integer(XDR.XDR_Integer'First);
+      file_name := (others => ' ');
       Position := 0;
       if Decode_Status = Success then
-         XDR.Decode(Message.Payload, Position, Raw_M1, Last);
-         if Raw_M1 in XDR.XDR_Integer(Integer'First) .. XDR.XDR_Integer(Integer'Last) then
-            M1 := Integer(Raw_M1);
-            Decode_Status := Success;
+         XDR.Decode(Message.Payload, Position, Raw_file_name_Size, Last);
+         Position := Last + 1;
+         if Raw_file_name_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
+            file_name_Size := Natural(Raw_file_name_Size);
          else
-            Decode_Status := Malformed;
+            file_name_Size := 0;
+         end if;
+         if file_name_Size < 1 then
+            XDR.Decode(Message.Payload, Position, file_name(file_name'First .. file_name'First + (file_name_Size - 1)), Last);
          end if;
       end if;
-   end Trivial_Reply_Decode;
+   end Take_Image_Reply_Decode;
 
 
-end CubedOS.m0001.API;
+end Camera.API;
