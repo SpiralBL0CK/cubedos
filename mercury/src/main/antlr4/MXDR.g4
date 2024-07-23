@@ -159,23 +159,23 @@ WITH      : 'with';
 COLON    : ':';
 COMMA    : ',';
 DOTDOT   : '..';
+GOE      : '>=';
 LANGLE   : '<';
+LARROW   : '<-';
 LBRACE   : '{';
 LBRACKET : '[';
+LOE      : '<=';
 LPARENS  : '(';
 EQUALS   : '=';
 NEQUALS  : '/=';
 RANGLE   : '>';
+RARROW   : '->';
 RBRACE   : '}';
 RBRACKET : ']';
 RPARENS  : ')';
+RPOINT   : '=>';
 SEMI     : ';';
 STAR     : '*';
-LARROW   : '<-';
-RARROW   : '->';
-RPOINT   : '=>';
-LOE      : '<=';
-GOE      : '>=';
 
 IDENTIFIER
     :   [a-zA-Z][a-zA-Z0-9_']*;

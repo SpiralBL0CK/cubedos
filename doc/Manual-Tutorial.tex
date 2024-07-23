@@ -570,11 +570,11 @@ where that data can be found. Here is the MXDR description of these two messages
 \begin{verbatim}
 message struct -> Take_Image_Request {
     void;
-}
+};
 
 message struct <- Take_Image_Reply {
     string file_name<128>;
-}
+};
 \end{verbatim}
 
 The core of an MXDR description are the message definitions. Messages are conceptualized as
@@ -775,11 +775,11 @@ enough for our purposes. We repeat it here for convenience:
 
   message struct -> Take_Image_Request {
       void;
-  }
+  };
   
   message struct <- Take_Image_Reply {
       string file_name<128>;
-  }
+  };
 \end{verbatim}
 
 \subsubsection{Radio Module}
