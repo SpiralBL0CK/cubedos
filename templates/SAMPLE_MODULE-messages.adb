@@ -9,6 +9,7 @@ pragma SPARK_Mode(On);
 with Message_Manager;    -- See the comments in SAMPLE_MODULE-api.ads.
 with Name_Resolver;      -- See the comments in SAMPLE_MODULE-api.ads.
 with Sample_Module.API;  -- Needed so that the types in the API can be used here.
+with CubedOS.Log_Server.API;
 
 package body Sample_Module.Messages is
    use Message_Manager;
@@ -53,8 +54,9 @@ package body Sample_Module.Messages is
       if Sample_Module.API.Is_A_Request(Message) then
          Handle_A_Request(Message);
       else
-         -- An unknown message type has been received. What should be done about that?
-         null;
+         CubedOS.Log_Server.API.Log_Message(Name_Resolver.SAMPLE_MODULE,
+                                            CubedOS.Log_Server.API.Error,
+                                            "An unknown message type has been received!");
       end if;
       -- When this procedure returns the message loop will immediately try to receive the next
       -- message. Note that all CubedOS send operations are non-blocking so sending an outgoing
@@ -81,7 +83,7 @@ package body Sample_Module.Messages is
       -- Process_Message.
       --
       loop
-         Message_Manager.Fetch_Message(Name_Resolver.Sample_Module.Message_ID, Incoming_Message);
+         Message_Manager.Fetch_Message(Name_Resolver.Sample_Module.Module_ID, Incoming_Message);
          Process(Incoming_Message);
       end loop;
    end Message_Loop;

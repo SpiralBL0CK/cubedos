@@ -53,8 +53,9 @@ package body Controller.Messages is
       if Controller.API.Is_A_Request(Message) then
          Handle_A_Request(Message);
       else
-         -- An unknown message type has been received. What should be done about that?
-         null;
+         CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
+                                            CubedOS.Log_Server.API.Error,
+                                            "An unknown message type has been received!");
       end if;
       -- When this procedure returns the message loop will immediately try to receive the next
       -- message. Note that all CubedOS send operations are non-blocking so sending an outgoing
