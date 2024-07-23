@@ -95,16 +95,29 @@ object Main {
       val specificationFile = new PrintStream(baseFileName + "-api.ads")
       val bodyFile = new PrintStream(baseFileName + "-api.adb")
 
-      val parts = baseName.split("-")
-      val baseModuleName = parts(0) + "." + parts(1)
+      if(baseName.contains("-")){
+        val parts = baseName.split("-")
+        val baseModuleName = parts(0) + "." + parts(1)
 
-      val mySpecificationGenerator =
-        new SpecificationGenerator(templateFolder, baseFileName, baseModuleName, symbolTable, specificationFile, reporter)
-      mySpecificationGenerator.visit(tree)
+        val mySpecificationGenerator =
+          new SpecificationGenerator(templateFolder, baseFileName, baseModuleName, symbolTable, specificationFile, reporter)
+        mySpecificationGenerator.visit(tree)
 
-      val myBodyGenerator =
-        new BodyGenerator(templateFolder, baseFileName, baseModuleName, symbolTable, bodyFile, reporter)
-      myBodyGenerator.visit(tree)
+        val myBodyGenerator =
+          new BodyGenerator(templateFolder, baseFileName, baseModuleName, symbolTable, bodyFile, reporter)
+        myBodyGenerator.visit(tree)
+      }
+      else{
+        val mySpecificationGenerator =
+          new SpecificationGenerator(templateFolder, baseFileName, baseName, symbolTable, specificationFile, reporter)
+        mySpecificationGenerator.visit(tree)
+
+        val myBodyGenerator =
+          new BodyGenerator(templateFolder, baseFileName, baseName, symbolTable, bodyFile, reporter)
+        myBodyGenerator.visit(tree)
+      }
+
+      
 
       specificationFile.close()
       bodyFile.close()

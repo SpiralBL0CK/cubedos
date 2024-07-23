@@ -6,7 +6,7 @@ class SemanticAnalyzer(
   reporter   : Reporter) extends MXDRBaseVisitor[(String, TypeRep.Rep, String)] {
 
 
-  /*override def visitMessage_struct_type_spec(ctx: MercParser.Message_struct_type_specContext): TypeRep.Rep = {
+ /* override def visitMessage_struct_type_spec(ctx: MercParser.Message_struct_type_specContext): TypeRep.Rep = {
     val MSName = ctx.IDENTIFIER().getText
     val parameters = visitChildren(ctx).asInstanceOf[ComponentRep]
     symbolTable.addObjectName(MSName, TypeRep.MStructRep(MSName, parameters), "null")
@@ -301,7 +301,6 @@ class SemanticAnalyzer(
           "Invalid range constraint: Require lower bound <= upper bound")
         println("")
       }
-    }
-  }*/
+    }*/
+  }
 
-}
