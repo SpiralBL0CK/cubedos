@@ -12,6 +12,9 @@ pragma SPARK_Mode(On);
 with CubedOS.Lib;
 with Message_Manager;  use Message_Manager;
 with System;
+with Name_Resolver;
+with CubedOS.Lib.XDR;
+use  CubedOS.Lib.XDR;
 
 package CubedOS.m0002.API is
 

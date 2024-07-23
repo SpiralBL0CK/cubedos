@@ -3408,7 +3408,7 @@ class BodyGenerator(
             out.println("for I in Integer range 0 .. " + symbolTable.getArraySSize(i, y) + " loop")
             indentationLevel += 1
             doIndentation()
-            out.println(sd + y + "(I) := (others => ' ');")
+            out.println(sd + y + "(I) := [others => ' '];")
             indentationLevel -= 1
             doIndentation()
             out.println("end loop;")
@@ -3556,7 +3556,7 @@ class BodyGenerator(
         }
         else if (symbolTable.getST(i, y).contains("StringRep")) {
           doIndentation()
-          out.println(sd + y + " := (others => ' ');")
+          out.println(sd + y + " := [others => ' '];")
         }
         else if (sp == "null" && symbolTable.getST(i, y).contains("BoolRep")) {
           doIndentation()
@@ -3616,7 +3616,7 @@ class BodyGenerator(
         }
         else if (symbolTable.getST(i, y).contains("DataRep")) {
           doIndentation()
-          out.println(sd + y + " := (others => 0);")
+          out.println(sd + y + " := [others => 0];")
           doIndentation()
           out.println("Size := 0;")
         }
@@ -3665,7 +3665,7 @@ class BodyGenerator(
             out.println("for I in Integer range 0 .. " + symbolTable.getArraySSize(i, y) + " loop")
             indentationLevel += 1
             doIndentation()
-            out.println(sd + y + "(I) := (others => ' ');")
+            out.println(sd + y + "(I) := [others => ' '];")
             indentationLevel -= 1
             doIndentation()
             out.println("end loop;")
@@ -3813,7 +3813,7 @@ class BodyGenerator(
         }
         else if (symbolTable.getST(i, y).contains("StringRep")) {
           doIndentation()
-          out.println(sd + y + " := (others => ' ');")
+          out.println(sd + y + " := [others => ' '];")
         }
         else if (sp == "null" && symbolTable.getST(i, y).contains("BoolRep")) {
           doIndentation()
@@ -3873,7 +3873,7 @@ class BodyGenerator(
         }
         else if (symbolTable.getST(i, y).contains("DataRep")) {
           doIndentation()
-          out.println(sd + y + " := (others => 0);")
+          out.println(sd + y + " := [others => 0];")
           doIndentation()
           out.println("Size := 0;")
         }
@@ -4567,7 +4567,7 @@ class BodyGenerator(
           out.println("for I in Integer range 0 .. " + symbolTable.getArraySSize(id, i) + " loop")
           indentationLevel += 1
           doIndentation()
-          out.println(i + "(I) := (others => ' ');")
+          out.println(i + "(I) := [others => ' '];")
           indentationLevel -= 1
           doIndentation()
           out.println("end loop;")
@@ -4715,7 +4715,7 @@ class BodyGenerator(
       }
       else if (symbolTable.getST(id, i).contains("StringRep")) {
         doIndentation()
-        out.println(i + " := (others => ' ');")
+        out.println(i + " := [others => ' '];")
       }
       else if (s != "null" && symbolTable.getST(id, i).contains("EnumRep")) {
         // The EnumRep case was added by pchapin... Do we need a case for s == "null"?
@@ -4780,7 +4780,7 @@ class BodyGenerator(
       }
       else if (symbolTable.getST(id, i).contains("DataRep")) {
         doIndentation()
-        out.println(i + " := (others => 0);")
+        out.println(i + " := [others => 0];")
         doIndentation()
         out.println("Size := 0;")
       }

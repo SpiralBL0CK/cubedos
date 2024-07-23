@@ -9,10 +9,8 @@
 --------------------------------------------------------------------------------
 pragma SPARK_Mode(On);
 
-with CubedOS.Lib.XDR;
 with CubedOS.Lib;
 use  CubedOS.Lib;
-use  CubedOS.Lib.XDR;
 
 package body Camera.API is
 
@@ -27,7 +25,7 @@ package body Camera.API is
    begin
       Message := Make_Empty_Message(
          Sender_Address   => Sender_Address,
-         Receiver_Address => Name_Resolver.Camera,
+         Receiver_Address => ID,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(Take_Image_Request),
          Priority   => Priority);
@@ -45,7 +43,7 @@ package body Camera.API is
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record := Make_Empty_Message(
-         Sender_Address   => Name_Resolver.Camera,
+         Sender_Address   => ID,
          Receiver_Address => Receiver_Address,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(Take_Image_Reply),

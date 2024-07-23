@@ -9,10 +9,8 @@
 --------------------------------------------------------------------------------
 pragma SPARK_Mode(On);
 
-with CubedOS.Lib.XDR;
 with CubedOS.Lib;
 use  CubedOS.Lib;
-use  CubedOS.Lib.XDR;
 
 package body %MODULENAME%.API is
 

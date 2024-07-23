@@ -9,6 +9,7 @@ pragma SPARK_Mode(On);
 with Message_Manager;    -- See the comments in SAMPLE_MODULE-api.ads.
 with Name_Resolver;      -- See the comments in SAMPLE_MODULE-api.ads.
 with Controller.API;  -- Needed so that the types in the API can be used here.
+with CubedOS.Log_Server.API;
 
 package body Controller.Messages is
    use Message_Manager;
