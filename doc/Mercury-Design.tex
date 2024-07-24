@@ -1,218 +1,39 @@
 \section{Design}
 \label{sec:mercury-design}
 
-\subsection{System Level Design}
+In this section we describe the design of Mercury. This section will be primarily of interest to
+developers who are working on the implementation of Mercury. Developers who are using Mercury to
+generate API packages for CubedOS modules should refer to the tutorial in
+Section~\ref{sec:mercury-tutorial}.
 
-\subsection{System Goals}
-
-The goal of Mercury is to ease the implementation of CubedOS on its user. The user inputs a
-modified XDR file and receives as output verified \SPARK.
-
-Client-side Mercury could very well insert an XDR file into the payload of a UDP or TCP/IP
-protocol packet and be sent across a network (or even the Internet) to then produce an
-executable outputted in \SPARK. This would require modification to the Scala used to write the
-ANTLR generated compiler and would result in a product like those mentioned in Competitive
-Analysis of the Mercury Requirements document. This would also require intimate knowledge of the
-server to which the meta-packet is sent, including having Mercury set up server-side to accept
-an XDR file from the payload of a meta-packet and decompose the file into a \SPARK\ executable
-intended to be executed, typically, on that same server. Then Mercury server-side could
-reciprocate based on the instructions in the \SPARK\ executable.
-
-\subsection{Key Components}
+\subsection{Mercury Pipeline}
 
 \begin{itemize}
-\item \textbf{Scala} is a general-purpose-language running on the Java Virtual Machine (JVM)
-that is a Frankenstein mixture of functional and imperative programming. Here it is being used
-to create the ANTLR-based compiler tool Mercury.
+\item \textbf{Scala}. Mercury is written in Scala, a functional/OOP hybrid language for the Java
+Virtual Machine (JVM). Mercury capitalizes on the Scala/Java ecosystem in terms of tooling (such
+as SBT) and library support.
 
-\item \textbf{XDR} is a C-derived Data Representation Language, similar to XML, designed to move
-the data itself from one node to another.
+\item \textbf{Grammar}. MXDL is described as an ANTLR4 grammar that is then processed by ANTLR
+to generate the lexical analyzer and parser (in Java).
 
-\item \textbf{Grammar} is an arbitrary set of rules, each one expressing the structure of a
-phrase. ANTLR translates a grammar to a parser.
+\item \textbf{Lexer}. Mercury's lexical analyzer is ANTLR generated. It is fairly standard in
+terms of its handling of whitespace, identifiers, numeric literals, etc.
 
-\item \textbf{Lexer} is an ANTLR generated file custom designed to perform lexical analysis (or
-tokenizing) on the modified XDR input. The lexer groups related tokens into token types (INT,
-ID, FLOAT, etc.) A token consists of two pieces of information: token type and the text matched
-for the token by the lexer.
+\item \textbf{Parser}. The parser is also ANTLR generated, and Mercury uses ANTLR generated
+classes for traversing the parse tree produced by the parser. Syntax errors are detected by the
+ANTLR generated code.
 
-\item \textbf{Parser} is also an ANTLR generated file, based off a supplied grammar, that cares
-only about the type of an individual token. The parser uses a parse tree (or syntax tree) to
-recognize the structure of the input sentence and its component phrases. ANTLR parsers descend
-recursively, beginning at the root of the parse tree and proceeding toward the leaves (tokens).
+\item \textbf{Semantic Analyzer}. After parsing, the semantic analyzer walks over the parse tree
+searching for type errors and other violations of MXDR's rules. After this stage of processing,
+the input MXDR is considered valid and code can be generated from it.
 
-\item \textbf{Parse Tree} is generated from the parser, the parse tree is easy to process in
-subsequent steps and is reusable. The inner nodes of the parse tree are phrase names that group
-and identify their children, with the root node being the most abstract phrase name. The leaves
-of a parse tree are the input tokens.
-
-\item \textbf{Semantic Analyzer} is a user provided file intended to ensure that the meaning of
-the sentence structure is correct. Whereas the other files are concerned with the correctness of
-the sentence syntax and the correct structure of the generated parse tree, the semantic analyzer
-makes sure that the sentence structure makes sense from the point-of-view of the Mercury user.
-
-\item \textbf{SPARK} SPARK 2014 is a subset language of Ada 2012 released April 30, 2014. This
-High Integrity Language incorporates parts of the Ada 2012 language that can be run through
-certain tools built into SPARK IDEs that run mathematical calculations on the provided code to
-ensure that the code meets the design objectives of \SPARK: logical soundness, semantic
-soundness, security, verifiability, bounded resource requirements, and runtime system
-requirements. The other design objective of \SPARK\ was to find a meeting point between
-maintaining rigorous formal definition while not sacrificing its expressive and artistic power.
-The first version of \SPARK\ was designed by University of Southampton Bernard Carre and Trevor
-Jennings based on the original Ada '83. It has subsequently been revamped typically 2 to 3 years
-after each of Ada's revamping's.
-
-With \SPARK, contracts were added to the code to improve tools such as GNATprove in
-determining the designer's intentions by comparing the contract along with its pre, post and
-verification conditions against what the code is doing. This makes for the prevention of the
-hypothetical scenario where, even though the code is doing something legal and correct, it still
-wasn't the designer's intention. Also, contracts help for an added layer of security and
-verifiability in general and can help the designer through the coding process.
-
-Here is an example of a SPARK procedure with a contract comprised of one precondition and one
-postcondition:
-\begin{verbatim}
-	procedure Locate_Node(Position : out Node_Index)
-  with Pre => not isFull,
-    	 Post => Node_Array(Position).used = False
-   		 is
-   		 begin
-\end{verbatim}
-  
-Industrially, \SPARK\ is currently ubiquitous, especially in the security and safety realms.
-Vermont State University (VTSU) is currently using \SPARK\ in its CubeSat missions.
-
-The most important line of any \SPARK\ program in order that it be differentiated from original
-Ada:
-\begin{verbatim}
-			pragma SPARK_Mode(On);
-\end{verbatim}			
-
-This one-liner designates that what follows, along with the file’s associated files (the
-specification file that defines public and private functions and procedures, the body file that
-holds the complete functions and procedures of the project itself, and the main file that
-manipulates public functions and procedures in the specification file), is in fact SPARK and not
-full Ada.
-
-What exactly separates Ada from \SPARK? \SPARK\ has no access types such as pointers, no
-unstructured control flow such as gotos, no exception handling, no aliasing of outputs from
-subprograms, and no side effects in expressions and functions. All these “normal things” found
-in many other languages make the formal reasoning and mathematical verifications much harder, at
-very least, if not impossible.
+\item \textbf{Code Generation}. The code generator takes the validated MXDR and generates the
+Ada package that defines the API to the module. Two files are produced: the package
+specification and the package body. Code generation entails walking over the parse tree again
+and emitting Ada code based on the nodes encountered.
 \end{itemize}
-
-\subsection{Component Interactions}
-
-\begin{itemize}
-\item \textbf{USE CASE} The user of CubedOS creates a modified XDR file intended to generate two
-SPARK 2014 output files: *.ads and concomitant *.adb. Internally, the lexical analyzer and
-parser (with the generated parse tree) have all been automatically generated in Scala based on
-the supplied grammar. The modified XDR is tokenized by the lexical analyzer and subsequently
-parsed by the parser using the parse tree. This results in a stream of chars that is then sent
-to the semantic analyzer for a check of intended logical soundness. SPARK 2014 (*.ads and *.adb)
-is then generated based on the correctness of the original modified XDR input.
-\end{itemize}
-
-\subsubsection{Code Level Design}
 
 Since approximately half of the files in this Mercury compiler pipeline are auto-generated by
 the ANTLR tool, the three distinct areas of focus at the code level are the grammar, the
-semantic analyzer, and the code generation. The grammar and semantic analyzer are each a file.
-Code generation requires multiple files and references to the outputs of the other phases of the
-compiler pipeline, namely the parse tree.
-
-SPARK skeletons (*.ads and *.adb) are filled in by the code generation phase after the previous
-compiler phases check the soundness and validity of the modified XDR.
-
-\subsection{Code Goals}
-
-Code goals include simplicity, readability/understandability, and—of course—executability.
-
-\subsection{Code Level Plan for Implementation and Explanation}
-
-\begin{itemize}
-\item \textbf{Modified XDR} For each module, the CubedOS user creates a modified XDR file
-(*.mxdr) consisting of a message struct per message type. The name the user supplies to the
-first enum invariably named Module will replace MODULENAME in the correct template, delimited by
-\%. The second enum is used to identify n-number of types of messages in this template, all of
-which must be explicitly associated with ascending and incremental values beginning at 1. Each
-enum must be a message type outlined in the Appendix B. The *.mxdr files are then placed in a
-folder. The various typedefs following the enums are used for the input parameter list of each
-function/procedure then outlined in each message struct. There is a direct, one-to-one
-correspondence between the Message\_Type enum and the number of message structs. Mercury is then
-invoked using the command-line syntax and options outlined in this document. The output of this
-process is shown in SPARK Output.
-\begin{verbatim}
-enum { Publish_Subscribe };
-enum Message_Type { Subscribe_Request, Subscribe_Reply, 
-   Publish_Request, Publish_Reply, Publish_Result };
-
-typedef unsigned int Channel_ID range 1 .. 16;
-typedef Boolean Status_Current;
-
-message struct {
-    Channel_ID     Channel;
-} Subscribe_Request;
-
-message struct {
-    Channel_ID     Channel;
-    Status_Current Status;
-} Subscribe_Reply;
-
-message struct {
-    Channel_ID     Channel;
-    Opaque<>       Message_Data;
-} Publish_Request;
-
-message struct {
-    Channel_ID     Channel;
-    Status_Current Status;
-} Publish_Reply;
-
-message struct {
-    Channel_ID     Channel;
-    Opaque<>       Message_Data;
-} Publish_Result;
-\end{verbatim}
-  
-\item \textbf{Grammar} The grammar consists of the rules that construct the lexical analyzer,
-the parser and, thus, the parse tree. An example can be found in Appendix A.
-
-\item \textbf{Parse Tree} A parse tree is an ordered, rooted tree that represents the syntactic
-structure of a string according to a context-free grammar. A parse tree is generated for each
-input of modified XDR. Leaf nodes in the parse tree are containers that point at tokens in the
-token stream. The tokens record start and stop character indexes into the ChatStream, rather
-than making copies of substrings. ANTLR provides support for two tree-walking mechanisms in its
-runtime library: listener design pattern and visitor design pattern.
-  
-  \begin{itemize}
-  \item \textbf{Listener Design Pattern} By default, ANTLR generates a parse tree listener
-  interface that responds to events triggered by the built-in tree walker. The listeners receive
-  notification of events. To make a language application, a ParseTreeListener is built and
-  implemented for each grammar with enter and exit methods for each rule. As the walker
-  encounters the node for a hypothetical rule assign, it triggers enterAssign() and passes it
-  the AssignContext parse tree node. After the walker visits all children of the assign node, it
-  triggers exitAssign(). The tree diagram below shows ParseTreeWalker performing a depth-first
-  walk, represented by the dashed line.
-
-  \item \textbf{Visitor Design Pattern} When the walk must be controlled, explicitly calling
-  methods to visit children, option -visitor asks ANTLR to generate a visitor interface from a
-  grammar with a visit method per rule.
-  \end{itemize}
-
-\item \textbf{Semantic Analyzer} Semantic analysis involves checking that the *.mxdr file
-presented to Mercury follows the specified rules of modified XDR required. For example, internal
-to Mercury, if a certain module identification from Appendix B is used in the modified XDR file,
-then one aspect of semantic analysis will be to make sure the inputted parameter list and any
-possible flags or identifiers associated are valid for that module type.
-
-\item \textbf{SPARK Skeletons} A generic \SPARK\ template with exactly 5 types of messages to be
-auto-generated into the file.
-  
-\item \textbf{SPARK Output} What follows is an example \SPARK\ output from Mercury for the
-  CubedOS publish-subscribe API (Application Programming Interface) based off the modified XDR
-  presented previously. For each of the 5 provided message types, 2 functions and a procedure is
-  generated: 1 function to encode messages, 1 function to check if the message is of the correct
-  type, and 1 procedure to decode incoming messages.
-  
-\end{itemize}
+semantic analyzer, and the code generation. SPARK skeletons are filled in by the code generation
+phase after the previous compiler phases check the soundness and validity of the modified XDR.

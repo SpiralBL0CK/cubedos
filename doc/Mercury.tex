@@ -2,7 +2,21 @@
 \chapter{Mercury}
 \label{chapt:mercury}
 
-\todo{Give overview!}
+Mercury is an interface definition language (IDL) compiler for CubedOS. It takes as input a file
+describing the messages a CubedOS module receives (requests) or sends (replies), and outputs an
+Ada package that defines the API to that module. The package provides subprograms for encoding
+messages, decoding messages, and classifying messages.
+
+One unique aspect of Mercury is that it generates \SPARK\ code that can be proved free of
+runtime error without any further intervention by the user.
+
+The IDL used by Mercury is an extension of XDR as defined in RFC-4506 \cite{rfc-4506}, that we
+call modified XDR or MXDR. The modifications incorporate features that facilitate \SPARK's
+ability to prove the absence of runtime errors.
+
+Mercury is written in Scala and is invoked from the command line.
+
+In this chapter we describe the requirements, design, and usage of Mercury.
 
 \input{Mercury-Requirements.tex}
 \input{Mercury-Design.tex}
