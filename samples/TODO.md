@@ -19,7 +19,7 @@ Here are some todo-items related to the sample programs.
   work at all.
   
 + The `moonshot` sample is our version of the tutorial application described in the
-  documentation. It is nothing more than a placeholder right now.
+  documentation.
   
 + The `pathfinder` sample compiles and runs. It is intended to demonstrate priority inversion,
   but it hasn't been checked to see if that is really true.
