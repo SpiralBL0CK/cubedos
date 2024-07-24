@@ -3,23 +3,35 @@
 -- SUBJECT: Specification of a package containing CCSDS space packet encoding/decoding logic.
 -- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
+-- Space packets are described by CCSDS-133.0-B-2, Space Packet Protocol.
 --------------------------------------------------------------------------------
 pragma SPARK_Mode(On);
 
 package CubedOS.Lib.Space_Packets is
 
-   subtype Primary_Header is Octet_Array(1 .. 6);
+   -- The header always has a size of exactly six octets.
+   subtype Packet_Header_Index_Type is Natural range 1 .. 6;
+   subtype Primary_Header is Octet_Array(Packet_Header_Index_Type);
 
-   subtype Packet_Data_Index_Type is
-     Natural range 1 .. 65536; -- TODO: Should this upper limit be generic?
-   subtype Packet_Data_Size_Type is
-     Natural range Packet_Data_Index_Type'First .. Packet_Data_Index_Type'Last;
-   type Packet_Data is array(Packet_Data_Index_Type range <>) of Octet;
+   -- The data has variable size with a maximum of 65536 octets.
+   subtype Packet_Data_Index_Type is Natural range 1 .. 65536;
+   subtype Packet_Data_Size_Type is Natural range Packet_Data_Index_Type'First .. Packet_Data_Index_Type'Last;
 
    type APID_Type is mod 2**11;
    type Packet_Type_Type is (Telemetry, Telecommand);
    type Segementation_Flag_Type is (Continuation_Segment, First_Segment, Last_Segment, Unsegmented);
    type Sequence_Count_Type is mod 2**14;
+
+   type Space_Packet(Size : Packet_Data_Size_Type) is
+      record
+         Header : Primary_Header;
+         Data   : Octet_Array(1 .. Size);
+      end record;
+
+   function To_Raw_Array(Packet : in Space_Packet) return Octet_Array;
+
+   function From_Raw_Array(Raw_Packet : in Octet_Array) return Space_Packet
+     with Pre => Raw_Packet'Length >= 7 and Raw_Packet'Length <= 65542;
 
    -- Space Packet Decoding
    ------------------------

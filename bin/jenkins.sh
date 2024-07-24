@@ -90,26 +90,26 @@ cd ..
 
 echo -e "\nSPARK Analysis (Core)"
 echo      "====================="
-gnatprove -P src/cubedos.gpr --level=2 --mode=silver -j2
+gnatprove -P src/cubedos.gpr --level=2 --mode=silver -j4
 
 echo -e "\nSPARK Analysis (Sample Programs)"
 echo      "================================"
 echo -e "\nEcho"
 echo      "----"
-gnatprove -P samples/echo/echo.gpr --level=2 --mode=silver -j2
+gnatprove -P samples/echo/echo.gpr --level=2 --mode=silver -j4
 
 echo -e "\nMoonshot"
 echo      "--------"
-gnatprove -P samples/moonshot/moonshot.gpr --level=2 --mode=silver -j2
+gnatprove -P samples/moonshot/moonshot.gpr --level=2 --mode=silver -j4
 
 echo -e "\nMulti-Domain"
 echo      "------------"
-gnatprove -P samples/networking/networking.gpr -XBUILD=DomainA --level=2 --mode=silver -j2
-gnatprove -P samples/networking/networking.gpr -XBUILD=DomainB --level=2 --mode=silver -j2
+gnatprove -P samples/networking/networking.gpr -XBUILD=DomainA --level=2 --mode=silver -j4
+gnatprove -P samples/networking/networking.gpr -XBUILD=DomainB --level=2 --mode=silver -j4
 
 echo -e "\nPathfinder"
 echo      "----------"
-gnatprove -P samples/pathfinder/pathfinder.gpr --level=2 --mode=silver -j2
+gnatprove -P samples/pathfinder/pathfinder.gpr --level=2 --mode=silver -j4
 
 # Right now (2024-07-05), this program is not SPARK because it doesn't declare the external
 # hardware it uses correctly. This should be fixed, of course, but I'm commenting out this
@@ -117,9 +117,9 @@ gnatprove -P samples/pathfinder/pathfinder.gpr --level=2 --mode=silver -j2
 #
 #echo -e "\nSTM32F4"
 #echo      "-------"
-#gnatprove -P samples/STM32F4/stmdemo.gpr --level=2 --mode=silver -j2
+#gnatprove -P samples/STM32F4/stmdemo.gpr --level=2 --mode=silver -j4
 
 echo -e "\nCodePeer Analysis"
 echo      "================="
-gnatsas analyze -P src/cubedos.gpr --quiet -j2 --mode=deep --no-gnat -- inspector -quiet
-gnatsas report text -P src/cubedos.gpr --quiet -j2 --mode=deep
+gnatsas analyze -P src/cubedos.gpr --quiet -j4 --mode=deep --no-gnat -- inspector -quiet
+gnatsas report text -P src/cubedos.gpr --quiet -j4 --mode=deep

@@ -8,6 +8,25 @@ pragma SPARK_Mode(On);
 
 package body CubedOS.Lib.Space_Packets is
 
+   function To_Raw_Array(Packet : in Space_Packet) return Octet_Array is
+      Result : Octet_Array(1 .. Packet.Size + 6) := [others => 0];
+      -- The initialization above is needed because SPARK doesn't realize the entire array is filled below.
+   begin
+      Result(1 .. 6) := Packet.Header;
+      Result(7 .. 7 + (Packet.Size - 1)) := Packet.Data(1 .. Packet.Size);
+      return Result;
+   end To_Raw_Array;
+
+
+   function From_Raw_Array(Raw_Packet : in Octet_Array) return Space_Packet is
+      Result : Space_Packet(Size => Raw_Packet'Length - 6);
+   begin
+      Result.Header := Raw_Packet(Raw_Packet'First .. (Raw_Packet'First + 6) - 1);
+      Result.Data := Raw_Packet(Raw_Packet'First + 6 .. (Raw_Packet'First + 6) + (Result.Size - 1));
+      return Result;
+   end From_Raw_Array;
+
+
    function Format_Primary_Header
      (APID           : in APID_Type;
       Packet_Type    : in Packet_Type_Type;

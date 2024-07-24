@@ -15,11 +15,16 @@ package CubedOS.Lib is
    type Quadruple_Octet is mod 2**32;
    type Octuple_Octet is mod 2**64;
 
-   -- Limiting the maximum size of arrays simplfies proving freedom from overflow in array index
-   -- computations. There is no other particular reason for this limit; it is arbitrary. The
-   -- limit should be high enough to satisfy any reasonable application.
+   -- Limiting the maximum size of arrays simplfies proving freedom from overflow in array index computations.
+   -- There is no other particular reason for this limit; it is arbitrary. The limit should be high enough to
+   -- satisfy any reasonable application.
    --
-   Maximum_Array_Size : constant := 2**16;
+   -- There are situations where an Octet_Array needs to hold multiple octet sequences at once where at least
+   -- one of those sequences can be as much as 2**16 long. For example, the data in a space packet can be up to
+   -- 2**16 long, and the header is an addition 6 octets. Creating an Octet_Array that can hold the entire
+   -- packet might require 2**16 + 6 octets in total. For this reason, the upper bound on Octet_Array is 2**17.
+   --
+   Maximum_Array_Size : constant := 2**17;
 
    -- Starting the index type at 0 is consistent with low level expectations.
    subtype Octet_Array_Index is Natural range 0 .. Maximum_Array_Size - 1;
