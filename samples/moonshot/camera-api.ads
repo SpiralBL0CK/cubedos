@@ -12,6 +12,9 @@ pragma SPARK_Mode(On);
 with CubedOS.Lib;
 with Message_Manager;  use Message_Manager;
 with System;
+with Name_Resolver;
+with CubedOS.Lib.XDR;
+use  CubedOS.Lib.XDR;
 
 package Camera.API is
 
@@ -28,7 +31,7 @@ package Camera.API is
       Global => null;
 
    function Is_Take_Image_Request(Message : in Message_Record) return Boolean is
-      (Message.Receiver_Address = ID and Message.Message_ID = Message_Type'Pos(Take_Image_Request));
+      (Message.Receiver_Address = Name_Resolver.Camera and Message.Message_ID = Message_Type'Pos(Take_Image_Request));
 
 
    function Take_Image_Reply_Encode
@@ -41,7 +44,7 @@ package Camera.API is
       Pre => (0 < file_name'Length and file_name'Length <= XDR_Size_Type'Last - 12);
 
    function Is_Take_Image_Reply(Message : in Message_Record) return Boolean is
-      (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(Take_Image_Reply));
+      (Message.Sender_Address = Name_Resolver.Camera and Message.Message_ID = Message_Type'Pos(Take_Image_Reply));
 
    procedure Take_Image_Reply_Decode
       (Message : in  Message_Record;

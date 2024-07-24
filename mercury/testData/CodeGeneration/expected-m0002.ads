@@ -12,6 +12,9 @@ pragma SPARK_Mode(On);
 with CubedOS.Lib;
 with Message_Manager;  use Message_Manager;
 with System;
+with Name_Resolver;
+with CubedOS.Lib.XDR;
+use  CubedOS.Lib.XDR;
 
 package CubedOS.m0002.API is
 
@@ -92,7 +95,7 @@ package CubedOS.m0002.API is
       Global => null;
 
    function Is_Reddish(Message : in Message_Record) return Boolean is
-      (Message.Receiver_Address = ID and Message.Message_ID = Message_Type'Pos(Reddish));
+      (Message.Receiver_Address = Name_Resolver.m0002 and Message.Message_ID = Message_Type'Pos(Reddish));
 
    procedure Reddish_Decode
       (Message : in  Message_Record;
@@ -121,7 +124,7 @@ package CubedOS.m0002.API is
       Global => null;
 
    function Is_Bluish(Message : in Message_Record) return Boolean is
-      (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(Bluish));
+      (Message.Sender_Address = Name_Resolver.m0002 and Message.Message_ID = Message_Type'Pos(Bluish));
 
    procedure Bluish_Decode
       (Message : in  Message_Record;
@@ -148,7 +151,7 @@ package CubedOS.m0002.API is
       Global => null;
 
    function Is_Example(Message : in Message_Record) return Boolean is
-      (Message.Receiver_Address = ID and Message.Message_ID = Message_Type'Pos(Example));
+      (Message.Receiver_Address = Name_Resolver.m0002 and Message.Message_ID = Message_Type'Pos(Example));
 
    procedure Example_Decode
       (Message : in  Message_Record;

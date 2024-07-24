@@ -12,6 +12,9 @@ pragma SPARK_Mode(On);
 with CubedOS.Lib;
 with Message_Manager;  use Message_Manager;
 with System;
+with Name_Resolver;
+with CubedOS.Lib.XDR;
+use  CubedOS.Lib.XDR;
 
 package CubedOS.m0004.API is
 
@@ -84,7 +87,7 @@ package CubedOS.m0004.API is
       Global => null;
 
    function Is_ms(Message : in Message_Record) return Boolean is
-      (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(ms));
+      (Message.Sender_Address = Name_Resolver.m0004 and Message.Message_ID = Message_Type'Pos(ms));
 
    procedure ms_Decode
       (Message : in  Message_Record;
@@ -108,7 +111,7 @@ package CubedOS.m0004.API is
       Global => null;
 
    function Is_ms1(Message : in Message_Record) return Boolean is
-      (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(ms1));
+      (Message.Sender_Address = Name_Resolver.m0004 and Message.Message_ID = Message_Type'Pos(ms1));
 
 
 

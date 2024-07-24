@@ -9,10 +9,8 @@
 --------------------------------------------------------------------------------
 pragma SPARK_Mode(On);
 
-with CubedOS.Lib.XDR;
 with CubedOS.Lib;
 use  CubedOS.Lib;
-use  CubedOS.Lib.XDR;
 
 package body Camera.API is
 
@@ -75,7 +73,7 @@ package body Camera.API is
       pragma Warnings
          (Off, "unused assignment to ""Last""", Reason => "The last value of Last is not needed");
       Decode_Status := Success;
-      file_name := (others => ' ');
+      file_name := [others => ' '];
       Position := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_file_name_Size, Last);
