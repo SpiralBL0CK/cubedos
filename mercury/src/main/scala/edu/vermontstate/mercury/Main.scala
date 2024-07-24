@@ -104,7 +104,7 @@ object Main {
         mySpecificationGenerator.visit(tree)
 
         val myBodyGenerator =
-          new BodyGenerator(templateFolder, baseFileName, baseModuleName, symbolTable, bodyFile, reporter)
+          new BodyGenerator(templateFolder, baseFileName, baseModuleName, parts(1), symbolTable, bodyFile, reporter)
         myBodyGenerator.visit(tree)
       }
       else{
@@ -113,7 +113,7 @@ object Main {
         mySpecificationGenerator.visit(tree)
 
         val myBodyGenerator =
-          new BodyGenerator(templateFolder, baseFileName, baseName, symbolTable, bodyFile, reporter)
+          new BodyGenerator(templateFolder, baseFileName, baseName, baseName, symbolTable, bodyFile, reporter)
         myBodyGenerator.visit(tree)
       }
 

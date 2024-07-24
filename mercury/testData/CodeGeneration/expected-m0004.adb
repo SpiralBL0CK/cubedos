@@ -24,7 +24,7 @@ package body CubedOS.m0004.API is
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record := Make_Empty_Message(
-         Sender_Address   => ID,
+         Sender_Address   => Name_Resolver.m0004,
          Receiver_Address => Receiver_Address,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(ms),
@@ -317,7 +317,7 @@ package body CubedOS.m0004.API is
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record := Make_Empty_Message(
-         Sender_Address   => ID,
+         Sender_Address   => Name_Resolver.m0004,
          Receiver_Address => Receiver_Address,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(ms1),

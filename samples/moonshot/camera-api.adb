@@ -25,7 +25,7 @@ package body Camera.API is
    begin
       Message := Make_Empty_Message(
          Sender_Address   => Sender_Address,
-         Receiver_Address => ID,
+         Receiver_Address => Name_Resolver.Camera,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(Take_Image_Request),
          Priority   => Priority);
@@ -43,7 +43,7 @@ package body Camera.API is
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record := Make_Empty_Message(
-         Sender_Address   => ID,
+         Sender_Address   => Name_Resolver.Camera,
          Receiver_Address => Receiver_Address,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(Take_Image_Reply),
@@ -75,17 +75,15 @@ package body Camera.API is
       Decode_Status := Success;
       file_name := [others => ' '];
       Position := 0;
-      if Decode_Status = Success then
-         XDR.Decode(Message.Payload, Position, Raw_file_name_Size, Last);
-         Position := Last + 1;
-         if Raw_file_name_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
-            file_name_Size := Natural(Raw_file_name_Size);
-         else
-            file_name_Size := 0;
-         end if;
-         if file_name_Size < 1 then
-            XDR.Decode(Message.Payload, Position, file_name(file_name'First .. file_name'First + (file_name_Size - 1)), Last);
-         end if;
+      XDR.Decode(Message.Payload, Position, Raw_file_name_Size, Last);
+      Position := Last + 1;
+      if Raw_file_name_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
+         file_name_Size := Natural(Raw_file_name_Size);
+      else
+         file_name_Size := 0;
+      end if;
+      if file_name_Size < 1 then
+         XDR.Decode(Message.Payload, Position, file_name(file_name'First .. file_name'First + (file_name_Size - 1)), Last);
       end if;
    end Take_Image_Reply_Decode;
 

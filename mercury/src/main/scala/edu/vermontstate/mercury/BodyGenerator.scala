@@ -6,6 +6,7 @@ class BodyGenerator(
   templateFolder : String,
   nameOfFile     : String,
   nameOfModule   : String,
+  nameInResolver : String,
   symbolTable    : BasicSymbolTable,
   out            : java.io.PrintStream,
   reporter       : Reporter) extends MXDRBaseVisitor[Void] {
@@ -3971,7 +3972,7 @@ class BodyGenerator(
       out.println("Message : Message_Record := Make_Empty_Message(")
       indentationLevel += 1
       doIndentation()
-      out.println("Sender_Address   => ID,")
+      out.println("Sender_Address   => Name_Resolver." + nameInResolver + ",")
       doIndentation()
       out.println("Receiver_Address => Receiver_Address,")
       doIndentation()
@@ -4011,7 +4012,7 @@ class BodyGenerator(
       doIndentation()
       out.println("Sender_Address   => Sender_Address,")
       doIndentation()
-      out.println("Receiver_Address => ID,")
+      out.println("Receiver_Address => Name_Resolver." + nameInResolver + ",")
       doIndentation()
       out.println("Request_ID   => Request_ID,")
       doIndentation()
