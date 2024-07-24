@@ -75,15 +75,17 @@ package body Camera.API is
       Decode_Status := Success;
       file_name := [others => ' '];
       Position := 0;
-      XDR.Decode(Message.Payload, Position, Raw_file_name_Size, Last);
-      Position := Last + 1;
-      if Raw_file_name_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
-         file_name_Size := Natural(Raw_file_name_Size);
-      else
-         file_name_Size := 0;
-      end if;
-      if file_name_Size < 1 then
-         XDR.Decode(Message.Payload, Position, file_name(file_name'First .. file_name'First + (file_name_Size - 1)), Last);
+      if Decode_Status = Success then
+         XDR.Decode(Message.Payload, Position, Raw_file_name_Size, Last);
+         Position := Last + 1;
+         if Raw_file_name_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
+            file_name_Size := Natural(Raw_file_name_Size);
+         else
+            file_name_Size := 0;
+         end if;
+         if file_name_Size < 1 then
+            XDR.Decode(Message.Payload, Position, file_name(file_name'First .. file_name'First + (file_name_Size - 1)), Last);
+         end if;
       end if;
    end Take_Image_Reply_Decode;
 
