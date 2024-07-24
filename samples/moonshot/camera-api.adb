@@ -25,7 +25,7 @@ package body Camera.API is
    begin
       Message := Make_Empty_Message(
          Sender_Address   => Sender_Address,
-         Receiver_Address => ID,
+         Receiver_Address => Name_Resolver.Camera,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(Take_Image_Request),
          Priority   => Priority);
@@ -43,7 +43,7 @@ package body Camera.API is
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record := Make_Empty_Message(
-         Sender_Address   => ID,
+         Sender_Address   => Name_Resolver.Camera,
          Receiver_Address => Receiver_Address,
          Request_ID   => Request_ID,
          Message_ID => Message_Type'Pos(Take_Image_Reply),
