@@ -70,21 +70,33 @@ class CodeGeneratorSpec extends UnitSpec {
       val fullSpecificationName = folderName + baseFileName + "-api.ads"
       val fullBodyName = folderName + baseFileName + "-api.adb"
 
-      val parts = baseName.split("-")
-      val baseModuleName = parts(0) + "." + parts(1)
-
       // Open the output files.
       val specificationFile = new PrintStream(fullSpecificationName)
       val bodyFile = new PrintStream(fullBodyName)
 
       // Do the code generation...
-      val mySpecificationGenerator =
-        new SpecificationGenerator(templateFolder, baseFileName, baseModuleName, symbolTable, specificationFile, reporter)
-      mySpecificationGenerator.visit(tree)
 
-      val myBodyGenerator =
-        new BodyGenerator(templateFolder, baseFileName, baseModuleName, symbolTable, bodyFile, reporter)
-      myBodyGenerator.visit(tree)
+      if(baseName.contains("-")){
+        val parts = baseName.split("-")
+        val baseModuleName = parts(0) + "." + parts(1)
+
+        val mySpecificationGenerator =
+          new SpecificationGenerator(templateFolder, baseFileName, baseModuleName, parts(1), symbolTable, specificationFile, reporter)
+        mySpecificationGenerator.visit(tree)
+
+        val myBodyGenerator =
+          new BodyGenerator(templateFolder, baseFileName, baseModuleName, symbolTable, bodyFile, reporter)
+        myBodyGenerator.visit(tree)
+      }
+      else{
+        val mySpecificationGenerator =
+          new SpecificationGenerator(templateFolder, baseFileName, baseName, baseName, symbolTable, specificationFile, reporter)
+        mySpecificationGenerator.visit(tree)
+
+        val myBodyGenerator =
+          new BodyGenerator(templateFolder, baseFileName, baseName, symbolTable, bodyFile, reporter)
+        myBodyGenerator.visit(tree)
+      }
 
       // Close the output files.
       specificationFile.close()

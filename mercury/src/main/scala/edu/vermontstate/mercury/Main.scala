@@ -100,7 +100,7 @@ object Main {
         val baseModuleName = parts(0) + "." + parts(1)
 
         val mySpecificationGenerator =
-          new SpecificationGenerator(templateFolder, baseFileName, baseModuleName, symbolTable, specificationFile, reporter)
+          new SpecificationGenerator(templateFolder, baseFileName, baseModuleName, parts(1), symbolTable, specificationFile, reporter)
         mySpecificationGenerator.visit(tree)
 
         val myBodyGenerator =
@@ -109,7 +109,7 @@ object Main {
       }
       else{
         val mySpecificationGenerator =
-          new SpecificationGenerator(templateFolder, baseFileName, baseName, symbolTable, specificationFile, reporter)
+          new SpecificationGenerator(templateFolder, baseFileName, baseName, baseName, symbolTable, specificationFile, reporter)
         mySpecificationGenerator.visit(tree)
 
         val myBodyGenerator =

@@ -9,6 +9,7 @@ pragma SPARK_Mode(On);
 with Message_Manager;    -- See the comments in SAMPLE_MODULE-api.ads.
 with Name_Resolver;      -- See the comments in SAMPLE_MODULE-api.ads.
 with Camera.API;  -- Needed so that the types in the API can be used here.
+with CubedOS.Log_Server.API;
 
 package body Camera.Messages is
    use Message_Manager;
@@ -35,11 +36,11 @@ package body Camera.Messages is
    -- it should be called Sample_Module.Core (for example).
 
    procedure Handle_A_Request(Message : in Message_Record)
-     with Pre => Camera.API.Is_A_Request(Message)
+     with Pre => Camera.API.Is_Take_Image_Request(Message)
    is
       Status : Message_Status_Type;
    begin
-      Camera.API.A_Request_Decode(Message, Status);
+      null;
       -- Act on the request message.
    end Handle_A_Request;
 
@@ -50,11 +51,12 @@ package body Camera.Messages is
    -- This procedure processes exactly one message at a time.
    procedure Process(Message : in Message_Record) is
    begin
-      if Camera.API.Is_A_Request(Message) then
+      if Camera.API.Is_Take_Image_Request(Message) then
          Handle_A_Request(Message);
       else
-         -- An unknown message type has been received. What should be done about that?
-         null;
+         CubedOS.Log_Server.API.Log_Message(Name_Resolver.Camera,
+                                            CubedOS.Log_Server.API.Error,
+                                            "An unknown message type has been received!");
       end if;
       -- When this procedure returns the message loop will immediately try to receive the next
       -- message. Note that all CubedOS send operations are non-blocking so sending an outgoing
@@ -81,7 +83,7 @@ package body Camera.Messages is
       -- Process_Message.
       --
       loop
-         Message_Manager.Fetch_Message(Name_Resolver.Camera.Message_ID, Incoming_Message);
+         Message_Manager.Fetch_Message(Name_Resolver.Camera.Module_ID, Incoming_Message);
          Process(Incoming_Message);
       end loop;
    end Message_Loop;

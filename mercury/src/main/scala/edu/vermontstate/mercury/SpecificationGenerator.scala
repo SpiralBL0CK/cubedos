@@ -9,6 +9,7 @@ class SpecificationGenerator(
   templateFolder : String,
   nameOfFile     : String,
   nameOfModule   : String,
+  nameInResolver : String,
   symbolTable    : BasicSymbolTable,
   out            : java.io.PrintStream,
   reporter       : Reporter) extends MXDRBaseVisitor[Void] {
@@ -601,7 +602,7 @@ class SpecificationGenerator(
     else if (arrowFlag == 1) {
       out.print("(Message.Sender_Address")
     }
-    out.println(" = ID and Message.Message_ID = Message_Type'Pos(" + id + "));")
+    out.println(" = Name_Resolver." + nameInResolver + " and Message.Message_ID = Message_Type'Pos(" + id + "));")
     out.println("")
     indentationLevel -= 1
     null

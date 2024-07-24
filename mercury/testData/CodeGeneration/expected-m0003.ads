@@ -14,6 +14,9 @@ with Ada.Real_Time;
 with CubedOS.Lib;
 with Message_Manager;  use Message_Manager;
 with System;
+with Name_Resolver;
+with CubedOS.Lib.XDR;
+use  CubedOS.Lib.XDR;
 
 package CubedOS.m0003.API is
 
@@ -281,7 +284,7 @@ package CubedOS.m0003.API is
       Global => null;
 
    function Is_v75(Message : in Message_Record) return Boolean is
-      (Message.Receiver_Address = ID and Message.Message_ID = Message_Type'Pos(v75));
+      (Message.Receiver_Address = Name_Resolver.m0003 and Message.Message_ID = Message_Type'Pos(v75));
 
 
    function v76_Encode
@@ -293,7 +296,7 @@ package CubedOS.m0003.API is
       Global => null;
 
    function Is_v76(Message : in Message_Record) return Boolean is
-      (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(v76));
+      (Message.Sender_Address = Name_Resolver.m0003 and Message.Message_ID = Message_Type'Pos(v76));
 
 
    function v79_Encode
@@ -390,7 +393,7 @@ package CubedOS.m0003.API is
       Pre => (0 < sv90'Length and sv90'Length <= XDR_Size_Type'Last - 12);
 
    function Is_v79(Message : in Message_Record) return Boolean is
-      (Message.Receiver_Address = ID and Message.Message_ID = Message_Type'Pos(v79));
+      (Message.Receiver_Address = Name_Resolver.m0003 and Message.Message_ID = Message_Type'Pos(v79));
 
    procedure v79_Decode
       (Message : in  Message_Record;
@@ -585,7 +588,7 @@ package CubedOS.m0003.API is
       Pre => (0 < sv89'Length and sv89'Length <= XDR_Size_Type'Last - 12);
 
    function Is_v80(Message : in Message_Record) return Boolean is
-      (Message.Sender_Address = ID and Message.Message_ID = Message_Type'Pos(v80));
+      (Message.Sender_Address = Name_Resolver.m0003 and Message.Message_ID = Message_Type'Pos(v80));
 
    procedure v80_Decode
       (Message : in  Message_Record;
