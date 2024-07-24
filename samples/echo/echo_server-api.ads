@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- FILE   : echo_server-api.ads
 -- SUBJECT: Specification of a package that simplifies use of the module.
--- AUTHOR : (C) Copyright 2021 by Vermont Technical College
+-- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
 --------------------------------------------------------------------------------
 with Message_Manager; use Message_Manager;

@@ -17,5 +17,5 @@ with Sensor_Driver.API;    pragma Unreferenced(Sensor_Driver.API);
 procedure Line_Rider.Main is
    pragma Priority(System.Priority'First);
 begin
-   return;
+   null;
 end Line_Rider.Main;

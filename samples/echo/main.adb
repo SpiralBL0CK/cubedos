@@ -19,5 +19,5 @@ pragma Unreferenced(CubedOS.Log_Server.Messages);
 procedure Main is
    pragma Priority(System.Priority'First);
 begin
-   return;
+   null;
 end Main;

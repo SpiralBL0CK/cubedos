@@ -23,5 +23,5 @@ procedure Main with
    Priority => System.Priority'First
 is
 begin
-   return;
+   null;
 end Main;

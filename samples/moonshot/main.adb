@@ -20,5 +20,5 @@ pragma Unreferenced(Controller.Messages);
 
 procedure Main is
 begin
-   return;
+   null;
 end Main;

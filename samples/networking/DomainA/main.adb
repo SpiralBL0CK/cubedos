@@ -18,5 +18,5 @@ pragma Unreferenced(DomainA_Client.Messages);
 procedure Main is
    pragma Priority(System.Priority'First);
 begin
-   return;
+   null;
 end Main;

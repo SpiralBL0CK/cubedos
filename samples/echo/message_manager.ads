@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- FILE    : message_manager.adb
 -- SUBJECT : Package holding the mailboxes used by CubedOS message passing.
--- AUTHOR  : (C) Copyright 2021 by Vermont Technical College
+-- AUTHOR  : (C) Copyright 2024 by Vermont State University
 --
 --------------------------------------------------------------------------------
 with CubedOS.Generic_Message_Manager;
