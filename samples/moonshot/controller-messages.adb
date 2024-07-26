@@ -6,21 +6,33 @@
 --------------------------------------------------------------------------------
 pragma SPARK_Mode(On);
 
-with Message_Manager;    -- See the comments in SAMPLE_MODULE-api.ads.
-with Name_Resolver;      -- See the comments in SAMPLE_MODULE-api.ads.
-with Controller.API;  -- Needed so that the types in the API can be used here.
+with Message_Manager;
+with Name_Resolver;
 with CubedOS.Log_Server.API;
+with CubedOS.File_Server.API;
+with Ada.Real_Time;
+with CubedOS.Time_Server;
+with CubedOS.Time_Server.API;
+with Camera.API;
+with Ada.Text_IO;
+use CubedOS.File_Server.API;
+
+--with CubedOS.Time_Server.Messages;
 
 package body Controller.Messages is
    use Message_Manager;
 
-   -- The package initializer, if needed. This procedure might be called as the message loop
-   -- (see below) is starting, or perhaps during package elaboration. If this procedure is not
-   -- needed, it should be removed to avoid SPARK flow warnings.
-   --
    procedure Initialize is
+      Periodic_Message : Message_Record;
    begin
-      null;
+      Periodic_Message := CubedOS.Time_Server.API.Relative_Request_Encode
+        (Sender_Address => Name_Resolver.Controller,
+         Request_ID => 1,
+         Tick_Interval => Ada.Real_Time.Minutes(1),
+         Request_Type => CubedOS.Time_Server.API.Periodic,
+         Series_ID => 1);
+      Message_Manager.Route_Message
+        (Message => Periodic_Message);
    end Initialize;
 
    -------------------
@@ -35,32 +47,104 @@ package body Controller.Messages is
    -- and dispatching the messages. We recommend that if a single internal package is used that
    -- it should be called Sample_Module.Core (for example).
 
-   procedure Handle_A_Request(Message : in Message_Record)
-     with Pre => Controller.API.Is_A_Request(Message)
+   procedure Handle_Ping_Reply(Message : in Message_Record)
+     with Pre => CubedOS.Time_Server.API.Is_Tick_Reply(Message)
+   is
+      Series_ID : CubedOS.Time_Server.API.Series_ID_Type;
+      Status : Message_Status_Type;
+      Count : Natural;
+      Image_Request : Message_Record;
+   begin
+      CubedOS.Time_Server.API.Tick_Reply_Decode
+        (Message => Message,
+         Series_ID => Series_ID,
+         Count => Count,
+         Decode_Status => Status);
+      if Status = Message_Manager.Success then
+         Image_Request := Camera.API.Take_Image_Request_Encode
+           (Sender_Address => Name_Resolver.Controller,
+            Request_ID => 1);
+         Message_Manager.Route_Message(Image_Request);
+         Ada.Text_IO.Put_Line("Ping has been handled. Image request has been sent to camera...");
+      else
+         CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
+                                            CubedOS.Log_Server.API.Error,
+                                            "Tick message has decoded inccorectly!");
+      end if;
+   end Handle_Ping_Reply;
+   
+   procedure Handle_Image_Reply(Message : in Message_Record)
+     with Pre => Camera.API.Is_Take_Image_Reply(Message)
    is
       Status : Message_Status_Type;
+      File_Name : String(1..30);
+      Name_Size : Natural;
+      Open_Request : Message_Record;
    begin
-      Controller.API.A_Request_Decode(Message, Status);
-      -- Act on the request message.
-   end Handle_A_Request;
+      Camera.API.Take_Image_Reply_Decode
+         (Message => Message,
+          File_Name => File_Name,
+          File_Name_Size => Name_Size,
+          Decode_Status => Status);
+      if Status = Message_Manager.Success then
+         Open_Request := CubedOS.File_Server.API.Open_Request_Encode
+           (Sender_Address => Name_Resolver.Controller,
+            Request_ID => 1,
+            Mode => CubedOS.File_Server.API.Read,
+            Name => File_Name);
+         Message_Manager.Route_Message(Open_Request);
+         Ada.Text_IO.Put_Line("Image reply has been handled, open request has been sent");
+      else
+         CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
+                                            CubedOS.Log_Server.API.Error,
+                                            "Image reply message has decoded inccorectly!");
+      end if;
+   end Handle_Image_Reply;
+   
+   procedure Handle_Open_Reply(Message : in Message_Record)
+     with Pre => CubedOS.File_Server.API.Is_Open_Reply(Message)
+   is
+      Status : Message_Status_Type;
+      Handle : CubedOS.File_Server.API.File_Handle_Type;
+   begin
+      CubedOS.File_Server.API.Open_Reply_Decode
+        (Message => Message,
+         Handle => Handle,
+         Decode_Status => Status);
+      if Status /= Message_Manager.Success then
+         CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
+                                            CubedOS.Log_Server.API.Error,
+                                            "Open reply message has decoded inccorectly!");
+      elsif Handle = CubedOS.File_Server.API.Invalid_Handle then
+         CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
+                                            CubedOS.Log_Server.API.Error,
+                                            "File failed to open");
+      else
+         Ada.Text_IO.Put_Line("File has been opened...");
+      end if;
+   end Handle_Open_Reply;
 
    -----------------------------------
    -- Message Decoding and Dispatching
    -----------------------------------
-   
+
    -- This procedure processes exactly one message at a time.
    procedure Process(Message : in Message_Record) is
    begin
-      if Controller.API.Is_A_Request(Message) then
-         Handle_A_Request(Message);
+      if CubedOS.Time_Server.API.Is_Tick_Reply(Message) then
+         Ada.Text_IO.Put_Line("Tick reply has been received");
+         Handle_Ping_Reply(Message);
+      elsif Camera.API.Is_Take_Image_Reply(Message) then
+         Ada.Text_IO.Put_Line("Image Reply has been received");
+         Handle_Image_Reply(Message);
+      elsif CubedOS.File_Server.API.Is_Open_Reply(Message) then
+         Ada.Text_IO.Put_Line("Open Reply has been received");
+         Handle_Open_Reply(Message);
       else
          CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
                                             CubedOS.Log_Server.API.Error,
                                             "An unknown message type has been received!");
       end if;
-      -- When this procedure returns the message loop will immediately try to receive the next
-      -- message. Note that all CubedOS send operations are non-blocking so sending an outgoing
-      -- message will not delay execution.
    end Process;
 
    ---------------
@@ -70,18 +154,8 @@ package body Controller.Messages is
    task body Message_Loop is
       Incoming_Message : Message_Manager.Message_Record;
    begin
-      -- Initialize the internal workings of the module (if required) before processing any of
-      -- its messages. It may instead be appropriate for the package to initialize itself at
-      -- elaboration time. Note that SPARK requires that applications use the configuration
-      -- pragma of Partition_Elaboration_Policy set to Sequential. This ensures that all
-      -- packages are elaborated before any library level tasks start.
-      --
       Initialize;
-
-      -- Process messages as they arrive. This simple loop may be all that is needed. It may
-      -- also be appropriate to do some prechecks or preprocessing of messages before calling
-      -- Process_Message.
-      --
+      Ada.Text_IO.Put_Line("Initialization is done. Ticks are starting...");
       loop
          Message_Manager.Fetch_Message(Name_Resolver.Controller.Module_ID, Incoming_Message);
          Process(Incoming_Message);

@@ -19,42 +19,43 @@ use  CubedOS.Lib.XDR;
 package Camera.API is
 
    type Message_Type is
-      (Take_Image_Reply, 
+      (Take_Image_Reply,
       Take_Image_Request);
 
    function Take_Image_Request_Encode
       (Sender_Address : in Message_Address;
-      Request_ID : in Request_ID_Type;
-      --TODO
+       Request_ID : in Request_ID_Type;
+       -- TODO
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    with
       Global => null;
 
    function Is_Take_Image_Request(Message : in Message_Record) return Boolean is
-      (Message.Receiver_Address = Name_Resolver.Camera and Message.Message_ID = Message_Type'Pos(Take_Image_Request));
+     (Message.Receiver_Address = Name_Resolver.Camera and 
+        Message.Message_ID = Message_Type'Pos(Take_Image_Request));
 
 
    function Take_Image_Reply_Encode
       (Receiver_Address : in Message_Address;
       Request_ID : in Request_ID_Type;
-      file_name : in String;
+      File_Name : in String;
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    with
       Global => null,
-      Pre => (0 < file_name'Length and file_name'Length <= XDR_Size_Type'Last - 12);
+      Pre => (0 < File_name'Length and File_name'Length <= XDR_Size_Type'Last - 12);
 
    function Is_Take_Image_Reply(Message : in Message_Record) return Boolean is
       (Message.Sender_Address = Name_Resolver.Camera and Message.Message_ID = Message_Type'Pos(Take_Image_Reply));
 
    procedure Take_Image_Reply_Decode
       (Message : in  Message_Record;
-      file_name : out String;
-      file_name_Size : out Natural;
+      File_Name : out String;
+      File_Name_Size : out Natural;
       Decode_Status : out Message_Status_Type)
    with
       Global => null,
       Pre => Is_Take_Image_Reply(Message),
-      Depends => ((file_name, file_name_Size, Decode_Status) => Message);
+      Depends => ((file_name, File_Name_Size, Decode_Status) => Message);
 
 
 

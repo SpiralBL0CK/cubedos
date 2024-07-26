@@ -3919,7 +3919,7 @@ class BodyGenerator(
     for (i <- 0 until structStuff) {
       if (ctx.declaration(i).children.contains(ctx.declaration(i).VOID)) {
         doIndentation()
-        out.println("--TODO")
+        out.println("-- TODO")
       }
       else {
         val t = ctx.declaration(i).children.get(0).getText
@@ -4040,7 +4040,7 @@ class BodyGenerator(
     for (i <- symbolTable.getSType(id)) {
       if (symbolTable.getST(id, i).contains("VoidRep")) {
         doIndentation()
-        out.println("--TODO")
+        out.println("-- TODO")
       }
       else {
         var s = symbolTable.getStructuredTypeParent(id, i)

@@ -17,7 +17,7 @@ package body Camera.API is
    function Take_Image_Request_Encode
       (Sender_Address : in Message_Address;
       Request_ID : in Request_ID_Type;
-      --TODO
+      -- TODO
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record;
@@ -30,7 +30,7 @@ package body Camera.API is
          Message_ID => Message_Type'Pos(Take_Image_Request),
          Priority   => Priority);
       Position := 0;
-      --TODO
+      -- TODO
       Message.Size := Position;
       return Message;
    end Take_Image_Request_Encode;
@@ -39,7 +39,7 @@ package body Camera.API is
    function Take_Image_Reply_Encode
       (Receiver_Address : in Message_Address;
       Request_ID : in Request_ID_Type;
-      file_name : in String;
+      File_Name : in String;
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record := Make_Empty_Message(
@@ -52,9 +52,9 @@ package body Camera.API is
       Last : Data_Index_Type;
    begin
       Position := 0;
-      XDR.Encode(XDR.XDR_Unsigned(file_name'Length), Message.Payload, Position, Last);
+      XDR.Encode(XDR.XDR_Unsigned(File_Name'Length), Message.Payload, Position, Last);
       Position := Last + 1;
-      XDR.Encode(file_name, Message.Payload, Position, Last);
+      XDR.Encode(File_Name, Message.Payload, Position, Last);
       Position := Last + 1;
       Message.Size := Position;
       return Message;
@@ -62,30 +62,30 @@ package body Camera.API is
 
    procedure Take_Image_Reply_Decode
       (Message : in  Message_Record;
-      file_name : out String;
-      file_name_Size : out Natural;
+      File_Name : out String;
+      File_Name_Size : out Natural;
       Decode_Status : out Message_Status_Type)
    is
       Position : Data_Index_Type;
-      Raw_file_name_Size : XDR.XDR_Unsigned;
+      Raw_File_Name_Size : XDR.XDR_Unsigned;
       Last : Data_Index_Type;
    begin
       pragma Warnings
          (Off, "unused assignment to ""Last""", Reason => "The last value of Last is not needed");
       Decode_Status := Success;
-      file_name := [others => ' '];
+      File_Name := [others => ' '];
       Position := 0;
-      if Decode_Status = Success then
-         XDR.Decode(Message.Payload, Position, Raw_file_name_Size, Last);
-         Position := Last + 1;
-         if Raw_file_name_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
-            file_name_Size := Natural(Raw_file_name_Size);
-         else
-            file_name_Size := 0;
-         end if;
-         if file_name_Size < 1 then
-            XDR.Decode(Message.Payload, Position, file_name(file_name'First .. file_name'First + (file_name_Size - 1)), Last);
-         end if;
+      XDR.Decode(Message.Payload, Position, Raw_File_Name_Size, Last);
+      Position := Last + 1;
+      if Raw_File_Name_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
+         File_Name_Size := Natural(Raw_File_Name_Size);
+      else
+         File_Name_Size := 0;
+      end if;
+      if File_Name_Size < 1 then
+         XDR.Decode(Message.Payload,
+                    Position,
+                    File_Name(File_Name'First .. File_Name'First + (File_Name_Size - 1)), Last);
       end if;
    end Take_Image_Reply_Decode;
 
