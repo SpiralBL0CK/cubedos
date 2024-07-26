@@ -503,7 +503,7 @@ class SpecificationGenerator(
     for (i <- 0 until structStuff) {
       if (ctx.declaration(i).children.contains(ctx.declaration(i).VOID)) {
         doIndentation()
-        out.println("--TODO")
+        out.println("-- TODO")
       }
       else {
         doIndentation()

@@ -20,7 +20,7 @@ package body CubedOS.m0003.API is
    function v75_Encode
       (Sender_Address : in Message_Address;
       Request_ID : in Request_ID_Type;
-      --TODO
+      -- TODO
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record;
@@ -33,7 +33,7 @@ package body CubedOS.m0003.API is
          Message_ID => Message_Type'Pos(v75),
          Priority   => Priority);
       Position := 0;
-      --TODO
+      -- TODO
       Message.Size := Position;
       return Message;
    end v75_Encode;
@@ -42,7 +42,7 @@ package body CubedOS.m0003.API is
    function v76_Encode
       (Receiver_Address : in Message_Address;
       Request_ID : in Request_ID_Type;
-      --TODO
+      -- TODO
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    is
       Message : Message_Record := Make_Empty_Message(
@@ -54,7 +54,7 @@ package body CubedOS.m0003.API is
       Position : Data_Index_Type;
    begin
       Position := 0;
-      --TODO
+      -- TODO
       Message.Size := Position;
       return Message;
    end v76_Encode;

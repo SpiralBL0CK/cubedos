@@ -105,7 +105,7 @@ package CubedOS.m0004.API is
    function ms1_Encode
       (Receiver_Address : in Message_Address;
       Request_ID : in Request_ID_Type;
-      --TODO
+      -- TODO
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    with
       Global => null;

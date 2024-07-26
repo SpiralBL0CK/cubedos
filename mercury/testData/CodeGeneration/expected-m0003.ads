@@ -278,7 +278,7 @@ package CubedOS.m0003.API is
    function v75_Encode
       (Sender_Address : in Message_Address;
       Request_ID : in Request_ID_Type;
-      --TODO
+      -- TODO
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    with
       Global => null;
@@ -290,7 +290,7 @@ package CubedOS.m0003.API is
    function v76_Encode
       (Receiver_Address : in Message_Address;
       Request_ID : in Request_ID_Type;
-      --TODO
+      -- TODO
       Priority : in System.Priority := System.Default_Priority) return Message_Record
    with
       Global => null;

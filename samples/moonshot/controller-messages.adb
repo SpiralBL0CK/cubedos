@@ -39,14 +39,6 @@ package body Controller.Messages is
    -- Message Handling
    -------------------
 
-   -- Here is where the details of handing the messages is done. Probably there will be a
-   -- separate subprogram for each message, but the exact organization is, obviously, dependent
-   -- on the needs of the module. It might be useful to put these message handling subprograms
-   -- into a private sibling package. That would move the complex details of message handling to
-   -- a different file and reduce clutter in this file. This file is really just about decoding
-   -- and dispatching the messages. We recommend that if a single internal package is used that
-   -- it should be called Sample_Module.Core (for example).
-
    procedure Handle_Ping_Reply(Message : in Message_Record)
      with Pre => CubedOS.Time_Server.API.Is_Tick_Reply(Message)
    is
