@@ -15,9 +15,9 @@ cd mercury
 echo -e "\nBuild Mercury Executable"
 echo      "========================"
 # Fail the build here if Mercury doesn't build. CubedOS builds rely on Mercury.
-if [ ! /usr/local/sbt/bin/sbt -no-colors assembly ]; then
+/usr/local/sbt/bin/sbt -no-colors assembly || {
     exit 1
-fi;
+}
 
 echo -e "\nBuild Mercury Scaladoc"
 echo      "======================"
@@ -57,7 +57,7 @@ gprbuild -P samples/echo/echo.gpr
 echo -e "\nMoonshot"
 echo      "--------"
 (cd samples/moonshot/src/mxdr; ../../../../bin/mercury.sh Camera.mxdr)
-(cd samples/moonshot; gprbuild -P moonshot.gpr)
+gprbuild -P samples/moonshot/moonshot.gpr
 
 echo -e "\nMulti-Domain"
 echo      "------------"
