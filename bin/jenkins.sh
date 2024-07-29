@@ -49,11 +49,12 @@ echo -e "\nBuild Sample Programs"
 echo      "====================="
 echo -e "\nEcho"
 echo      "----"
-gprbuild -P samples/echo/echo.gpr samples/echo/main.adb
+gprbuild -P samples/echo/echo.gpr
 
 echo -e "\nMoonshot"
 echo      "--------"
-gprbuild -P samples/moonshot/moonshot.gpr samples/moonshot/main.adb
+(cd samples/moonshot/src/mxdr; ../../../../bin/mercury.sh Camera.mxdr)
+gprbuild -P samples/moonshot/moonshot.gpr
 
 echo -e "\nMulti-Domain"
 echo      "------------"
@@ -62,11 +63,11 @@ gprbuild -P samples/networking/networking.gpr -XBUILD=DomainB samples/networking
 
 echo -e "\nPathfinder"
 echo      "----------"
-gprbuild -P samples/pathfinder/pathfinder.gpr samples/pathfinder/src/main.adb
+gprbuild -P samples/pathfinder/pathfinder.gpr
 
 echo -e "\nSTM32F4"
 echo      "-------"
-gprbuild -P samples/STM32F4/stmdemo.gpr samples/STM32F4/main.adb
+gprbuild -P samples/STM32F4/stmdemo.gpr
 
 echo -e "\nStyle Checking"
 echo      "=============="
