@@ -167,17 +167,21 @@ form via its development repository. There is no release distribution yet.
 
 The folder for your application need not be included in the CubedOS repository folder. In fact,
 we recommend that you do \emph{not} include it there. Instead, create a folder somewhere else on
-your system for your application. You can organize this folder as you please, but for this
-example, we will assume all the source files are stored directly in the folder.
+your system for your application.
 
-It is often useful to use an existing application as a baseline for new work. The Echo
-sample in the CubedOS repository is a good place to start. First, create a project file in
-your application folder named \texttt{moonshot.gpr} that contains the following:
+It is often useful to use an existing application as a starting point for new work. The Echo
+sample in the CubedOS repository is a good reference. First, create a \filename{build} and
+\filename{src} folder in your application folder. Also, create a folder \filename{src/mxdr} as a
+placeholder for the MXDR files you will create later. The precise folder structure you use isn't
+mandated by CubedOS, but this is what we recommend for CubedOS applications.
+
+Next, create a GNAT project file in the root of your application folder named
+\texttt{moonshot.gpr} that contains the following:
 \begin{verbatim}
 project Moonshot is
    for Main use ("main.adb");
    for Object_Dir use "build";
-   for Source_Dirs use (".", "../../src/modules", "../../src/library");
+   for Source_Dirs use ("src", "src/mxdr", "../../src/modules", "../../src/library");
    for Languages use ("Ada");
 
    package Compiler is
@@ -192,13 +196,10 @@ project Moonshot is
 end Moonshot;
 \end{verbatim}
 
-The source paths should include the current folder (``.''), or wherever you plan to store the
-source files for your application, together with the two source folders from the CubedOS
-repository. Edit the paths above as appropriate for your system. Create a folder named
-\texttt{build} in your application folder (so the relative path in the project file works) to
-hold the build artifacts of the application. The default switches are fine for this getting
-started application. They enable all warnings, runtime assertion checking, and debugging
-support. In a real application you may want different switches or multiple build scenarios.
+The source paths should include two source folders from the CubedOS repository. Edit the paths
+above as appropriate for your system. The default switches are fine for this tutorial
+application. They enable all warnings, runtime assertion checking, and debugging support. In a
+real application you may want different switches or multiple build scenarios.
 
 Notice that CubedOS applications are intended to use Ada 2022 as their base language. Although
 this is not strictly necessary, Ada 2022 does provide some niceties that are helpful. Finally,
@@ -213,8 +214,8 @@ in this file later.
 
 Filling in the rest of the application requires the following steps:
 \begin{enumerate}
-\item Instantiating the CubedOS generic message manager to create a domain (mailbox array) for
-  your application.
+\item Instantiating the CubedOS generic message manager to create a domain (i.e., a mailbox
+  array) for your application.
 \item Writing a name resolver package to assign addresses to the modules you will use, including
   the core modules.
 \item Creating skeletons for the modules you will write by copying the templates from the
@@ -222,13 +223,13 @@ Filling in the rest of the application requires the following steps:
 \item Writing the Ada-required main procedure to ensure the modules you need will be compiled
   into your executable.
 \item Verifying that your completed skeleton application builds and runs.
+\item Writing MXDR interface descriptions for the messages that will be sent between modules,
+  and using the Mercury tool to generate the Ada code for those message encoding and decoding
+  subprograms.
 \item Writing a publish/subscribe channel definition package to define the channels you will use
   in your application.
-\item Writing MXDR interface definition descriptions for the messages that will be sent between
-  modules, and using the Mercury tool to generate the Ada code for those message encoding and
-  decoding subprograms.
-\item Implementing the full logic of your application by filling in the skeletons you created
-  earlier.
+\item Implementing the full logic of your application by filling in the rest of your
+  application's details.
 \end{enumerate}
 
 \subsection{Instantiating the Message Manager}
@@ -243,7 +244,8 @@ At the time of this writing, the generic instance \emph{must} be called |Message
 name is hard-coded in the core modules. In a multi-domain application, you would have multiple
 instances of the generic message manager, one for each domain, but since every instance must
 have the same name, they must reside in different executable units. This is a limitation of the
-current CubedOS design that might be lifted in the future, if it proves to be problematic.
+current CubedOS design that might be lifted in the future, if it proves to be overly
+restrictive.
 
 Here is a suitable instantiation of the generic message manager for the Moonshot application:
 
@@ -282,8 +284,8 @@ The meaning of the generic arguments is as follows:
   messages being dropped. However, a large mailbox size wastes memory.
 
   Be aware that all modules in the same domain will use the same mailbox size. Choose a size
-  large enough to satisfy the needs of the module requiring the most depth of any in the domain.
-  A mailbox size of 8 is a reasonable default.
+  large enough to satisfy the needs of the module requiring the greatest size of any in the
+  domain. A mailbox size of 8 is a reasonable default.
 
   \item[Maximum\_Message\_Size] The maximum message size is the maximum number of 8-bit bytes
   (also called ``Octets'') that can be sent in a single message. The maximum message size should
@@ -294,7 +296,7 @@ The total amount of memory (not counting certain overheads) required for the mai
 product of |Module_Count|, |Mailbox_Size|, and |Maximum_Message_Size|. In the Moonshot
 application, the total memory required for the mailboxes is $8 \times 8 \times 1024 = 64$ KiB.
 Depending on the platform on which the application will run, this may be a significant amount of
-memory. Be sure to consider the memory requirements of your application when choosing these
+memory. Be sure to consider the memory constraints of your platform when choosing these
 parameters.
 
 \subsection{Writing the Name Resolver}
@@ -304,9 +306,9 @@ In CubedOS, every module has an address represented by a pair of integers (Domai
 ID). In the Moonshot application, the domain ID is 1, and the module IDs are in the range from 1
 to 8 inclusive.
 
-You must assign these module IDs to the modules yourself, in any way you see fit (it could be
-arbitrary), but you must ensure that each module has a unique ID. The core modules do \emph{not}
-have predefined ID numbers. You must assign them as well.
+You must assign these module IDs to the modules yourself, in any way you see fit, but you must
+ensure that each module has a unique ID. The core modules do \emph{not} have predefined ID
+numbers. You must assign them as well.
 
 The ID assignments are made in a package called |Name_Resolver|. As with the message Manager
 package, the name resolve package must also have a specific name because references to it are
@@ -353,7 +355,7 @@ producing many ``invalid message'' errors at runtime.
 
 It is also important that you don't accidentally assign a module ID outside the range of allowed
 ID values implied by the |Module_Count| parameter of the |Message_Manager| instantiation.
-However, in this case you will get compile-time errors, so it is less likely to be a problem.
+However, in this case you will get compile-time warnings, so it is less likely to be a problem.
 
 Finally, there is no requirement that the module IDs be contiguous or start at 1. For example,
 you could assign the core modules IDs 1 through 4 and the application-specific modules IDs 10
@@ -415,33 +417,34 @@ grandchild packages, and yet can see the module-global declarations in the top-l
 without making those declarations global program-wide. This is a nice example of Ada's scope and
 visibility-management features in action.
 
-CubedOS modules have at least two child packages: |API| and |Messages|.
+CubedOS modules normally have at least two child packages: |API| and |Messages|.
 
 The |API| package contains subprograms for creating messages from well-typed values, breaking
-messages back into well-typed values, and testing messages for validity. A more typical API is a
-collection of subprograms (functions, methods, etc.) that take well-typed parameters, perform
-some action, and return a result. In CubedOS, modules communicate by sending messages. The API
-is thus about which messages a module receives (called ``Requests'') and sends (called
-``Replies''). The API package provides subprograms that manipulate these messages.
+messages back into well-typed values, and testing messages for validity. The API of a module is
+all about which messages that module receives (called ``Requests'') and sends (called
+``Replies'').
 
 Characterizing messages as requests and replies follows from the view of message passing as a
 kind of client/server interaction where the client makes a request, and the server replies to
 it. However, in CubedOS, modules can act as both clients and servers, depending on what they are
-doing. Each module specifies in its API what requests it will accept and what replies it may
-produce. Also requests can be sent without expecting a reply, and replies can be sent without
-ever receiving a request (i.e., unsolicited replies).
-
-The CubedOS repository includes a folder \filename{templates} that contains template files for
-the |API| and |Messages| packages. You can copy these templates into your module's folder and
-edit them to suit your needs. They are heavily commented to help guide you. The expectation is
-that you will ultimately remove most, if not all, of the provided comments and replacement them
-with application-specific comments as appropriate.
+doing. Also requests can be sent without expecting a reply, and replies can be sent without ever
+receiving a request (i.e., unsolicited replies).
 
 The |Messages| package contains a task that fetches a message from the module's mailbox,
 processes that message, and then fetches the next message. This task is called the module's main
 task.
 
-The template files in the \filename{templates} folder show the recommended structure. The
+The CubedOS repository includes a folder \filename{templates} that contains template files for
+both the |API| and |Messages| packages. You can copy the templates you need into your module's
+\filename{src} folder and edit them to suit your needs. They are heavily commented to help guide
+you. The expectation is that you will ultimately remove most, if not all, of the provided
+comments and replacement them with application-specific comments as appropriate.
+
+In most cases, however, as we describe in Section~\ref{sec:manual-tutorial-mercury}, you would
+use the \newterm{Mercury} tool to generate a module's |API| package for you and not rely on the
+templates for that package.
+
+The |Messages| package template shows the recommended structure of that package. The
 implementation of the main task (at the bottom) is very simple. It immediately passes each
 message it receives to procedure |Process|. That procedure, in turn, examines the message and
 calls the appropriate subprogram to handle that message.
@@ -451,9 +454,9 @@ well-typed components, and then acting on the message. Normally, this involves s
 messages to other modules, and ultimately, in most cases, sending a reply message back to the
 requester.
 
-Copy the sample module templates to your working folder, renaming the files as appropriate for
-the Controller module. Edit the templates to change names, as necessary. For now, don't try to
-implement any real logic. Let's get the skeleton to compile and run first.
+Copy the template |Messages| package templates to your \filename{src} folder, renaming the files
+as appropriate for the Controller module. Edit the templates to change names, as necessary. For
+now, don't try to implement any real logic. Let's get the skeleton to compile and run first.
 
 \subsection{Writing the Main Procedure}
 \label{sec:manual-tutorial-main-procedure}
@@ -504,19 +507,20 @@ create them, editing |Main| to include them when we are ready.
 
 At this point, the program should compile and run. When executed, all modules will block
 immediately trying to fetch a message from their mailboxes. Since no messages are ever sent,
-nothing more happens. We're off to a good start!\footnote{It didn't crash, did it?}
+nothing more happens. We're off to a good start!
 
 \subsection{Using Mercury}
 \label{sec:manual-tutorial-mercury}
 
-If you spent much time studying the template API module, you probably noticed that it is
+If you spent much time studying the template API packages, you probably noticed that they are
 intricate. Each encoding and decoding subprogram involves repeated calls to the XDR library to
 encode (or decode) individual message parameters into (or from) an array of raw octets. This is
-tedious and error-prone.
+tedious and error-prone to write manually.
 
-To help with this, CubedOS includes a tool called Mercury that generates the encoding and
-decoding subprograms for you. Mercury reads a simple, human-readable description of the messages
-sent and received by a module, and it outputs a SPARK-provable API package for that module.
+To help with this, CubedOS includes a tool called \newterm{Mercury} that generates the encoding
+and decoding subprograms for you. Mercury reads a simple, human-readable description of the
+messages sent and received by a module, and it outputs a SPARK-provable API package for that
+module.
 
 Mercury is a work in progress, and it may not be able to handle all your API needs
 automatically. However, even when the API package it produces is incomplete or insufficient, you
@@ -531,14 +535,14 @@ this inherently distributed nature to allow applications to be spread across a n
 spacecraft in a natural way.
 
 Many distributed application environments exist: COBRA, ONC RPC, SOAP, Ice, and gRPC, to name
-only a few. Essentially all of these environments use some  \newterm{interface definition
-language} (IDL) to describe the interface of remote code. That IDL is then compiled into
-client-side code (often called ``stubs'') that \newterm{marshal} the parameters of a remote
-procedure call into a message that can be sent over a network, and server-side code (often
-called ``skeletons'') that \newterm{unmarshal} the message back into parameters that can be
-passed to the actual remote code. These stubs and skeletons, together with the message-passing
-infrastructure connecting client and server form the \newterm{middleware} layer of the
-application.
+only a few. \pet{Citations needed} Essentially all of these environments use some
+\newterm{interface definition language} (IDL) to describe the interface of remote code. That IDL
+is then compiled into client-side code (sometimes called ``stubs'') that \newterm{marshal} the
+parameters of a remote procedure call into a message that can be sent over a network, and
+server-side code (sometimes called ``skeletons'') that \newterm{unmarshal} the message back into
+parameters that can be passed to the actual remote code. These stubs and skeletons, together
+with the message-passing infrastructure connecting client and server form the
+\newterm{middleware} layer of the application.
 
 In CubedOS terms, the middleware layer is the message manager together with the API packages
 generated by Mercury. Marshaling is done by the encoding functions generated by Mercury, and
@@ -549,10 +553,10 @@ convenience; it is an essential part of CubedOS's architecture.
 
 CubedOS currently uses XDR (eXternal Data Representation) \cite{rfc-4506} as its encoding
 format, but it could just as easily use some other approach such as ASN.1, Protocol Buffers, or
-even JSON. As a CubedOS application developer, switching to a different encoding format should
-be as simple as setting an option on Mercury's command line. You should not be required to
-manually rewrite the marshaling and unmarshaling code in your application (i.e., the API
-packages).
+even JSON. \pet{Citations needed} As a CubedOS application developer, switching to a different
+encoding format should be as simple as setting an option on Mercury's command line. You should
+not be required to manually rewrite the marshaling and unmarshaling code in your application
+(i.e., the API packages).
 
 \subsubsection{MXDR}
 
@@ -583,7 +587,7 @@ the direction of information flow. An arrow pointing to the right is for message
 client to the module being described. An arrow pointing to the left is for messages that go from
 the module being described to the client. Thus, an MXDR description is always from the point of
 view of the module being described as playing the role of a server. When a module acts as a
-client, it will use the API package of the other modules that services its requests.
+client, it will use the API packages of the other modules that service its requests.
 
 In this case the Camera module provides an operation ``Take Image'' and so accepts a message
 |Take_Image_Request| and replies with a message |Take_Image_Reply|. The names of the messages
@@ -601,7 +605,17 @@ The reply message contains a single parameter, a string of up to 128 characters.
 maps to the usual Ada string type, but in this case, there will be an additional decoded
 value to indicate how much of the string is actually used.
 
-When Mercury compiles this MXDR description, it will generate the following six subprograms:
+The MXDR description is saved in a file with the extension \filename{.mxdr}, in this case
+\filename{Camera.mxdr} (with the indicated casing), and should be included in the
+\filename{src/mxdr} folder of your application. The Ada code generated by Mercury will also be
+saved to \filename{src/mxdr}. This separates the interfaces of your modules from their
+implementations, which is a good practice. It is similar to the way some C and C++ projects use
+a separate folder for header files.
+
+Mercury uses the name of the MXDR file to construct the name of the generated Ada package. In
+this example, Mercury will create the package |Camera.API| in the files
+\filename{camera-api.ads} and \filename{camera-api.adb}. The package will contain the following
+six subprograms:
 
 \begin{verbatim}
   function  Take_Image_Request_Encode(...) return Message_Record;
@@ -618,20 +632,14 @@ messages include a |Request_ID| parameter that the sender can use to mark messag
 identifier meaningful to that sender. This is useful for correlating requests and replies.
 
 For example, the sender might command the camera to take several images, perhaps using different
-parameters (in general, but not shown here). The sender can mark each request with a unique
-|Request_ID|. When the Camera module replies, it will copy the sender's |Request_ID| into the
-reply. The sender can then use that information to match the reply with a particular request. If
-there is no need for a sender to correlate requests and replies, the |Request_ID| can be set to
-zero and ignored.
+parameters. The sender can mark each request with a unique |Request_ID|. When the Camera module
+replies, it will copy the sender's |Request_ID| into the reply. The sender can then use that
+information to match the reply with a particular request. If there is no need for a sender to
+correlate requests and replies, the |Request_ID| can be set to zero and ignored.
 
 Keep in mind that the sender might send multiple requests before receiving any replies, allowing
 it to tend to other matters while the camera acquires the images and writes them to storage.
 This highly asynchronous behavior is typical of CubedOS applications.
-
-Mercury uses the name of the MXDR file to construct the name of the generated Ada package. In
-this case, the MXDR file should be named \filename{Camera.mxdr}, with the indicated casing.
-Mercury will create the package |Camera.API| in the files \filename{camera-api.ads} and
-\filename{camera-api.adb}, as required by the GNAT Ada compiler.
 
 To understand how to use a module, you only need to read the MXDR for that module, resorting to
 the generated API package only when you need to know the exact subprogram signatures. For
@@ -686,8 +694,7 @@ The full interface to the file server also includes messages for writing files, 
 and some other operations. The file server implementation provided with CubedOS uses the file
 system on your development system. In a real mission, the implementation (i.e., the |Messages|
 package) could be replaced with a version that works with whatever storage is available on the
-spacecraft without changing the interface or the modules that rely on that interface. In this
-way, CubedOS supports a limited object-oriented-like programming style.
+spacecraft without changing the interface or the modules that rely on that interface.
 
 Notice how various types are defined before the message structures can be declared. Mercury will
 generate corresponding Ada type definitions into the API package accordingly. As an extension to
