@@ -56,7 +56,7 @@ gprbuild -P samples/echo/echo.gpr
 
 echo -e "\nMoonshot"
 echo      "--------"
-(cd samples/moonshot/src/mxdr; ../../../../bin/mercury.sh Camera.mxdr)
+(cd samples/moonshot/src/mxdr; make)
 gprbuild -P samples/moonshot/moonshot.gpr
 
 echo -e "\nMulti-Domain"

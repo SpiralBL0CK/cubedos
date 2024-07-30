@@ -181,7 +181,8 @@ Next, create a GNAT project file in the root of your application folder named
 project Moonshot is
    for Main use ("main.adb");
    for Object_Dir use "build";
-   for Source_Dirs use ("src", "src/mxdr", "../../src/modules", "../../src/library");
+   for Source_Dirs
+      use ("src", "src/mxdr", "../../src/modules", "../../src/library");
    for Languages use ("Ada");
 
    package Compiler is
@@ -651,13 +652,17 @@ MXDR:
 enum Mode_Type { Read, Write };
 
 // The special value 0 is used for invalid files.
-typedef unsigned int File_Handle_Type range 0 .. 64;
-typedef File_Handle_Type Valid_File_Handle_Type range 1 .. File_Handle_Type'Last;
+typedef unsigned int File_Handle_Type
+    range 0 .. 64;
+typedef File_Handle_Type Valid_File_Handle_Type
+    range 1 .. File_Handle_Type'Last;
   
 // Types to count the number of octets read/written.
 const Maximum_Read_Size  = 256;
-typedef unsigned int Read_Result_Size_Type range 0 .. Maximum_Read_Size;
-typedef unsigned int Read_Size_Type range 1 .. Read_Result_Size_Type'Last;
+typedef unsigned int Read_Result_Size_Type
+    range 0 .. Maximum_Read_Size;
+typedef unsigned int Read_Size_Type
+    range 1 .. Read_Result_Size_Type'Last;
   
 // Open the named file in the given mode.
 message struct -> Open_Request {
@@ -748,6 +753,41 @@ Note that this only produces \filename{camera-api.ads} and \filename{camera-api.
 not produce the top level package itself (\filename{camera.ads} in this case). When configuring
 the build of your application, you must arrange for Mercury to be run on the MXDR files, if
 necessary, before the Ada compiler is invoked.
+
+During normal development, you will most likely want to integrate the execution of Mercury
+into your regular build environment. In a realistic application, with many modules (and thus
+many MXDR files), you will want the build system to recompile only the MXDR files that have
+changed, if any, since the last build. This can be accomplished using the \command{make}
+utility. Here is a \filename{Makefile} that can be added to the \filename{mxdr} folder of
+your Moonshot application.
+
+\begin{verbatim}
+# Adjust to reflect Mercury's location.
+MERCURY=../../../../bin/mercury.sh
+  
+# List of generated specification files.
+all:	camera-api.ads
+  
+.PHONY: clean
+  
+clean:
+        rm -f *.ads *.adb
+  
+camera-api.ads:	Camera.mxdr
+        $(MERCURY) $^  
+\end{verbatim}
+
+This file only describes how to build the Ada specifications; the body files are ignored. Since
+Mercury generates both files together, the \command{make} utility only needs to focus on the
+specifications, letting the bodies be generated as a kind of side effect.
+
+To add a new MXDR file, you only need to add the name of the specification to the list of
+prerequisites to the ``all'' target, and include a suitable rule for the new target file at the
+bottom.
+
+For full effect, you now only need to integrate \command{make} in your overall build system.
+\pet{Is there a way to get GNAT Studio to run \command{make} automatically as part of the
+build?}
 
 Mercury is intended to produce files that can be provided free of runtime errors with \SPARK.
 Thus, you can (and should) use the \SPARK\ tools to verify the generated code along with your
