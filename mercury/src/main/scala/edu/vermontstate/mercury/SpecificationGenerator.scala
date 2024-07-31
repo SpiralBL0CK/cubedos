@@ -867,33 +867,38 @@ class SpecificationGenerator(
       =>
         val n = ctx.IDENTIFIER.getText
         var m_i = List[String]()
-        if (ctx.children.contains(ctx.condition)) {
-          for (i <- 0 until ctx.condition.expression.size()) {
-            if (ctx.condition.expression(i).children.contains(ctx.condition.expression(i).GOE)) {
-              m_i = (ctx.condition.expression(i).IDENTIFIER(0).getText + " " +
-                ctx.condition.expression(i).GOE.getText + " " +
-                ctx.condition.expression(i).IDENTIFIER(1).getText) :: m_i
-            }
-            else if (ctx.condition.expression(i).children.contains(ctx.condition.expression(i).LOE)) {
-              m_i = (ctx.condition.expression(i).IDENTIFIER(0).getText + " " +
-                ctx.condition.expression(i).LOE.getText + " " +
-                ctx.condition.expression(i).IDENTIFIER(1).getText) :: m_i
-            }
-            else if (ctx.condition.expression(i).children.contains(ctx.condition.expression(i).RANGLE)) {
-              m_i = (ctx.condition.expression(i).IDENTIFIER(0).getText + " " +
-                ctx.condition.expression(i).RANGLE.getText + " " +
-                ctx.condition.expression(i).IDENTIFIER(1).getText) :: m_i
-            }
-            else if (ctx.condition.expression(i).children.contains(ctx.condition.expression(i).LANGLE)) {
-              m_i = (ctx.condition.expression(i).IDENTIFIER(0).getText + " " +
-                ctx.condition.expression(i).LANGLE.getText + " " +
-                ctx.condition.expression(i).IDENTIFIER(1).getText) :: m_i
-            }
-            else if (ctx.condition.expression(i).children.contains(ctx.condition.expression(i).EQUALS)) {
-              m_i = (ctx.condition.expression(i).IDENTIFIER(0).getText + " " +
-                ctx.condition.expression(i).EQUALS.getText + " " +
-                ctx.condition.expression(i).IDENTIFIER(1).getText) :: m_i
-            }
+        if (ctx.children.contains(ctx.aspect_list)) {
+          for (i <- 0 until ctx.aspect_list.aspect_deffinition.size()) {
+//             if (ctx.aspect_list.aspect_deffinition(i).children.contains(ctx.aspect_list.aspect_deffinition(i).expression.GOE)) {
+//               m_i = (ctx.aspect_list.aspect_deffinition(i).IDENTIFIER(0).getText + " " +
+//                 ctx.aspect_list.aspect_deffinition(i).GOE.getText + " " +
+//                 ctx.aspect_list.aspect_deffinition(i).IDENTIFIER(1).getText) :: m_i
+//             }
+//             else if (ctx.aspect_list.aspect_deffinition(i).children.contains(ctx.aspect_list.aspect_deffinition(i).expression.LOE)) {
+//               m_i = (ctx.aspect_list.aspect_deffinition(i).IDENTIFIER(0).getText + " " +
+//                 ctx.aspect_list.aspect_deffinition(i).LOE.getText + " " +
+//                 ctx.aspect_list.aspect_deffinition(i).IDENTIFIER(1).getText) :: m_i
+//             }
+//             else if (ctx.aspect_list.aspect_deffinition(i).children.contains(ctx.aspect_list.aspect_deffinition(i).expression.RANGLE)) {
+//               m_i = (ctx.aspect_list.aspect_deffinition(i).IDENTIFIER(0).getText + " " +
+//                 ctx.aspect_list.aspect_deffinition(i).RANGLE.getText + " " +
+//                 ctx.aspect_list.aspect_deffinition(i).IDENTIFIER(1).getText) :: m_i
+//             }
+//             else if (ctx.aspect_list.aspect_deffinition(i).children.contains(ctx.aspect_list.aspect_deffinition(i).expression.LANGLE)) {
+//               m_i = (ctx.aspect_list.aspect_deffinition(i).IDENTIFIER(0).getText + " " +
+//                 ctx.aspect_list.aspect_deffinition(i).LANGLE.getText + " " +
+//                 ctx.aspect_list.aspect_deffinition(i).IDENTIFIER(1).getText) :: m_i
+//             }
+//             else if (ctx.aspect_list.aspect_deffinition(i).children.contains(ctx.aspect_list.aspect_deffinition(i).expression.EQUALS)) {
+//               m_i = (ctx.aspect_list.aspect_deffinition(i).IDENTIFIER(0).getText + " " +
+//                 ctx.aspect_list.aspect_deffinition(i).EQUALS.getText + " " +
+//                 ctx.aspect_list.aspect_deffinition(i).IDENTIFIER(1).getText) :: m_i
+//             }
+//             else if (ctx.aspect_list.aspect_deffinition(i).children.contains(ctx.aspect_list.aspect_deffinition(i).expression.NEQUALS)) {
+//               m_i = (ctx.aspect_list.aspect_deffinition(i).IDENTIFIER(0).getText + " " +
+//                 ctx.aspect_list.aspect_deffinition(i).NEQUALS.getText + " " +
+//                 ctx.aspect_list.aspect_deffinition(i).IDENTIFIER(1).getText) :: m_i
+//             }
           }
         }
         var voidFlag = 0
