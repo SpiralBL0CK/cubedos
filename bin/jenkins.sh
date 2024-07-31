@@ -64,6 +64,10 @@ echo      "------------"
 gprbuild -P samples/networking/networking.gpr -XBUILD=DomainA samples/networking/DomainA/main.adb
 gprbuild -P samples/networking/networking.gpr -XBUILD=DomainB samples/networking/DomainB/main.adb
 
+echo -e "\nNUCLEO-F446ZE"
+echo      "-------------"
+gprbuild -P samples/NUCLEO-F446ZE/stmdemo.gpr
+
 echo -e "\nPathfinder"
 echo      "----------"
 gprbuild -P samples/pathfinder/pathfinder.gpr
@@ -110,6 +114,13 @@ echo -e "\nMulti-Domain"
 echo      "------------"
 gnatprove -P samples/networking/networking.gpr -XBUILD=DomainA --level=2 --mode=silver -j4
 gnatprove -P samples/networking/networking.gpr -XBUILD=DomainB --level=2 --mode=silver -j4
+
+# See the note for the STM32F4 project below. This project also uses the Ada Drivers Library,
+# which might introduce additional issues.
+#
+#echo -e "\nNUCLEO-F446ZE"
+#echo      "-------------"
+#gnatprove -P samples/NUCLEO-F446ZE/stmdemo.gpr --level=2 --mode=silver -j4
 
 echo -e "\nPathfinder"
 echo      "----------"

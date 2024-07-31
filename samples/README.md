@@ -27,6 +27,9 @@ CubedOS Samples
   on a conventional TCP/IP network. This is essentially the Echo sample reworked as a
   multi-domain application.
   
++ `NUCLEO-F446ZE`: This folder contains a simple demonstration of CubedOS running on the
+   NUCLEO-F446ZE board.
+  
 + `pathfinder`: A sample application that demonstrates priority inversion in the CubedOS message
   passing system. Roughly this sample replicates the issue that existed in the Mars Pathfinder
   mission, albeit as a limited demonstration. When (if) priority inheritance is implemented in

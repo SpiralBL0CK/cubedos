@@ -4,6 +4,7 @@ aggregate project Samples is
      "echo/echo.gpr",
      "moonshot/moonshot.gpr",
      "networking/networking.gpr",
+     "NUCLEO-F446ZE/stmdemo.gpr",
      "pathfinder/pathfinder.gpr",
      "STM32F4/stmdemo.gpr");
 

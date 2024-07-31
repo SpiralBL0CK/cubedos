@@ -7,28 +7,33 @@
 
 echo -e "\nCubedOS Core"
 echo      "------------"
-codepeer-gnatcheck -P src/cubedos.gpr src/library/*.ads src/library/*.adb
-codepeer-gnatcheck -P src/cubedos.gpr src/modules/*.ads src/modules/*.adb
-codepeer-gnatcheck -P src/cubedos.gpr src/check/*.ads src/check/*.adb
+codepeer-gnatcheck -P src/cubedos.gpr
 
 # Now the samples...
 
 echo -e "\nEcho"
 echo      "----"
-codepeer-gnatcheck -P samples/echo/echo.gpr samples/echo/*.ads samples/echo/*.adb
+codepeer-gnatcheck -P samples/echo/echo.gpr
 
 echo -e "\nMoonshot"
 echo      "--------"
-codepeer-gnatcheck -P samples/moonshot/moonshot.gpr samples/moonshot/*.ads samples/moonshot/*.adb
+codepeer-gnatcheck -P samples/moonshot/moonshot.gpr
 
 echo -e "\nMulti-Domain"
 echo      "------------"
-codepeer-gnatcheck -P samples/networking/networking.gpr -XBUILD=DomainA samples/networking/DomainA/*.ads samples/networking/DomainA/*.adb
-codepeer-gnatcheck -P samples/networking/networking.gpr -XBUILD=DomainB samples/networking/DomainB/*.ads samples/networking/DomainB/*.adb
+codepeer-gnatcheck -P samples/networking/networking.gpr -XBUILD=DomainA
+codepeer-gnatcheck -P samples/networking/networking.gpr -XBUILD=DomainB
+
+# See the note for the STM32F4 project below. This sample uses the Ada Drivers library, so that
+# might introduce some additional issues.
+#
+#echo -e "\nNUCLEO-F446ZE"
+#echo      "-------------"
+#codepeer-gnatcheck -P samples/NUCLEO-F446ZE/stmdemo.gpr
 
 echo -e "\nPathfinder"
 echo      "----------"
-codepeer-gnatcheck -P samples/pathfinder/pathfinder.gpr samples/pathfinder/*.ads samples/pathfinder/*.adb
+codepeer-gnatcheck -P samples/pathfinder/pathfinder.gpr
 
 # The AdaCore-provided packages make heavy use of names with non-standardard casing. As a
 # result, analyzing the style of this sample produces a lot of warnings in packages we did not
@@ -40,7 +45,7 @@ codepeer-gnatcheck -P samples/pathfinder/pathfinder.gpr samples/pathfinder/*.ads
 #
 #echo -e "\nSTM32F4"
 #echo      "-------"
-#codepeer-gnatcheck -P samples/STM32F4/stmdemo.gpr samples/STM32F4/*.ads samples/pubsub/*.adb
+#codepeer-gnatcheck -P samples/STM32F4/stmdemo.gpr
 
 
 exit 0  # Success!
