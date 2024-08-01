@@ -33,9 +33,9 @@ subtype_spec:
     | IS NATURAL;
 
 aspect_list
-    :   (aspect_deffinition COMMA)* aspect_deffinition;
+    :   (aspect_definition COMMA)* aspect_definition;
 
-aspect_deffinition
+aspect_definition
     :   ASPECT_TYPE RPOINT LPARENS expression RPARENS;
 
 constant_def:
@@ -127,7 +127,7 @@ primary_expression
     : IDENTIFIER
     | TRUE
     | FALSE
-    | INTEGER_LITERAL
+    | CONSTANT
     | LPARENS expression RPARENS;
 
 /* =========== */
@@ -199,13 +199,10 @@ MINUS    : '-';
 DIVIDE   : '/';
 
 ASPECT_TYPE
-    : 'message_invariant';
+    : 'Message_Invariant';
 
 IDENTIFIER
     :   [a-zA-Z][a-zA-Z0-9_']*;
-
-INTEGER_LITERAL
-    :   [0-9][0-9]*;
 
 WHITESPACE
     :   [ \t\f\r\n]+  -> skip;
