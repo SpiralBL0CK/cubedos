@@ -1122,8 +1122,8 @@ class STPopulation(
     }
     val t = TypeRep.ConstRep
     val v = ctx.CONSTANT().getText
-    symbolTable.addTypeName(n, t.apply(n, v), v)
-    (n, t.apply(n, v), v)
+    symbolTable.addTypeName(n, t(n, v), v)
+    (n, t(n, v), v)
   }
 
 
