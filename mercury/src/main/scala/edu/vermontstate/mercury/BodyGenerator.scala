@@ -536,8 +536,11 @@ class BodyGenerator(
             out.println("if " + sd + y + "_Size < 1 then")
             indentationLevel += 1
             doIndentation()
-            out.println("XDR.Decode(Message.Payload, Position, " + sd + y + "(" + sd + y + "'First .. " + y +
-              "'First + (" + sd + y + "_Size - 1)), Last);")
+            out.println("XDR.Decode(Message.Payload, Position,")
+            indentationLevel += 1
+            doIndentation()
+            out.println(sd + y + "(" + sd + y + "'First .. " + y + "'First + (" + sd + y + "_Size - 1)), Last);")
+            indentationLevel -= 1
             doIndentation()
             out.println("Position := Last + 1;")
             indentationLevel -= 1
@@ -1074,8 +1077,11 @@ class BodyGenerator(
           out.println("if " + sd + y + "_Size < 1 then")
           indentationLevel += 1
           doIndentation()
-          out.println("XDR.Decode(Message.Payload, Position, " + y + "(" + y + "'First .. " + y +
-            "'First + (" + y + "_Size - 1)), Last);")
+          out.println("XDR.Decode(Message.Payload, Position,")
+          indentationLevel += 1
+          doIndentation()
+          out.println(y + "(" + y + "'First .. " + y + "'First + (" + y + "_Size - 1)), Last);")
+          indentationLevel -= 1
           if (posFlag == 1 && y == symbolTable.getSType(i).last && sd == stringFlag) {
             //do Nothing!
           }
@@ -1562,7 +1568,11 @@ class BodyGenerator(
           out.println("if Size < " + y + "'Length then")
           indentationLevel += 1
           doIndentation()
-          out.println("XDR.Decode(Message.Payload, Position, " + y + "(" + y + "'First .. " + y + "'First + Size - 1), Last);")
+          out.println("XDR.Decode(Message.Payload, Position,")
+          indentationLevel += 1
+          doIndentation()
+          out.println(y + "(" + y + "'First .. " + y + "'First + Size - 1), Last);")
+          indentationLevel -= 1
           if (posFlag == 1 && y == symbolTable.getSType(i).last && sd == stringFlag) {
             //do Nothing!
           }
@@ -1794,8 +1804,11 @@ class BodyGenerator(
             out.println("if " + sd + y + "_Size < 1 then")
             indentationLevel += 1
             doIndentation()
-            out.println("XDR.Decode(Message.Payload, Position, " + sd + y + "(" + sd + y + "'First .. " + y +
-              "'First + (" + sd + y + "_Size - 1)), Last);")
+            out.println("XDR.Decode(Message.Payload, Position,")
+            indentationLevel += 1
+            doIndentation()
+            out.println(sd + y + "(" + sd + y + "'First .. " + y + "'First + (" + sd + y + "_Size - 1)), Last);")
+            indentationLevel -= 1
             doIndentation()
             out.println("Position := Last + 1;")
             indentationLevel -= 1
@@ -2332,8 +2345,11 @@ class BodyGenerator(
           out.println("if " + sd + y + "_Size < 1 then")
           indentationLevel += 1
           doIndentation()
-          out.println("XDR.Decode(Message.Payload, Position, " + y + "(" + y + "'First .. " + y +
-            "'First + (" + y + "_Size - 1)), Last);")
+          out.println("XDR.Decode(Message.Payload, Position,")
+          indentationLevel += 1
+          doIndentation()
+          out.println(y + "(" + y + "'First .. " + y + "'First + (" + y + "_Size - 1)), Last);")
+          indentationLevel -= 1
           if (posFlag == 1 && y == symbolTable.getSType(i).last && sd == stringFlag) {
             //do Nothing!
           }
@@ -2820,7 +2836,11 @@ class BodyGenerator(
           out.println("if Size < " + y + "'Length then")
           indentationLevel += 1
           doIndentation()
-          out.println("XDR.Decode(Message.Payload, Position, " + y + "(" + y + "'First .. " + y + "'First + Size - 1), Last);")
+          out.println("XDR.Decode(Message.Payload, Position,")
+          indentationLevel += 1
+          doIndentation()
+          out.println(y + "(" + y + "'First .. " + y + "'First + Size - 1), Last);")
+          indentationLevel -= 1
           if (posFlag == 1 && y == symbolTable.getSType(i).last && sd == stringFlag) {
             //do Nothing!
           }
@@ -4924,8 +4944,11 @@ class BodyGenerator(
           out.println("if " + i + "_Size(I) < 1 then")
           indentationLevel += 1
           doIndentation()
-          out.println("XDR.Decode(Message.Payload, Position, " + i + "(" + i + "'First .. " + i +
-            "'First + (" + i + "_Size(I) - 1)), Last);")
+          out.println("XDR.Decode(Message.Payload, Position,")
+          indentationLevel += 1
+          doIndentation()
+          out.println(i + "(" + i + "'First .. " + i + "'First + (" + i + "_Size(I) - 1)), Last);")
+          indentationLevel -= 1
           doIndentation()
           out.println("Position := Last + 1;")
           indentationLevel -= 1
@@ -5455,8 +5478,11 @@ class BodyGenerator(
         out.println("if " + i + "_Size < 1 then")
         indentationLevel += 1
         doIndentation()
-        out.println("XDR.Decode(Message.Payload, Position, " + i + "(" + i + "'First .. " + i +
-          "'First + (" + i + "_Size - 1)), Last);")
+        out.println("XDR.Decode(Message.Payload, Position,")
+        indentationLevel += 1
+        doIndentation()
+        out.println(i + "(" + i + "'First .. " + i + "'First + (" + i + "_Size - 1)), Last);")
+        indentationLevel -= 1
         if (i != ctx.declaration(num - 1).IDENTIFIER.getText) {
           doIndentation()
           out.println("Position := Last + 1;")
@@ -5896,7 +5922,11 @@ class BodyGenerator(
         out.println("if Size < " + i + "'Length then")
         indentationLevel += 1
         doIndentation()
-        out.println("XDR.Decode(Message.Payload, Position, " + i + "(" + i + "'First .. " + i + "'First + Size - 1), Last);")
+        out.println("XDR.Decode(Message.Payload, Position,")
+        indentationLevel += 1
+        doIndentation()
+        out.println(i + "(" + i + "'First .. " + i + "'First + Size - 1), Last);")
+        indentationLevel -= 1
         if (i != ctx.declaration(num - 1).IDENTIFIER.getText) {
           doIndentation()
           out.println("Position := Last + 1;")

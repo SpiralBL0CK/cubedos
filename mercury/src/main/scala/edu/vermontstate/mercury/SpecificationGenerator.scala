@@ -95,11 +95,11 @@ class SpecificationGenerator(
           }
           else {
             if (name == n.head) {
-              out.println(name + ", ")
+              out.println(name + ",")
             }
             else {
               doIndentation()
-              out.println(name + ", ")
+              out.println(name + ",")
             }
           }
         }
@@ -602,7 +602,11 @@ class SpecificationGenerator(
     else if (arrowFlag == 1) {
       out.print("(Message.Sender_Address")
     }
-    out.println(" = Name_Resolver." + nameInResolver + " and Message.Message_ID = Message_Type'Pos(" + id + "));")
+    out.println(" =")
+    indentationLevel += 1
+    doIndentation()
+    indentationLevel -= 1
+    out.println("Name_Resolver." + nameInResolver + " and Message.Message_ID = Message_Type'Pos(" + id + "));")
     out.println("")
     indentationLevel -= 1
     null
