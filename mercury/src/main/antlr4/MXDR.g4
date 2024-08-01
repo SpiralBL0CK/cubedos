@@ -22,7 +22,7 @@ type_def:
     | ENUM IDENTIFIER enum_body SEMI
     | STRUCT IDENTIFIER struct_body SEMI
     | UNION IDENTIFIER union_body SEMI
-    | MESSAGE STRUCT (LARROW | RARROW) IDENTIFIER struct_body (condition)? SEMI;
+    | MESSAGE STRUCT (LARROW | RARROW) IDENTIFIER struct_body (WITH aspect_list)? SEMI;
 
 range_constraint:
       CONSTANT DOTDOT CONSTANT
@@ -32,8 +32,11 @@ subtype_spec:
       IS IDENTIFIER
     | IS NATURAL;
 
-condition
-    :   (WITH INVARIANT RPOINT expression COMMA)* WITH INVARIANT RPOINT expression;
+aspect_list
+    :   (aspect_definition COMMA)* aspect_definition;
+
+aspect_definition
+    :   ASPECT_TYPE RPOINT LPARENS expression RPARENS;
 
 constant_def:
       CONST IDENTIFIER EQUALS CONSTANT SEMI
@@ -109,12 +112,23 @@ case_spec:
 // Expression Syntax
 // -----------------
 expression
-    :   IDENTIFIER LOE IDENTIFIER
-    |   IDENTIFIER GOE IDENTIFIER
-    |   IDENTIFIER RANGLE IDENTIFIER
-    |   IDENTIFIER LANGLE IDENTIFIER
-    |   IDENTIFIER EQUALS IDENTIFIER
-    |   IDENTIFIER NEQUALS IDENTIFIER;
+    : add_expression
+    | expression (EQUALS | NEQUALS | LANGLE | LOE | RANGLE | GOE) add_expression;
+
+add_expression
+    : multiply_expression
+    | add_expression (PLUS | MINUS) multiply_expression;
+
+multiply_expression
+    : primary_expression
+    | multiply_expression (STAR | DIVIDE) primary_expression;
+
+primary_expression
+    : IDENTIFIER
+    | TRUE
+    | FALSE
+    | CONSTANT
+    | LPARENS expression RPARENS;
 
 /* =========== */
 /* Lexer rules */
@@ -135,7 +149,6 @@ ENUM      : 'enum';
 FLOAT     : 'float';
 HYPER     : 'hyper';
 INT       : 'int';
-INVARIANT : 'message_invariant';
 IS        : 'is';
 MESSAGE   : 'message';
 NATURAL   : 'Natural';
@@ -152,10 +165,15 @@ UNION     : 'union';
 UNSIGNED  : 'unsigned';
 VOID      : 'void';
 WITH      : 'with';
+TRUE      : 'true';
+FALSE     : 'false';
 
 // -------
 // Symbols
 // -------
+AND      : '&&';
+OR       : '||';
+NOT      : '!';
 COLON    : ':';
 COMMA    : ',';
 DOTDOT   : '..';
@@ -176,6 +194,12 @@ RPARENS  : ')';
 RPOINT   : '=>';
 SEMI     : ';';
 STAR     : '*';
+PLUS     : '+';
+MINUS    : '-';
+DIVIDE   : '/';
+
+ASPECT_TYPE
+    : 'Message_Invariant';
 
 IDENTIFIER
     :   [a-zA-Z][a-zA-Z0-9_']*;
