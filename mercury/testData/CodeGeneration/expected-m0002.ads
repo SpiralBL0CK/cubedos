@@ -19,8 +19,8 @@ use  CubedOS.Lib.XDR;
 package CubedOS.m0002.API is
 
    type Message_Type is
-      (Example, 
-      Bluish, 
+      (Example,
+      Bluish,
       Reddish);
 
    type Color is
@@ -95,7 +95,8 @@ package CubedOS.m0002.API is
       Global => null;
 
    function Is_Reddish(Message : in Message_Record) return Boolean is
-      (Message.Receiver_Address = Name_Resolver.m0002 and Message.Message_ID = Message_Type'Pos(Reddish));
+      (Message.Receiver_Address =
+         Name_Resolver.m0002 and Message.Message_ID = Message_Type'Pos(Reddish));
 
    procedure Reddish_Decode
       (Message : in  Message_Record;
@@ -124,7 +125,8 @@ package CubedOS.m0002.API is
       Global => null;
 
    function Is_Bluish(Message : in Message_Record) return Boolean is
-      (Message.Sender_Address = Name_Resolver.m0002 and Message.Message_ID = Message_Type'Pos(Bluish));
+      (Message.Sender_Address =
+         Name_Resolver.m0002 and Message.Message_ID = Message_Type'Pos(Bluish));
 
    procedure Bluish_Decode
       (Message : in  Message_Record;
@@ -151,7 +153,8 @@ package CubedOS.m0002.API is
       Global => null;
 
    function Is_Example(Message : in Message_Record) return Boolean is
-      (Message.Receiver_Address = Name_Resolver.m0002 and Message.Message_ID = Message_Type'Pos(Example));
+      (Message.Receiver_Address =
+         Name_Resolver.m0002 and Message.Message_ID = Message_Type'Pos(Example));
 
    procedure Example_Decode
       (Message : in  Message_Record;

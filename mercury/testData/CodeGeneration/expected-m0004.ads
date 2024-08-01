@@ -19,7 +19,7 @@ use  CubedOS.Lib.XDR;
 package CubedOS.m0004.API is
 
    type Message_Type is
-      (ms1, 
+      (ms1,
       ms);
 
    type f1 is new Integer range 1 .. 100;
@@ -87,7 +87,8 @@ package CubedOS.m0004.API is
       Global => null;
 
    function Is_ms(Message : in Message_Record) return Boolean is
-      (Message.Sender_Address = Name_Resolver.m0004 and Message.Message_ID = Message_Type'Pos(ms));
+      (Message.Sender_Address =
+         Name_Resolver.m0004 and Message.Message_ID = Message_Type'Pos(ms));
 
    procedure ms_Decode
       (Message : in  Message_Record;
@@ -111,7 +112,8 @@ package CubedOS.m0004.API is
       Global => null;
 
    function Is_ms1(Message : in Message_Record) return Boolean is
-      (Message.Sender_Address = Name_Resolver.m0004 and Message.Message_ID = Message_Type'Pos(ms1));
+      (Message.Sender_Address =
+         Name_Resolver.m0004 and Message.Message_ID = Message_Type'Pos(ms1));
 
 
 

@@ -19,7 +19,7 @@ use  CubedOS.Lib.XDR;
 package CubedOS.m0001.API is
 
    type Message_Type is
-      (Trivial_Reply, 
+      (Trivial_Reply,
       Trivial_Request);
 
    function Trivial_Request_Encode
@@ -31,7 +31,8 @@ package CubedOS.m0001.API is
       Global => null;
 
    function Is_Trivial_Request(Message : in Message_Record) return Boolean is
-      (Message.Receiver_Address = Name_Resolver.m0001 and Message.Message_ID = Message_Type'Pos(Trivial_Request));
+      (Message.Receiver_Address =
+         Name_Resolver.m0001 and Message.Message_ID = Message_Type'Pos(Trivial_Request));
 
    procedure Trivial_Request_Decode
       (Message : in  Message_Record;
@@ -52,7 +53,8 @@ package CubedOS.m0001.API is
       Global => null;
 
    function Is_Trivial_Reply(Message : in Message_Record) return Boolean is
-      (Message.Sender_Address = Name_Resolver.m0001 and Message.Message_ID = Message_Type'Pos(Trivial_Reply));
+      (Message.Sender_Address =
+         Name_Resolver.m0001 and Message.Message_ID = Message_Type'Pos(Trivial_Reply));
 
    procedure Trivial_Reply_Decode
       (Message : in  Message_Record;

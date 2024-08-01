@@ -1446,7 +1446,8 @@ package body CubedOS.m0003.API is
             sv16_Size := 0;
          end if;
          if sv16_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv16(sv16'First .. sv16'First + (sv16_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv16(sv16'First .. sv16'First + (sv16_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -1661,7 +1662,8 @@ package body CubedOS.m0003.API is
             sv30_sv8_Size := 0;
          end if;
          if sv30_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -1696,7 +1698,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -1874,7 +1877,8 @@ package body CubedOS.m0003.API is
             sv31_sv1_sv8_Size := 0;
          end if;
          if sv31_sv1_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -1909,7 +1913,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -2087,7 +2092,8 @@ package body CubedOS.m0003.API is
             sv31_sv2_sv8_Size := 0;
          end if;
          if sv31_sv2_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -2122,7 +2128,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -2300,7 +2307,8 @@ package body CubedOS.m0003.API is
             sv32_sv8_Size := 0;
          end if;
          if sv32_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -2335,7 +2343,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -2513,7 +2522,8 @@ package body CubedOS.m0003.API is
             sv33_sv1_sv8_Size := 0;
          end if;
          if sv33_sv1_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -2548,7 +2558,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -2726,7 +2737,8 @@ package body CubedOS.m0003.API is
             sv33_sv2_sv8_Size := 0;
          end if;
          if sv33_sv2_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -2761,7 +2773,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -2939,7 +2952,8 @@ package body CubedOS.m0003.API is
             sv42_Size := 0;
          end if;
          if sv42_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv42(sv42'First .. sv42'First + (sv42_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv42(sv42'First .. sv42'First + (sv42_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -2952,7 +2966,8 @@ package body CubedOS.m0003.API is
             sv43_Size := 0;
          end if;
          if sv43_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv43(sv43'First .. sv43'First + (sv43_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv43(sv43'First .. sv43'First + (sv43_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -3041,7 +3056,8 @@ package body CubedOS.m0003.API is
             sv54_Size := 0;
          end if;
          if sv54_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv54(sv54'First .. sv54'First + (sv54_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv54(sv54'First .. sv54'First + (sv54_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -3194,7 +3210,8 @@ package body CubedOS.m0003.API is
             sv63_sv8_Size := 0;
          end if;
          if sv63_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -3229,7 +3246,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -3345,7 +3363,8 @@ package body CubedOS.m0003.API is
             sv64_sv1_sv8_Size := 0;
          end if;
          if sv64_sv1_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -3380,7 +3399,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -3496,7 +3516,8 @@ package body CubedOS.m0003.API is
             sv64_sv2_sv8_Size := 0;
          end if;
          if sv64_sv2_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -3531,7 +3552,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -3637,7 +3659,8 @@ package body CubedOS.m0003.API is
             sv72_Size := 0;
          end if;
          if sv72_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv72(sv72'First .. sv72'First + (sv72_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv72(sv72'First .. sv72'First + (sv72_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -3650,7 +3673,8 @@ package body CubedOS.m0003.API is
             sv73_Size := 0;
          end if;
          if sv73_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv73(sv73'First .. sv73'First + (sv73_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv73(sv73'First .. sv73'First + (sv73_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -3739,7 +3763,8 @@ package body CubedOS.m0003.API is
             sv82_Size := 0;
          end if;
          if sv82_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv82(sv82'First .. sv82'First + (sv82_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv82(sv82'First .. sv82'First + (sv82_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -3774,7 +3799,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv86'Length then
-            XDR.Decode(Message.Payload, Position, sv86(sv86'First .. sv86'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv86(sv86'First .. sv86'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -3800,7 +3826,8 @@ package body CubedOS.m0003.API is
             sv90_Size := 0;
          end if;
          if sv90_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv90(sv90'First .. sv90'First + (sv90_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv90(sv90'First .. sv90'First + (sv90_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -5232,7 +5259,8 @@ package body CubedOS.m0003.API is
             sv16_Size := 0;
          end if;
          if sv16_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv16(sv16'First .. sv16'First + (sv16_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv16(sv16'First .. sv16'First + (sv16_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -5447,7 +5475,8 @@ package body CubedOS.m0003.API is
             sv30_sv8_Size := 0;
          end if;
          if sv30_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -5482,7 +5511,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -5660,7 +5690,8 @@ package body CubedOS.m0003.API is
             sv31_sv1_sv8_Size := 0;
          end if;
          if sv31_sv1_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -5695,7 +5726,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -5873,7 +5905,8 @@ package body CubedOS.m0003.API is
             sv31_sv2_sv8_Size := 0;
          end if;
          if sv31_sv2_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -5908,7 +5941,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -6086,7 +6120,8 @@ package body CubedOS.m0003.API is
             sv32_sv8_Size := 0;
          end if;
          if sv32_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -6121,7 +6156,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -6299,7 +6335,8 @@ package body CubedOS.m0003.API is
             sv33_sv1_sv8_Size := 0;
          end if;
          if sv33_sv1_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -6334,7 +6371,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -6512,7 +6550,8 @@ package body CubedOS.m0003.API is
             sv33_sv2_sv8_Size := 0;
          end if;
          if sv33_sv2_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -6547,7 +6586,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -6725,7 +6765,8 @@ package body CubedOS.m0003.API is
             sv42_Size := 0;
          end if;
          if sv42_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv42(sv42'First .. sv42'First + (sv42_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv42(sv42'First .. sv42'First + (sv42_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -6738,7 +6779,8 @@ package body CubedOS.m0003.API is
             sv43_Size := 0;
          end if;
          if sv43_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv43(sv43'First .. sv43'First + (sv43_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv43(sv43'First .. sv43'First + (sv43_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -6827,7 +6869,8 @@ package body CubedOS.m0003.API is
             sv54_Size := 0;
          end if;
          if sv54_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv54(sv54'First .. sv54'First + (sv54_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv54(sv54'First .. sv54'First + (sv54_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -6980,7 +7023,8 @@ package body CubedOS.m0003.API is
             sv63_sv8_Size := 0;
          end if;
          if sv63_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -7015,7 +7059,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -7131,7 +7176,8 @@ package body CubedOS.m0003.API is
             sv64_sv1_sv8_Size := 0;
          end if;
          if sv64_sv1_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -7166,7 +7212,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -7282,7 +7329,8 @@ package body CubedOS.m0003.API is
             sv64_sv2_sv8_Size := 0;
          end if;
          if sv64_sv2_sv8_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv8(sv8'First .. sv8'First + (sv8_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -7317,7 +7365,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv12'Length then
-            XDR.Decode(Message.Payload, Position, sv12(sv12'First .. sv12'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv12(sv12'First .. sv12'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -7423,7 +7472,8 @@ package body CubedOS.m0003.API is
             sv72_Size := 0;
          end if;
          if sv72_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv72(sv72'First .. sv72'First + (sv72_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv72(sv72'First .. sv72'First + (sv72_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -7436,7 +7486,8 @@ package body CubedOS.m0003.API is
             sv73_Size := 0;
          end if;
          if sv73_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv73(sv73'First .. sv73'First + (sv73_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv73(sv73'First .. sv73'First + (sv73_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -7525,7 +7576,8 @@ package body CubedOS.m0003.API is
             sv82_Size := 0;
          end if;
          if sv82_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv82(sv82'First .. sv82'First + (sv82_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv82(sv82'First .. sv82'First + (sv82_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
@@ -7560,7 +7612,8 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
          if Size < sv86'Length then
-            XDR.Decode(Message.Payload, Position, sv86(sv86'First .. sv86'First + Size - 1), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv86(sv86'First .. sv86'First + Size - 1), Last);
             Position := Last + 1;
             Decode_Status := Success;
          else
@@ -7586,7 +7639,8 @@ package body CubedOS.m0003.API is
             sv89_Size := 0;
          end if;
          if sv89_Size < 1 then
-            XDR.Decode(Message.Payload, Position, sv89(sv89'First .. sv89'First + (sv89_Size - 1)), Last);
+            XDR.Decode(Message.Payload, Position,
+               sv89(sv89'First .. sv89'First + (sv89_Size - 1)), Last);
             Position := Last + 1;
          end if;
       end if;
