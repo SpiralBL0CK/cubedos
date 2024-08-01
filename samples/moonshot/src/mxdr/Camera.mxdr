@@ -3,6 +3,6 @@ message struct -> Take_Image_Request {
     void;
 };
 message struct <- Take_Image_Reply {
-    string file_name<128>;
+    string File_Name<128>;
 };
 

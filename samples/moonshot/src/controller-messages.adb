@@ -17,7 +17,7 @@ with Camera.API;
 with Ada.Text_IO;
 use CubedOS.File_Server.API;
 
---with CubedOS.Time_Server.Messages;
+-- with CubedOS.Time_Server.Messages;
 
 package body Controller.Messages is
    use Message_Manager;
@@ -64,7 +64,7 @@ package body Controller.Messages is
                                             "Tick message has decoded inccorectly!");
       end if;
    end Handle_Ping_Reply;
-   
+
    procedure Handle_Image_Reply(Message : in Message_Record)
      with Pre => Camera.API.Is_Take_Image_Reply(Message)
    is
@@ -92,7 +92,7 @@ package body Controller.Messages is
                                             "Image reply message has decoded inccorectly!");
       end if;
    end Handle_Image_Reply;
-   
+
    procedure Handle_Open_Reply(Message : in Message_Record)
      with Pre => CubedOS.File_Server.API.Is_Open_Reply(Message)
    is
