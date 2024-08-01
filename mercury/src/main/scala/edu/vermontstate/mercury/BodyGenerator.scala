@@ -5453,6 +5453,8 @@ class BodyGenerator(
       }
       else if (symbolTable.getST(id, i).contains("StringRep")) {
         doIndentation()
+        out.println(i + "_Size := 0;")
+        doIndentation()
         out.println("if Decode_Status = Success then")
         indentationLevel += 1
         doIndentation()
@@ -5465,12 +5467,6 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println(i + "_Size := Natural(Raw_" + i + "_Size);")
-        indentationLevel -= 1
-        doIndentation()
-        out.println("else")
-        indentationLevel += 1
-        doIndentation()
-        out.println(i + "_Size := 0;")
         indentationLevel -= 1
         doIndentation()
         out.println("end if;")

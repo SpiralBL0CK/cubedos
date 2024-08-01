@@ -1437,13 +1437,12 @@ package body CubedOS.m0003.API is
          sv15 := v15'Val(XDR.XDR_Boolean'Pos(Raw_sv15));
          Decode_Status := Success;
       end if;
+      sv16_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv16_Size, Last);
          Position := Last + 1;
          if Raw_sv16_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv16_Size := Natural(Raw_sv16_Size);
-         else
-            sv16_Size := 0;
          end if;
          if sv16_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -2943,13 +2942,12 @@ package body CubedOS.m0003.API is
             sv41 := v41'First;
          end if;
       end if;
+      sv42_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv42_Size, Last);
          Position := Last + 1;
          if Raw_sv42_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv42_Size := Natural(Raw_sv42_Size);
-         else
-            sv42_Size := 0;
          end if;
          if sv42_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -2957,13 +2955,12 @@ package body CubedOS.m0003.API is
             Position := Last + 1;
          end if;
       end if;
+      sv43_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv43_Size, Last);
          Position := Last + 1;
          if Raw_sv43_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv43_Size := Natural(Raw_sv43_Size);
-         else
-            sv43_Size := 0;
          end if;
          if sv43_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -3047,13 +3044,12 @@ package body CubedOS.m0003.API is
          sv53 := v53'Val(XDR.XDR_Boolean'Pos(Raw_sv53));
          Decode_Status := Success;
       end if;
+      sv54_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv54_Size, Last);
          Position := Last + 1;
          if Raw_sv54_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv54_Size := Natural(Raw_sv54_Size);
-         else
-            sv54_Size := 0;
          end if;
          if sv54_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -3650,13 +3646,12 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
       end if;
+      sv72_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv72_Size, Last);
          Position := Last + 1;
          if Raw_sv72_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv72_Size := Natural(Raw_sv72_Size);
-         else
-            sv72_Size := 0;
          end if;
          if sv72_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -3664,13 +3659,12 @@ package body CubedOS.m0003.API is
             Position := Last + 1;
          end if;
       end if;
+      sv73_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv73_Size, Last);
          Position := Last + 1;
          if Raw_sv73_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv73_Size := Natural(Raw_sv73_Size);
-         else
-            sv73_Size := 0;
          end if;
          if sv73_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -3754,13 +3748,12 @@ package body CubedOS.m0003.API is
          sv81 := Boolean'Val(XDR.XDR_Boolean'Pos(Raw_sv81));
          Decode_Status := Success;
       end if;
+      sv82_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv82_Size, Last);
          Position := Last + 1;
          if Raw_sv82_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv82_Size := Natural(Raw_sv82_Size);
-         else
-            sv82_Size := 0;
          end if;
          if sv82_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -3817,13 +3810,12 @@ package body CubedOS.m0003.API is
             sv88 := null'First;
          end if;
       end if;
+      sv90_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv90_Size, Last);
          Position := Last + 1;
          if Raw_sv90_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv90_Size := Natural(Raw_sv90_Size);
-         else
-            sv90_Size := 0;
          end if;
          if sv90_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -5250,13 +5242,12 @@ package body CubedOS.m0003.API is
          sv15 := v15'Val(XDR.XDR_Boolean'Pos(Raw_sv15));
          Decode_Status := Success;
       end if;
+      sv16_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv16_Size, Last);
          Position := Last + 1;
          if Raw_sv16_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv16_Size := Natural(Raw_sv16_Size);
-         else
-            sv16_Size := 0;
          end if;
          if sv16_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -6756,13 +6747,12 @@ package body CubedOS.m0003.API is
             sv41 := v41'First;
          end if;
       end if;
+      sv42_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv42_Size, Last);
          Position := Last + 1;
          if Raw_sv42_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv42_Size := Natural(Raw_sv42_Size);
-         else
-            sv42_Size := 0;
          end if;
          if sv42_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -6770,13 +6760,12 @@ package body CubedOS.m0003.API is
             Position := Last + 1;
          end if;
       end if;
+      sv43_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv43_Size, Last);
          Position := Last + 1;
          if Raw_sv43_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv43_Size := Natural(Raw_sv43_Size);
-         else
-            sv43_Size := 0;
          end if;
          if sv43_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -6860,13 +6849,12 @@ package body CubedOS.m0003.API is
          sv53 := v53'Val(XDR.XDR_Boolean'Pos(Raw_sv53));
          Decode_Status := Success;
       end if;
+      sv54_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv54_Size, Last);
          Position := Last + 1;
          if Raw_sv54_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv54_Size := Natural(Raw_sv54_Size);
-         else
-            sv54_Size := 0;
          end if;
          if sv54_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -7463,13 +7451,12 @@ package body CubedOS.m0003.API is
             Decode_Status := Malformed;
          end if;
       end if;
+      sv72_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv72_Size, Last);
          Position := Last + 1;
          if Raw_sv72_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv72_Size := Natural(Raw_sv72_Size);
-         else
-            sv72_Size := 0;
          end if;
          if sv72_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -7477,13 +7464,12 @@ package body CubedOS.m0003.API is
             Position := Last + 1;
          end if;
       end if;
+      sv73_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv73_Size, Last);
          Position := Last + 1;
          if Raw_sv73_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv73_Size := Natural(Raw_sv73_Size);
-         else
-            sv73_Size := 0;
          end if;
          if sv73_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -7567,13 +7553,12 @@ package body CubedOS.m0003.API is
          sv81 := Boolean'Val(XDR.XDR_Boolean'Pos(Raw_sv81));
          Decode_Status := Success;
       end if;
+      sv82_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv82_Size, Last);
          Position := Last + 1;
          if Raw_sv82_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv82_Size := Natural(Raw_sv82_Size);
-         else
-            sv82_Size := 0;
          end if;
          if sv82_Size < 1 then
             XDR.Decode(Message.Payload, Position,
@@ -7630,13 +7615,12 @@ package body CubedOS.m0003.API is
             sv88 := null'First;
          end if;
       end if;
+      sv89_Size := 0;
       if Decode_Status = Success then
          XDR.Decode(Message.Payload, Position, Raw_sv89_Size, Last);
          Position := Last + 1;
          if Raw_sv89_Size in XDR.XDR_Unsigned(Natural'First) .. XDR.XDR_Unsigned(Natural'Last) then
             sv89_Size := Natural(Raw_sv89_Size);
-         else
-            sv89_Size := 0;
          end if;
          if sv89_Size < 1 then
             XDR.Decode(Message.Payload, Position,
