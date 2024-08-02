@@ -872,13 +872,12 @@ class SpecificationGenerator(
         val n = ctx.IDENTIFIER.getText
         var m_i = List[String]()
         if (ctx.children.contains(ctx.aspect_list)) {
-          for (i <- 0 until ctx.aspect_list.size()) {
-            if (ctx.aspect_list.(i).children.getText.equals(",")) {
-                visitAspect_definition(ctx.aspect_definition)
-                out.println(", ")
+          for (i <- 0 until ctx.aspect_list.children.size()) {
+            if (ctx.aspect_list.aspect_definition(i).getText.equals(",")) {
+                m_i = visitAspect_definition(ctx.aspect_list.aspect_definition(i)) + ", "
             }
             else{
-                visitAspect_definition(ctx.aspect_definition)
+                m_i = visitAspect_definition(ctx.aspect_list.aspect_definition(i))
             }
           }
         }
@@ -916,13 +915,81 @@ class SpecificationGenerator(
     null
   }
 
-  def visitAspect_list(ctx: MXDRParser.Aspect_listContext): Void
-  ={
-    for(i
+  def visitAspect_definition(ctx: MXDRParser.Aspect_definitionContext): List[String]
+  = {
+    ctx.ASPECT_TYPE.getText() + " => ( " + visitExpression(ctx.expression) + " )"
   }
 
-  def visitRange_constraint(ctx: MXDRParser.Range_constraintContext, floatFlag: Int): Void
+  def visitExpression(ctx: MXDRParser.ExpressionContext): List[String]
+  = {
+    if(ctx.children.contains(ctx.EQUALS)){
+        "( " visitExpression(ctx.expression) + " = " + visitAdd_expression(ctx.add_expression) + " )"
+    }
+    else if(ctx.children.contains(ctx.NQUALS)){
+        "( " visitExpression(ctx.expression) + " /= " + visitAdd_expression(ctx.add_expression) + " )"
+    }
+    else if(ctx.children.contains(ctx.LANGLE)){
+        "( " visitExpression(ctx.expression) + " < " + visitAdd_expression(ctx.add_expression) + " )"
+    }
+    else if(ctx.children.contains(ctx.RANGLE)){
+        "( " visitExpression(ctx.expression) + " > " + visitAdd_expression(ctx.add_expression) + " )"
+    }
+    else if(ctx.children.contains(ctx.LOE)){
+        "( " visitExpression(ctx.expression) + " <= " + visitAdd_expression(ctx.add_expression) + " )"
+    }
+    else if(ctx.children.contains(ctx.GOE)){
+        "( " visitExpression(ctx.expression) + " >= " + visitAdd_expression(ctx.add_expression) + " )"
+    }
+    else{
+        visitAdd_expression(ctx.add_expression)
+    }
+  }
 
+  def visitAdd_expression(ctx: MXDRParser.Add_expressionContext): List[String]
+  = {
+    if(ctx.children.contains(ctx.PLUS)){
+        "( " + visitAdd_expression(ctx.add_expression) + " + " + visitMultiply_expression(ctx.multiply_expression) + " )"
+    }
+    else if(ctx.children.contains(ctx.MINUS)){
+        "( " + visitAdd_expression(ctx.add_expression) + " - " + visitMultiply_expression(ctx.multiply_expression) + " )"
+    }
+    else{
+        visitMultiply_expression(ctx.multiply_expression)
+    }
+  }
+
+  def visitMultiply_expression(ctx: MXDRParser.Multiply_expressionContext): List[String]
+  = {
+    if(ctx.children.contains(ctx.STAR)){
+        "( " + visitMultiply_expression(ctx.multiply_expression) + " * " + visitPrimary_expression(ctx.primary_expression) + " )"
+    }
+    else if(ctx.children.contains(ctx.DIVIDE)){
+        "( " + visitMultiply_expression(ctx.multiply_expression) + " / " + visitPrimary_expression(ctx.primary_expression) + " )"
+    }
+    else{
+        visitPrimary_expression(ctx.primary_expression)
+    }
+  }
+
+  def visitPrimary_expression(ctx: MXDRParser.Primary_expressionContext): List[String]
+  = {
+    if(ctx.children.contains(ctx.IDENTIFIER)){
+        ctx.IDENTIFIER.getText()
+    }
+    else if(ctx.children.contains(ctx.TRUE)){
+        ctx.TRUE.getText()
+    }
+    else if(ctx.children.contains(ctx.FALSE)){
+        ctx.FALSE.getText()
+    }
+    else if(ctx.children.contains(ctx.CONSTANT)){
+        ctx.CONSTANT.getText()
+    }
+    else if(ctx.children.contains(ctx.LPARENS)){
+        "( " + visitExpression(ctx.expression) + " )"
+    }
+  }
+  def visitRange_constraint(ctx: MXDRParser.Range_constraintContext, floatFlag: Int): Void
   = {
     var lowerBound = ctx.getChild(0).getText
     var upperBound = ctx.getChild(2).getText
