@@ -872,37 +872,14 @@ class SpecificationGenerator(
         val n = ctx.IDENTIFIER.getText
         var m_i = List[String]()
         if (ctx.children.contains(ctx.aspect_list)) {
-          for (i <- 0 until ctx.aspect_list.aspect_definition.size()) {
-//             if (ctx.aspect_list.aspect_definition(i).children.contains(ctx.aspect_list.aspect_definition(i).expression.GOE)) {
-//               m_i = (ctx.aspect_list.aspect_definition(i).IDENTIFIER(0).getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).GOE.getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).IDENTIFIER(1).getText) :: m_i
-//             }
-//             else if (ctx.aspect_list.aspect_definition(i).children.contains(ctx.aspect_list.aspect_definition(i).expression.LOE)) {
-//               m_i = (ctx.aspect_list.aspect_definition(i).IDENTIFIER(0).getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).LOE.getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).IDENTIFIER(1).getText) :: m_i
-//             }
-//             else if (ctx.aspect_list.aspect_definition(i).children.contains(ctx.aspect_list.aspect_definition(i).expression.RANGLE)) {
-//               m_i = (ctx.aspect_list.aspect_definition(i).IDENTIFIER(0).getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).RANGLE.getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).IDENTIFIER(1).getText) :: m_i
-//             }
-//             else if (ctx.aspect_list.aspect_definition(i).children.contains(ctx.aspect_list.aspect_definition(i).expression.LANGLE)) {
-//               m_i = (ctx.aspect_list.aspect_definition(i).IDENTIFIER(0).getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).LANGLE.getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).IDENTIFIER(1).getText) :: m_i
-//             }
-//             else if (ctx.aspect_list.aspect_definition(i).children.contains(ctx.aspect_list.aspect_definition(i).expression.EQUALS)) {
-//               m_i = (ctx.aspect_list.aspect_definition(i).IDENTIFIER(0).getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).EQUALS.getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).IDENTIFIER(1).getText) :: m_i
-//             }
-//             else if (ctx.aspect_list.aspect_definition(i).children.contains(ctx.aspect_list.aspect_definition(i).expression.NEQUALS)) {
-//               m_i = (ctx.aspect_list.aspect_definition(i).IDENTIFIER(0).getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).NEQUALS.getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).IDENTIFIER(1).getText) :: m_i
-//             }
+          for (i <- 0 until ctx.aspect_list.size()) {
+            if (ctx.aspect_list.(i).children.getText.equals(",")) {
+                visitAspect_definition(ctx.aspect_definition)
+                out.println(", ")
+            }
+            else{
+                visitAspect_definition(ctx.aspect_definition)
+            }
           }
         }
         var voidFlag = 0
@@ -937,6 +914,11 @@ class SpecificationGenerator(
       case _ =>
     }
     null
+  }
+
+  def visitAspect_list(ctx: MXDRParser.Aspect_listContext): Void
+  ={
+    for(i
   }
 
   def visitRange_constraint(ctx: MXDRParser.Range_constraintContext, floatFlag: Int): Void
