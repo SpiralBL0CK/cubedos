@@ -9,15 +9,15 @@ pragma SPARK_Mode(On);
 -- with Name_Resolver;
 
 package body CubedOS.Generic_Message_Manager
-  with Refined_State => (Mailboxes => Message_Storage, Request_ID_Generator => Request_ID_Gen)
+  with Refined_State => (Mailboxes => Message_Storage, Request_ID_Generator => ID_Generator)
 is
 
    -- A protected object for generating request ID values.
-   protected Request_ID_Gen is
+   protected ID_Generator is
       procedure Generate_Next_ID(Request_ID : out Request_ID_Type);
    private
       Next_Request_ID : Request_ID_Type := 1;
-   end Request_ID_Gen;
+   end ID_Generator;
 
    -- A protected type for holding messages.
    protected type Mailbox is
@@ -41,7 +41,6 @@ is
       Count    : Message_Count_Type := 0;
       Next_In  : Message_Index_Type := 1;
       Next_Out : Message_Index_Type := 1;
-      Message_Waiting : Boolean := False;
    end Mailbox;
 
    -- One mailbox for each module.
@@ -51,7 +50,7 @@ is
    -- Implementations
    ------------------
 
-   protected body Request_ID_Gen is
+   protected body ID_Generator is
 
       procedure Generate_Next_ID(Request_ID : out Request_ID_Type) is
       begin
@@ -59,7 +58,7 @@ is
          Next_Request_ID := Next_Request_ID + 1;
       end Generate_Next_ID;
 
-   end Request_ID_Gen;
+   end ID_Generator;
 
 
    protected body Mailbox is
@@ -75,8 +74,7 @@ is
             else
                Next_In := Next_In + 1;
             end if;
-            Count := Count + 1;
-            Message_Waiting := True;
+            Count  := Count + 1;
             Status := Accepted;
          end if;
       end Send;
@@ -92,7 +90,6 @@ is
                Next_In := Next_In + 1;
             end if;
             Count := Count + 1;
-            Message_Waiting := True;
          end if;
       end Unchecked_Send;
 
@@ -103,7 +100,7 @@ is
       end Message_Count;
 
 
-      entry Receive(Message : out Message_Record) when Message_Waiting is
+      entry Receive(Message : out Message_Record) when Count > 0 is
       begin
          Message := Messages(Next_Out);
          if Next_Out = Mailbox_Size then
@@ -112,9 +109,6 @@ is
             Next_Out := Next_Out + 1;
          end if;
          Count := Count - 1;
-         if Count = 0 then
-            Message_Waiting := False;
-         end if;
       end Receive;
 
    end Mailbox;
@@ -157,7 +151,7 @@ is
 
    procedure Get_Next_Request_ID(Request_ID : out Request_ID_Type) is
    begin
-      Request_ID_Gen.Generate_Next_ID(Request_ID);
+      ID_Generator.Generate_Next_ID(Request_ID);
    end Get_Next_Request_ID;
 
 

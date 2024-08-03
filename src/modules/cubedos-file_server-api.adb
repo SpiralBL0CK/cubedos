@@ -13,9 +13,9 @@ use CubedOS.Lib;
 package body CubedOS.File_Server.API is
    use type XDR.XDR_Unsigned;
 
-   -- Encodes:
+   -- Encoding
+   -----------
 
-   -- Requester-side Use
    function Open_Request_Encode
      (Sender_Address : in Message_Address;
       Request_ID     : in Request_ID_Type;
@@ -44,7 +44,6 @@ package body CubedOS.File_Server.API is
    end Open_Request_Encode;
 
 
-   -- Server-side Use
    function Open_Reply_Encode
      (Receiver_Address : in Message_Address;
       Request_ID       : in Request_ID_Type;
@@ -94,7 +93,6 @@ package body CubedOS.File_Server.API is
    end Read_Request_Encode;
 
 
-   -- Server-side use.
    function Read_Reply_Encode
      (Receiver_Address : in Message_Address;
       Request_ID       : in Request_ID_Type;
@@ -153,7 +151,6 @@ package body CubedOS.File_Server.API is
    end Write_Request_Encode;
 
 
-   -- Server-side use.
    function Write_Reply_Encode
      (Receiver_Address : in Message_Address;
       Request_ID       : in Request_ID_Type;
@@ -202,9 +199,10 @@ package body CubedOS.File_Server.API is
       return Message;
    end Close_Request_Encode;
 
-   -- Decodes:
 
-   -- Server-side Use
+   -- Decoding
+   -----------
+
    procedure Open_Request_Decode
      (Message    : in  Message_Record;
       Mode       : out Mode_Type;
@@ -215,31 +213,42 @@ package body CubedOS.File_Server.API is
       Position : Data_Index_Type;
       Raw_Mode : XDR.XDR_Unsigned;
       Raw_Name_Size : XDR.XDR_Unsigned;
-      Last : Data_Index_Type;
+      Last : Data_Extended_Index_Type;
    begin
       pragma Warnings(Off, """Last"" is set by ""Decode""", Reason => "No further decoding required");
 
+      -- Initial values in case decoding fails.
+      Mode := Read;
       Name := [others => ' '];
+      Name_Size := 0;
+
+      Decode_Status := Success;
 
       Position := 0;
       XDR.Decode(Message.Payload, Position, Raw_Mode, Last);
       Position := Last + 1;
       if Raw_Mode <= Mode_Type'Pos(Mode_Type'Last) then
          Mode := Mode_Type'Val(Raw_Mode);
-         Decode_Status := Success;
       else
-         Mode := Mode_Type'First; -- appropriate?
          Decode_Status := Malformed;
+         return;
       end if;
-      -- TODO: Should we return here if Decode_Status is Malformed?
 
       XDR.Decode(Message.Payload, Position, Raw_Name_Size, Last);
       Position := Last + 1;
       if Raw_Name_Size <= XDR.XDR_Unsigned(Natural'Last) then
          Name_Size := Natural(Raw_Name_Size);
       else
-         Name_Size := 0;
+         Decode_Status := Malformed;
+         return;
       end if;
+
+      -- Check Name_Size.
+      if Name_Size > Name'Length then
+         Decode_Status := Malformed;
+         return;
+      end if;
+
       XDR.Decode(Message.Payload, Position, Name(Name'First .. Name'First + (Name_Size - 1)), Last);
    end Open_Request_Decode;
 

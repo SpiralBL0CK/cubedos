@@ -13,6 +13,8 @@ runtime error. Mercury is written in Scala. ScriptBuilder is written in Python.
 
 The subfolders are as follows:
 
++ `ADL`: A placeholder for the Ada Drivers Library submodule.
+
 + `bench`: Benchmark programs for measuring the performance of CubedOS.
 
 + `doc`: The documentation of CubedOS.
@@ -29,24 +31,31 @@ The subfolders are as follows:
   can use these templates to simplify the programming of new applications, however their use is
   not required.
   
+When you clone this repository, also use the command:
+
+    $ git submodule update --init --recursive
+    
+To fetch the Ada Drivers Library repository as a submodule. This will populate the `ADL` folder.
+Some of the sample projects depend on this library.
+  
   
 Development Environment
 -----------------------
 
-The official development platform for CubedOS is x86-64-based Ubuntu Linux 22.04. Development on
-Windows and macOS is probably possible, but we do not use those systems. Most of the test,
-sample, and benchmark programs can be compiled and run on the development host. Some programs
-that target other platforms are also included.
+The official development platform for CubedOS is x86-64-based Ubuntu Linux 22.04. Development,
+at least to some degree, on Windows and macOS is probably possible, but we do not use those
+systems. Most of the test, sample, and benchmark programs can be compiled and run on the
+development host. Some programs that target other platforms are also included.
 
 With generous support from AdaCore, we are able to use the GNAT Pro tool set (currently version
-24.1) for our development. Some experimentation with using Alire and the community tool chain
+24.2) for our development. Some experimentation with using Alire and the community tool chain
 has been done, but that build environment is not officially supported at this time.
 
 In addition to GNATstudio for the SPARK/Ada components of the project, we also support using
 Visual Studio Code. The advantage of VSCode is that it supports development of the entire
 project from a single environment: Ada, Scala, Python, and LaTeX. We describe how to set up
 VSCode in more detail below. JetBrains IDEs (IntelliJ and PyCharm) can also be used for the
-Scala and Python portions of the project.
+Scala and Python portions of the project, respectively.
 
 The README files in the `mercury` and `scriptbuilder` folders give more information about those
 subprojects.
