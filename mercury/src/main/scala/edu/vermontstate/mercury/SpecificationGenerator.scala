@@ -874,10 +874,10 @@ class SpecificationGenerator(
         if (ctx.children.contains(ctx.aspect_list)) {
           for (i <- 0 until ctx.aspect_list.children.size()) {
             if (ctx.aspect_list.aspect_definition(i).getText.equals(",")) {
-                m_i = visitAspect_definition(ctx.aspect_list.aspect_definition(i)) + ", "
+                m_i = (visitAspect_definition(ctx.aspect_list.aspect_definition(i)) + ", ") :: m_i
             }
             else{
-                m_i = visitAspect_definition(ctx.aspect_list.aspect_definition(i))
+                m_i = visitAspect_definition(ctx.aspect_list.aspect_definition(i)) :: m_i
             }
           }
         }
@@ -915,37 +915,37 @@ class SpecificationGenerator(
     null
   }
 
-  def visitAspect_definition(ctx: MXDRParser.Aspect_definitionContext): List[String]
+  def visitAspect_definition(ctx: MXDRParser.Aspect_definitionContext): String
   = {
     ctx.ASPECT_TYPE.getText() + " => ( " + visitExpression(ctx.expression) + " )"
   }
 
-  def visitExpression(ctx: MXDRParser.ExpressionContext): List[String]
+  def visitExpression(ctx: MXDRParser.ExpressionContext): String
   = {
     if(ctx.children.contains(ctx.EQUALS)){
-        "( " visitExpression(ctx.expression) + " = " + visitAdd_expression(ctx.add_expression) + " )"
+        "( " + visitExpression(ctx.expression) + " = " + visitAdd_expression(ctx.add_expression) + " )"
     }
-    else if(ctx.children.contains(ctx.NQUALS)){
-        "( " visitExpression(ctx.expression) + " /= " + visitAdd_expression(ctx.add_expression) + " )"
+    else if(ctx.children.contains(ctx.NEQUALS)){
+        "( " + visitExpression(ctx.expression) + " /= " + visitAdd_expression(ctx.add_expression) + " )"
     }
     else if(ctx.children.contains(ctx.LANGLE)){
-        "( " visitExpression(ctx.expression) + " < " + visitAdd_expression(ctx.add_expression) + " )"
+        "( " + visitExpression(ctx.expression) + " < " + visitAdd_expression(ctx.add_expression) + " )"
     }
     else if(ctx.children.contains(ctx.RANGLE)){
-        "( " visitExpression(ctx.expression) + " > " + visitAdd_expression(ctx.add_expression) + " )"
+        "( " + visitExpression(ctx.expression) + " > " + visitAdd_expression(ctx.add_expression) + " )"
     }
     else if(ctx.children.contains(ctx.LOE)){
-        "( " visitExpression(ctx.expression) + " <= " + visitAdd_expression(ctx.add_expression) + " )"
+        "( " + visitExpression(ctx.expression) + " <= " + visitAdd_expression(ctx.add_expression) + " )"
     }
     else if(ctx.children.contains(ctx.GOE)){
-        "( " visitExpression(ctx.expression) + " >= " + visitAdd_expression(ctx.add_expression) + " )"
+        "( " + visitExpression(ctx.expression) + " >= " + visitAdd_expression(ctx.add_expression) + " )"
     }
     else{
         visitAdd_expression(ctx.add_expression)
     }
   }
 
-  def visitAdd_expression(ctx: MXDRParser.Add_expressionContext): List[String]
+  def visitAdd_expression(ctx: MXDRParser.Add_expressionContext): String
   = {
     if(ctx.children.contains(ctx.PLUS)){
         "( " + visitAdd_expression(ctx.add_expression) + " + " + visitMultiply_expression(ctx.multiply_expression) + " )"
@@ -958,7 +958,7 @@ class SpecificationGenerator(
     }
   }
 
-  def visitMultiply_expression(ctx: MXDRParser.Multiply_expressionContext): List[String]
+  def visitMultiply_expression(ctx: MXDRParser.Multiply_expressionContext): String
   = {
     if(ctx.children.contains(ctx.STAR)){
         "( " + visitMultiply_expression(ctx.multiply_expression) + " * " + visitPrimary_expression(ctx.primary_expression) + " )"
@@ -971,7 +971,7 @@ class SpecificationGenerator(
     }
   }
 
-  def visitPrimary_expression(ctx: MXDRParser.Primary_expressionContext): List[String]
+  def visitPrimary_expression(ctx: MXDRParser.Primary_expressionContext): String
   = {
     if(ctx.children.contains(ctx.IDENTIFIER)){
         ctx.IDENTIFIER.getText()
@@ -985,7 +985,7 @@ class SpecificationGenerator(
     else if(ctx.children.contains(ctx.CONSTANT)){
         ctx.CONSTANT.getText()
     }
-    else if(ctx.children.contains(ctx.LPARENS)){
+    else{
         "( " + visitExpression(ctx.expression) + " )"
     }
   }
