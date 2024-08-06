@@ -11,7 +11,6 @@ with Name_Resolver;
 with CubedOS.Log_Server.API;
 with CubedOS.File_Server.API;
 with Ada.Real_Time;
-with CubedOS.Time_Server;
 with CubedOS.Time_Server.API;
 with Camera.API;
 with Ada.Text_IO;

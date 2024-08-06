@@ -1,0 +1,10 @@
+// FILE: Echo_Server.mxdr
+enum {Success, Failure} Status_Type;
+
+message struct -> Ping_Request {
+    void;
+};
+
+message struct <- Ping_Reply {
+    Status_Type Status;
+};

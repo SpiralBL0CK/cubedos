@@ -19,19 +19,13 @@ package body Echo_Server.Messages is
        Pre => Echo_Server.API.Is_Ping_Request(Message)
    is
       Outgoing_Message : Message_Record;
-      Decode_Status    : Message_Status_Type;
    begin
-      Echo_Server.API.Ping_Request_Decode(Message, Decode_Status);
-
-      -- Just ignore messages that don't decode properly (decoding Ping_Requests can't fail anyway).
-      if Decode_Status = Message_Manager.Success then
-         Outgoing_Message :=
-           Echo_Server.API.Ping_Reply_Encode
-             (Receiver_Address => Message.Sender_Address,
-              Request_ID      => Message.Request_ID,
-              Status          => Echo_Server.API.Success);  -- Ping is always successful.
-         Message_Manager.Route_Message(Outgoing_Message);
-      end if;
+      Outgoing_Message :=
+        Echo_Server.API.Ping_Reply_Encode
+          (Receiver_Address => Message.Sender_Address,
+           Request_ID      => Message.Request_ID,
+           Status          => Echo_Server.API.Success);  -- Ping is always successful.
+      Message_Manager.Route_Message(Outgoing_Message);
    end Handle_Ping_Request;
 
    -----------------------------------
