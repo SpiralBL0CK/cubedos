@@ -14,7 +14,7 @@ with CubedOS.Log_Server.API;
 package body Camera.Messages is
    use Message_Manager;
 
-   procedure Handle_A_Request(Message : in Message_Record)
+   procedure Handle_Take_Image_Request(Message : in Message_Record)
      with Pre => Camera.API.Is_Take_Image_Request(Message)
    is
       Image_Reply : Message_Record;
@@ -31,7 +31,7 @@ package body Camera.Messages is
             File_Name => "Image-Copernicus.jpg");
       end if;
       Route_Message(Image_Reply);
-   end Handle_A_Request;
+   end Handle_Take_Image_Request;
 
    -----------------------------------
    -- Message Decoding and Dispatching
@@ -41,7 +41,7 @@ package body Camera.Messages is
    procedure Process(Message : in Message_Record) is
    begin
       if Camera.API.Is_Take_Image_Request(Message) then
-         Handle_A_Request(Message);
+         Handle_Take_Image_Request(Message);
       else
          CubedOS.Log_Server.API.Log_Message(Name_Resolver.Camera,
                                             CubedOS.Log_Server.API.Error,

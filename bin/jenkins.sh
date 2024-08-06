@@ -52,6 +52,7 @@ echo -e "\nBuild Sample Programs"
 echo      "====================="
 echo -e "\nEcho"
 echo      "----"
+(cd samples/echo/src/mxdr; make)
 gprbuild -P samples/echo/echo.gpr
 
 echo -e "\nMoonshot"
