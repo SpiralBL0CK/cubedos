@@ -340,7 +340,7 @@ class SpecificationGenerator(
   }
 
   //Decode.
-  def doDecode(ctx: MXDRParser.Struct_bodyContext, id: String, m_i: List[String], arrowFlag: Int): Void = {
+  def doDecode(ctx: MXDRParser.Struct_bodyContext, id: String, alctx: MXDRParser.Aspect_listContext, arrowFlag: Int): Void = {
     val decodeString = "_Decode"
     doIndentation()
     out.println("procedure " + id + decodeString)
@@ -419,7 +419,7 @@ class SpecificationGenerator(
       }
       val id = ctx.declaration(i).IDENTIFIER.getText
       if (i == structStuff - 1) {
-        if (m_i.isEmpty) {
+        if (alctx == null) {
           if (t == "string" ||
             ctx.declaration(i).children.contains(ctx.declaration(i).STRING)) {
             out.print(id + ", ")
@@ -464,15 +464,9 @@ class SpecificationGenerator(
       }
     }
     out.println("")
-    for (i <- m_i.indices) {
-      if (i == m_i.size - 1) {
+    if(alctx != null){
         doIndentation()
-        out.println("Post => " + m_i(i) + ";")
-      }
-      else {
-        doIndentation()
-        out.println("Post => " + m_i(i) + ",")
-      }
+        out.println("Post => " + visitAspect_list(alctx) + ";")
     }
     indentationLevel -= 1
     out.println("")
@@ -480,7 +474,7 @@ class SpecificationGenerator(
   }
 
   //Encode sending.
-  def doEncode(ctx: MXDRParser.Struct_bodyContext, id: String, m_i: List[String], arrowFlag: Int): Void = {
+  def doEncode(ctx: MXDRParser.Struct_bodyContext, id: String, alctx: MXDRParser.Aspect_listContext, arrowFlag: Int): Void = {
     val encodeString = "_Encode"
     var stringFlag = ""
     var dataFlag = ""
@@ -555,7 +549,7 @@ class SpecificationGenerator(
     indentationLevel += 1
     doIndentation()
     if (stringFlag != "") {
-      if (m_i.isEmpty) {
+      if (alctx == null) {
         out.println("Global => null,")
         doIndentation()
         out.println("Pre => (0 < " + stringFlag + "'Length and " + stringFlag + "'Length <= XDR_Size_Type'Last - 12);")
@@ -567,21 +561,13 @@ class SpecificationGenerator(
       }
     }
     else {
-      if (m_i.isEmpty) {
+      if (alctx == null) {
         out.println("Global => null;")
       }
       else {
         out.println("Global => null,")
-        for (i <- m_i.indices) {
-          if (i == m_i.size - 1) {
-            doIndentation()
-            out.println("Pre => " + m_i(i) + ";")
-          }
-          else {
-            doIndentation()
-            out.println("Pre => " + m_i(i) + ",")
-          }
-        }
+        doIndentation()
+        out.println("Pre => " + visitAspect_list(alctx) + ";")
       }
     }
     indentationLevel -= 1
@@ -870,41 +856,6 @@ class SpecificationGenerator(
       case "message"
       =>
         val n = ctx.IDENTIFIER.getText
-        var m_i = List[String]()
-        if (ctx.children.contains(ctx.aspect_list)) {
-          for (i <- 0 until ctx.aspect_list.aspect_definition.size()) {
-//             if (ctx.aspect_list.aspect_definition(i).children.contains(ctx.aspect_list.aspect_definition(i).expression.GOE)) {
-//               m_i = (ctx.aspect_list.aspect_definition(i).IDENTIFIER(0).getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).GOE.getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).IDENTIFIER(1).getText) :: m_i
-//             }
-//             else if (ctx.aspect_list.aspect_definition(i).children.contains(ctx.aspect_list.aspect_definition(i).expression.LOE)) {
-//               m_i = (ctx.aspect_list.aspect_definition(i).IDENTIFIER(0).getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).LOE.getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).IDENTIFIER(1).getText) :: m_i
-//             }
-//             else if (ctx.aspect_list.aspect_definition(i).children.contains(ctx.aspect_list.aspect_definition(i).expression.RANGLE)) {
-//               m_i = (ctx.aspect_list.aspect_definition(i).IDENTIFIER(0).getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).RANGLE.getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).IDENTIFIER(1).getText) :: m_i
-//             }
-//             else if (ctx.aspect_list.aspect_definition(i).children.contains(ctx.aspect_list.aspect_definition(i).expression.LANGLE)) {
-//               m_i = (ctx.aspect_list.aspect_definition(i).IDENTIFIER(0).getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).LANGLE.getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).IDENTIFIER(1).getText) :: m_i
-//             }
-//             else if (ctx.aspect_list.aspect_definition(i).children.contains(ctx.aspect_list.aspect_definition(i).expression.EQUALS)) {
-//               m_i = (ctx.aspect_list.aspect_definition(i).IDENTIFIER(0).getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).EQUALS.getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).IDENTIFIER(1).getText) :: m_i
-//             }
-//             else if (ctx.aspect_list.aspect_definition(i).children.contains(ctx.aspect_list.aspect_definition(i).expression.NEQUALS)) {
-//               m_i = (ctx.aspect_list.aspect_definition(i).IDENTIFIER(0).getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).NEQUALS.getText + " " +
-//                 ctx.aspect_list.aspect_definition(i).IDENTIFIER(1).getText) :: m_i
-//             }
-          }
-        }
         var voidFlag = 0
         for (i <- 0 until ctx.struct_body.declaration.size()) {
           if (ctx.struct_body.declaration(i).getText == "void") {
@@ -920,7 +871,7 @@ class SpecificationGenerator(
           if (ctx.children.contains(ctx.LARROW)) {
             arrowFlag = 1
           }
-          doEncode(ctx.struct_body(), n, m_i, arrowFlag)
+          doEncode(ctx.struct_body(), n, ctx.aspect_list, arrowFlag)
           doCheck(n, arrowFlag)
           out.println("")
         }
@@ -929,9 +880,9 @@ class SpecificationGenerator(
           if (ctx.children.contains(ctx.LARROW)) {
             arrowFlag = 1
           }
-          doEncode(ctx.struct_body, n, m_i, arrowFlag)
+          doEncode(ctx.struct_body, n, ctx.aspect_list, arrowFlag)
           doCheck(n, arrowFlag)
-          doDecode(ctx.struct_body, n, m_i, arrowFlag)
+          doDecode(ctx.struct_body, n, ctx.aspect_list, arrowFlag)
           out.println("")
         }
       case _ =>
@@ -939,8 +890,101 @@ class SpecificationGenerator(
     null
   }
 
-  def visitRange_constraint(ctx: MXDRParser.Range_constraintContext, floatFlag: Int): Void
+  override def visitAspect_list(ctx: MXDRParser.Aspect_listContext): Void
+  = {
+    for (i <- 0 until ctx.children.size()) {
+        if (ctx.aspect_definition(i).getText.equals(",")) {
+            visitAspect_definition(ctx.aspect_definition(i))
+            out.print(", ")
+        }
+        else{
+            visitAspect_definition(ctx.aspect_definition(i))
+        }
+    }
+    null
+  }
 
+  override def visitAspect_definition(ctx: MXDRParser.Aspect_definitionContext): Void
+  = {
+    out.print(ctx.ASPECT_TYPE.getText() + " => ( " + visitExpression(ctx.expression) + " )")
+    null
+  }
+
+  override def visitExpression(ctx: MXDRParser.ExpressionContext): Void
+  = {
+    if(ctx.children.contains(ctx.EQUALS)){
+        out.print("( " + visitExpression(ctx.expression) + " = " + visitAdd_expression(ctx.add_expression) + " )")
+    }
+    else if(ctx.children.contains(ctx.NEQUALS)){
+        out.print("( " + visitExpression(ctx.expression) + " /= " + visitAdd_expression(ctx.add_expression) + " )")
+    }
+    else if(ctx.children.contains(ctx.LANGLE)){
+        out.print("( " + visitExpression(ctx.expression) + " < " + visitAdd_expression(ctx.add_expression) + " )")
+    }
+    else if(ctx.children.contains(ctx.RANGLE)){
+        out.print("( " + visitExpression(ctx.expression) + " > " + visitAdd_expression(ctx.add_expression) + " )")
+    }
+    else if(ctx.children.contains(ctx.LOE)){
+        out.print("( " + visitExpression(ctx.expression) + " <= " + visitAdd_expression(ctx.add_expression) + " )")
+    }
+    else if(ctx.children.contains(ctx.GOE)){
+        out.print("( " + visitExpression(ctx.expression) + " >= " + visitAdd_expression(ctx.add_expression) + " )")
+    }
+    else{
+        visitAdd_expression(ctx.add_expression)
+    }
+    null
+  }
+
+  override def visitAdd_expression(ctx: MXDRParser.Add_expressionContext): Void
+  = {
+    if(ctx.children.contains(ctx.PLUS)){
+        out.print("( " + visitAdd_expression(ctx.add_expression) + " + " + visitMultiply_expression(ctx.multiply_expression) + " )")
+    }
+    else if(ctx.children.contains(ctx.MINUS)){
+        out.print("( " + visitAdd_expression(ctx.add_expression) + " - " + visitMultiply_expression(ctx.multiply_expression) + " )")
+    }
+    else{
+        visitMultiply_expression(ctx.multiply_expression)
+    }
+    null
+  }
+
+  override def visitMultiply_expression(ctx: MXDRParser.Multiply_expressionContext): Void
+  = {
+    if(ctx.children.contains(ctx.STAR)){
+        out.print("( " + visitMultiply_expression(ctx.multiply_expression) + " * " + visitPrimary_expression(ctx.primary_expression) + " )")
+    }
+    else if(ctx.children.contains(ctx.DIVIDE)){
+        out.print("( " + visitMultiply_expression(ctx.multiply_expression) + " / " + visitPrimary_expression(ctx.primary_expression) + " )")
+    }
+    else{
+        visitPrimary_expression(ctx.primary_expression)
+    }
+    null
+  }
+
+  override def visitPrimary_expression(ctx: MXDRParser.Primary_expressionContext): Void
+  = {
+    if(ctx.children.contains(ctx.IDENTIFIER)){
+        out.print(ctx.IDENTIFIER.getText())
+    }
+    else if(ctx.children.contains(ctx.TRUE)){
+        out.print(ctx.TRUE.getText())
+    }
+    else if(ctx.children.contains(ctx.FALSE)){
+        out.print(ctx.FALSE.getText())
+    }
+    else if(ctx.children.contains(ctx.CONSTANT)){
+        out.print(ctx.CONSTANT.getText())
+    }
+    else{
+        out.print("( " + visitExpression(ctx.expression) + " )")
+    }
+    null
+  }
+
+  def visitRange_constraint(ctx: MXDRParser.Range_constraintContext, floatFlag: Int): Void
   = {
     var lowerBound = ctx.getChild(0).getText
     var upperBound = ctx.getChild(2).getText
