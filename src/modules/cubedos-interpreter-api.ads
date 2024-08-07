@@ -89,10 +89,10 @@ package CubedOS.Interpreter.API is
        Depends => (Decode_Status => Message),
        Pre => Is_Set_Request(Message);
 
-   procedure Set_Reply_Decode(Message : in  Message_Record; Decode_Status : out Message_Status_Type)
+   procedure Set_Reply_Decode(Message : in  Message_Record; Decode_Status : out Message_Status_Type; Value : out Positive)
      with
        Global => null,
-       Depends => (Decode_Status => Message),
+       Depends => ((Decode_Status, Value) => Message),
        Pre => Is_Set_Reply(Message);
 
    procedure Add_Request_Decode(Message : in  Message_Record; Decode_Status : out Message_Status_Type)
@@ -101,10 +101,10 @@ package CubedOS.Interpreter.API is
        Depends => (Decode_Status => Message),
        Pre => Is_Set_Request(Message);
 
-   procedure Add_Reply_Decode(Message : in  Message_Record; Decode_Status : out Message_Status_Type)
+   procedure Add_Reply_Decode(Message : in  Message_Record; Decode_Status : out Message_Status_Type; Value : out Positive)
      with
        Global => null,
-       Depends => (Decode_Status => Message),
+       Depends => ((Decode_Status, Value) => Message),
        Pre => Is_Set_Reply(Message);
 
 end CubedOS.Interpreter.API;

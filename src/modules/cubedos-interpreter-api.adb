@@ -123,11 +123,10 @@ package body CubedOS.Interpreter.API is
    end Set_Request_Decode;
 
 
-   procedure Set_Reply_Decode(Message : in  Message_Record; Decode_Status : out Message_Status_Type) is
+   procedure Set_Reply_Decode(Message : in  Message_Record; Decode_Status : out Message_Status_Type; Value : out Positive) is
       Position  : Data_Index_Type;
       Last      : Data_Index_Type;
       Raw_Value : XDR.XDR_Unsigned;
-      Value     : Positive; -- Commonly, this would be an out parameter. (Why isn't it? --pchapin)
    begin
       pragma Warnings(Off, """Last"" is set by ""Decode""", Reason => "No further decoding required");
 
@@ -156,11 +155,10 @@ package body CubedOS.Interpreter.API is
    end Add_Request_Decode;
 
 
-   procedure Add_Reply_Decode(Message : in  Message_Record; Decode_Status : out Message_Status_Type) is
+   procedure Add_Reply_Decode(Message : in  Message_Record; Decode_Status : out Message_Status_Type; Value : out Positive) is
       Position  : Data_Index_Type;
       Last      : Data_Index_Type;
       Raw_Value : XDR.XDR_Unsigned;
-      Value     : Positive; -- Commonly, this would be an out parameter. (Why isn't it? --pchapin)
    begin
       pragma Warnings(Off, """Last"" is set by ""Decode""", Reason => "No further decoding required");
 
