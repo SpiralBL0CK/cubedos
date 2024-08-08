@@ -77,23 +77,23 @@ package CubedOS.m0003.API is
    type v23 is new CubedOS.Lib.Octet_Array;
 
    type v24 is
-      (red, 
-      blue, 
+      (red,
+      blue,
       green);
 
    type v25 is
-      (red, 
-      blue, 
+      (red,
+      blue,
       green);
 
    type v26 is 
-         (red, 
-         blue, 
+         (red,
+         blue,
          green);
 
    type v27 is 
-         (red, 
-         blue, 
+         (red,
+         blue,
          green);
 
    type v28 is
@@ -216,13 +216,13 @@ package CubedOS.m0003.API is
    type v59 is new CubedOS.Lib.Octet_Array;
 
    type v60 is
-      (red, 
-      blue, 
+      (red,
+      blue,
       green);
 
    type v61 is
-      (red, 
-      blue, 
+      (red,
+      blue,
       green);
 
    type v62 is

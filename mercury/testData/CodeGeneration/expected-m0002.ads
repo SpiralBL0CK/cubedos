@@ -24,8 +24,8 @@ package CubedOS.m0002.API is
       Reddish);
 
    type Color is
-      (red, 
-      green, 
+      (red,
+      green,
       blue);
 
    type Hello is new Lib.Quadruple_Octet range 1 .. 2;
@@ -78,8 +78,8 @@ package CubedOS.m0002.API is
       end record;
 
    type Other_Colors is
-      (yellow, 
-      orange, 
+      (yellow,
+      orange,
       violet);
 
    function Reddish_Encode

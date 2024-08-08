@@ -313,7 +313,7 @@ class SpecificationGenerator(
           out.print(enumerator)
         }
         if (i < (v - 1)) {
-          out.println(", ")
+          out.println(",")
           doIndentation()
         }
       }
@@ -324,7 +324,7 @@ class SpecificationGenerator(
         val enumerator = it.next()
         out.print(enumerator.getText)
         if (it.hasNext) {
-          out.println(", ")
+          out.println(",")
           doIndentation()
         }
       }

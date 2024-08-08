@@ -5,4 +5,3 @@ message struct -> Take_Image_Request {
 message struct <- Take_Image_Reply {
     string File_Name<128>;
 };
-

@@ -47,8 +47,8 @@ package CubedOS.m0004.API is
    type f12 is array (0 .. 5) of f11;
 
    type e1_Intermediary is
-      (red, 
-      blue, 
+      (red,
+      blue,
       green);
 
    type e1 is array (0 .. 2) of e1_Intermediary;
