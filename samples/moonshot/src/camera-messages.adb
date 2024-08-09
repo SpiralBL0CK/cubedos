@@ -19,15 +19,15 @@ package body Camera.Messages is
    is
       Image_Reply : Message_Record;
    begin
-      if Message.Message_ID mod 2 = 0 then
+      if Message.Request_ID mod 2 = 0 then
          Image_Reply := Camera.API.Take_Image_Reply_Encode
           (Receiver_Address => Message.Sender_Address,
-           Request_ID => Message.Request_ID,
+           Request_ID => 2,
            File_Name => "Image-Korolev.jpg");
       else
          Image_Reply := Camera.API.Take_Image_Reply_Encode
            (Receiver_Address => Message.Sender_Address,
-            Request_ID => Message.Request_ID,
+            Request_ID => 1,
             File_Name => "Image-Copernicus.jpg");
       end if;
       Route_Message(Image_Reply);

@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- FILE   : SAMPLE_MODULE-messages.ads
+-- FILE   : controller-messages.ads
 -- SUBJECT: Specification of a package that implements the main part of the module.
 -- AUTHOR : (C) Copyright 2024 by Vermont State University
 --

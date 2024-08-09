@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
--- FILE   : SAMPLE_MODULE-messages.adb
+-- FILE   : controller-messages.adb
 -- SUBJECT: Body of a package that implements the main part of the module.
 -- AUTHOR : (C) Copyright 2024 by Vermont State University
 --
@@ -15,8 +15,6 @@ with CubedOS.Time_Server.API;
 with Camera.API;
 with Ada.Text_IO;
 use CubedOS.File_Server.API;
-
--- with CubedOS.Time_Server.Messages;
 
 package body Controller.Messages is
    use Message_Manager;
@@ -38,7 +36,7 @@ package body Controller.Messages is
    -- Message Handling
    -------------------
 
-   procedure Handle_Ping_Reply(Message : in Message_Record)
+   procedure Handle_Tick_Reply(Message : in Message_Record)
      with Pre => CubedOS.Time_Server.API.Is_Tick_Reply(Message)
    is
       Series_ID : CubedOS.Time_Server.API.Series_ID_Type;
@@ -54,7 +52,7 @@ package body Controller.Messages is
       if Status = Message_Manager.Success then
          Image_Request := Camera.API.Take_Image_Request_Encode
            (Sender_Address => Name_Resolver.Controller,
-            Request_ID => 1);
+            Request_ID => Request_ID_Type(Count));
          Message_Manager.Route_Message(Image_Request);
          Ada.Text_IO.Put_Line("Ping has been handled. Image request has been sent to camera...");
       else
@@ -62,14 +60,14 @@ package body Controller.Messages is
                                             CubedOS.Log_Server.API.Error,
                                             "Tick message has decoded inccorectly!");
       end if;
-   end Handle_Ping_Reply;
+   end Handle_Tick_Reply;
 
    procedure Handle_Image_Reply(Message : in Message_Record)
      with Pre => Camera.API.Is_Take_Image_Reply(Message)
    is
       Status : Message_Status_Type;
-      File_Name : String(1..30);
-      Name_Size : Natural;
+      Name_Size : Natural := 0;
+      File_Name : String(1 .. 128);
       Open_Request : Message_Record;
    begin
       Camera.API.Take_Image_Reply_Decode
@@ -84,7 +82,7 @@ package body Controller.Messages is
             Mode => CubedOS.File_Server.API.Read,
             Name => File_Name);
          Message_Manager.Route_Message(Open_Request);
-         Ada.Text_IO.Put_Line("Image reply has been handled, open request has been sent");
+         Ada.Text_IO.Put_Line("Image reply has been handled, open request for " & File_Name);
       else
          CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
                                             CubedOS.Log_Server.API.Error,
@@ -124,7 +122,7 @@ package body Controller.Messages is
    begin
       if CubedOS.Time_Server.API.Is_Tick_Reply(Message) then
          Ada.Text_IO.Put_Line("Tick reply has been received");
-         Handle_Ping_Reply(Message);
+         Handle_Tick_Reply(Message);
       elsif Camera.API.Is_Take_Image_Reply(Message) then
          Ada.Text_IO.Put_Line("Image Reply has been received");
          Handle_Image_Reply(Message);
