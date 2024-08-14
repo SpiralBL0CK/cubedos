@@ -25,7 +25,7 @@ package body Controller.Messages is
       Periodic_Message := CubedOS.Time_Server.API.Relative_Request_Encode
         (Sender_Address => Name_Resolver.Controller,
          Request_ID => 1,
-         Tick_Interval => Ada.Real_Time.Seconds(10),
+         Tick_Interval => Ada.Real_Time.Seconds(3),
          Request_Type => CubedOS.Time_Server.API.Periodic,
          Series_ID => 1);
       Message_Manager.Route_Message
@@ -54,7 +54,7 @@ package body Controller.Messages is
            (Sender_Address => Name_Resolver.Controller,
             Request_ID => Request_ID_Type(Count));
          Message_Manager.Route_Message(Image_Request);
-         Ada.Text_IO.Put_Line("Ping has been handled. Image request has been sent to camera...");
+         Ada.Text_IO.Put_Line("Tink has been handled. Image request has been sent to camera...");
       else
          CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
                                             CubedOS.Log_Server.API.Error,
@@ -72,7 +72,7 @@ package body Controller.Messages is
    begin
       Camera.API.Take_Image_Reply_Decode
          (Message => Message,
-          File_Name => File_Name,
+          File_Name => File_Name(1 .. Name_Size),
           File_Name_Size => Name_Size,
           Decode_Status => Status);
       if Status = Message_Manager.Success then
@@ -80,9 +80,10 @@ package body Controller.Messages is
            (Sender_Address => Name_Resolver.Controller,
             Request_ID => 1,
             Mode => CubedOS.File_Server.API.Read,
-            Name => File_Name);
+            Name => File_Name(1 .. Name_Size));
+         Ada.Text_IO.Put_Line("Routing Message... " & Integer'Image(Name_Size));
          Message_Manager.Route_Message(Open_Request);
-         Ada.Text_IO.Put_Line("Image reply has been handled, open request for " & File_Name);
+         Ada.Text_IO.Put_Line("Image reply has been handled, open request for " & File_Name(1 .. Name_Size));
       else
          CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
                                             CubedOS.Log_Server.API.Error,
@@ -124,10 +125,10 @@ package body Controller.Messages is
          Ada.Text_IO.Put_Line("Tick reply has been received");
          Handle_Tick_Reply(Message);
       elsif Camera.API.Is_Take_Image_Reply(Message) then
-         Ada.Text_IO.Put_Line("Image Reply has been received");
+         Ada.Text_IO.Put_Line("Image reply has been received");
          Handle_Image_Reply(Message);
       elsif CubedOS.File_Server.API.Is_Open_Reply(Message) then
-         Ada.Text_IO.Put_Line("Open Reply has been received");
+         Ada.Text_IO.Put_Line("Open reply has been received");
          Handle_Open_Reply(Message);
       else
          CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
