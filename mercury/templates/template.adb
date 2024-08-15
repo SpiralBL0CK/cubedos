@@ -10,6 +10,7 @@
 pragma SPARK_Mode(On);
 
 with CubedOS.Lib;
+with CubedOS.Log_Server.API;
 use  CubedOS.Lib;
 
 package body %MODULENAME%.API is

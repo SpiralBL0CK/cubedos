@@ -10,6 +10,7 @@
 pragma SPARK_Mode(On);
 
 with CubedOS.Lib;
+with CubedOS.Log_Server.API;
 use  CubedOS.Lib;
 
 package body CubedOS.m0004.API is
@@ -164,6 +165,9 @@ package body CubedOS.m0004.API is
                   Decode_Status := Success;
                else
                   Decode_Status := Malformed;
+                  CubedOS.Log_Server.API.Log_Message(Name_Resolver.m0004,
+                                                      CubedOS.Log_Server.API.Error,
+                                                      "Decode_Status is Malformed!");
                end if;
             end if;
          end loop;
@@ -176,6 +180,9 @@ package body CubedOS.m0004.API is
                   Decode_Status := Success;
                else
                   Decode_Status := Malformed;
+                  CubedOS.Log_Server.API.Log_Message(Name_Resolver.m0004,
+                                                      CubedOS.Log_Server.API.Error,
+                                                      "Decode_Status is Malformed!");
                end if;
             end if;
          end loop;
@@ -188,6 +195,9 @@ package body CubedOS.m0004.API is
                   Decode_Status := Success;
                else
                   Decode_Status := Malformed;
+                  CubedOS.Log_Server.API.Log_Message(Name_Resolver.m0004,
+                                                      CubedOS.Log_Server.API.Error,
+                                                      "Decode_Status is Malformed!");
                end if;
             end if;
          end loop;
@@ -200,6 +210,9 @@ package body CubedOS.m0004.API is
                   Decode_Status := Success;
                else
                   Decode_Status := Malformed;
+                  CubedOS.Log_Server.API.Log_Message(Name_Resolver.m0004,
+                                                      CubedOS.Log_Server.API.Error,
+                                                      "Decode_Status is Malformed!");
                end if;
             end if;
          end loop;
@@ -212,6 +225,9 @@ package body CubedOS.m0004.API is
                   Decode_Status := Success;
                else
                   Decode_Status := Malformed;
+                  CubedOS.Log_Server.API.Log_Message(Name_Resolver.m0004,
+                                                      CubedOS.Log_Server.API.Error,
+                                                      "Decode_Status is Malformed!");
                end if;
             end if;
          end loop;
@@ -224,6 +240,9 @@ package body CubedOS.m0004.API is
                   Decode_Status := Success;
                else
                   Decode_Status := Malformed;
+                  CubedOS.Log_Server.API.Log_Message(Name_Resolver.m0004,
+                                                      CubedOS.Log_Server.API.Error,
+                                                      "Decode_Status is Malformed!");
                end if;
             end if;
          end loop;
@@ -235,6 +254,9 @@ package body CubedOS.m0004.API is
                   mss1(Y).e2(I) := e1'Val(Raw_mss1_e2);
                else
                   Decode_Status := Malformed;
+                  CubedOS.Log_Server.API.Log_Message(Name_Resolver.m0004,
+                                                      CubedOS.Log_Server.API.Error,
+                                                      "Decode_Status is Malformed!");
                   mss1(Y).e2(I) := e1'First;
                end if;
             end if;
@@ -248,6 +270,9 @@ package body CubedOS.m0004.API is
                   Decode_Status := Success;
                else
                   Decode_Status := Malformed;
+                  CubedOS.Log_Server.API.Log_Message(Name_Resolver.m0004,
+                                                      CubedOS.Log_Server.API.Error,
+                                                      "Decode_Status is Malformed!");
                end if;
             end if;
          end loop;
@@ -260,6 +285,9 @@ package body CubedOS.m0004.API is
                   Decode_Status := Success;
                else
                   Decode_Status := Malformed;
+                  CubedOS.Log_Server.API.Log_Message(Name_Resolver.m0004,
+                                                      CubedOS.Log_Server.API.Error,
+                                                      "Decode_Status is Malformed!");
                end if;
             end if;
          end loop;
@@ -272,6 +300,9 @@ package body CubedOS.m0004.API is
                   Decode_Status := Success;
                else
                   Decode_Status := Malformed;
+                  CubedOS.Log_Server.API.Log_Message(Name_Resolver.m0004,
+                                                      CubedOS.Log_Server.API.Error,
+                                                      "Decode_Status is Malformed!");
                end if;
             end if;
          end loop;
@@ -284,6 +315,9 @@ package body CubedOS.m0004.API is
                e3(I) := e1'Val(Raw_e3);
             else
                Decode_Status := Malformed;
+               CubedOS.Log_Server.API.Log_Message(Name_Resolver.m0004,
+                                                   CubedOS.Log_Server.API.Error,
+                                                   "Decode_Status is Malformed!");
                e3(I) := e1'First;
             end if;
          end if;
@@ -305,6 +339,9 @@ package body CubedOS.m0004.API is
                Decode_Status := Success;
             else
                Decode_Status := Malformed;
+               CubedOS.Log_Server.API.Log_Message(Name_Resolver.m0004,
+                                                   CubedOS.Log_Server.API.Error,
+                                                   "Decode_Status is Malformed!");
             end if;
          end if;
       end loop;

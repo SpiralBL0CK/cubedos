@@ -495,6 +495,14 @@ class BodyGenerator(
             doIndentation()
             out.println("Decode_Status := Malformed;")
             doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 12
+            doIndentation()
             out.println(sf + "." + y + "(I)" + " := " + sp + "'First;")
             indentationLevel -= 1
             doIndentation()
@@ -622,7 +630,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -657,7 +672,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -692,7 +714,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -727,7 +756,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -762,7 +798,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -797,7 +840,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -832,7 +882,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -867,75 +924,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
             doIndentation()
-            out.println("end if;")
-            indentationLevel -= 1
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
             doIndentation()
-            out.println("end if;")
-            indentationLevel -= 1
+            out.println("CubedOS.Log_Server.API.Error,")
             doIndentation()
-            out.println("end loop;")
-          }
-          else if (sp == "null" && symbolTable.getArraySType(i, y) == "UIntRep") {
-            doIndentation()
-            out.println("for I in Integer range 0 .. " + symbolTable.getArraySSize(i, y) + " loop")
-            indentationLevel += 1
-            doIndentation()
-            out.println("if Decode_Status = Success then")
-            indentationLevel += 1
-            doIndentation()
-            out.println("XDR.Decode(Message.Payload, Position, Raw_" + sd + y + ", Last);")
-            doIndentation()
-            out.println("Position := Last + 1;")
-            doIndentation()
-            out.println("if Raw_" + sd + y + " in XDR.XDR_Unsigned(Lib.Quadruple_Octet'First) .. XDR.XDR_Unsigned(Lib.Quadruple_Octet'Last) then")
-            indentationLevel += 1
-            doIndentation()
-            out.println(sf + "." + y + "(I)" + " := Lib.Quadruple_Octet(Raw_" + sd + y + ");")
-            doIndentation()
-            out.println("Decode_Status := Success;")
-            indentationLevel -= 1
-            doIndentation()
-            out.println("else")
-            indentationLevel += 1
-            doIndentation()
-            out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
-            doIndentation()
-            out.println("end if;")
-            indentationLevel -= 1
-            doIndentation()
-            out.println("end if;")
-            indentationLevel -= 1
-            doIndentation()
-            out.println("end loop;")
-          }
-          else if (sp == "null" && symbolTable.getArraySType(i, y) == "IntRep") {
-            doIndentation()
-            out.println("for I in Integer range 0 .. " + symbolTable.getArraySSize(i, y) + " loop")
-            indentationLevel += 1
-            doIndentation()
-            out.println("if Decode_Status = Success then")
-            indentationLevel += 1
-            doIndentation()
-            out.println("XDR.Decode(Message.Payload, Position, Raw_" + sd + y + ", Last);")
-            doIndentation()
-            out.println("Position := Last + 1;")
-            doIndentation()
-            out.println("if Raw_" + sd + y + " in XDR.XDR_Integer(Integer'First) .. XDR.XDR_Integer(Integer'Last) then")
-            indentationLevel += 1
-            doIndentation()
-            out.println(sf + "." + y + "(I)" + " := Integer(Raw_" + sd + y + ");")
-            doIndentation()
-            out.println("Decode_Status := Success;")
-            indentationLevel -= 1
-            doIndentation()
-            out.println("else")
-            indentationLevel += 1
-            doIndentation()
-            out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -969,7 +965,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -1003,7 +1006,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -1041,6 +1051,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 12
           doIndentation()
           out.println(sf + "." + y + " := " + sp + "'First;")
           indentationLevel -= 1
@@ -1164,7 +1182,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1197,7 +1222,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1231,7 +1263,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1265,7 +1304,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1298,7 +1344,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1332,7 +1385,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1365,7 +1425,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1399,7 +1466,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1432,7 +1506,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1465,7 +1546,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1499,7 +1587,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1533,7 +1628,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1561,7 +1663,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           doIndentation()
@@ -1588,7 +1697,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1621,7 +1737,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1656,7 +1779,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1690,7 +1820,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -1763,6 +1900,14 @@ class BodyGenerator(
             doIndentation()
             out.println("Decode_Status := Malformed;")
             doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 12
+            doIndentation()
             out.println(sf + "." + y + "(I)" + " := " + sp + "'First;")
             indentationLevel -= 1
             doIndentation()
@@ -1890,7 +2035,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -1925,7 +2077,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -1960,7 +2119,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -1995,7 +2161,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -2030,7 +2203,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -2065,7 +2245,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -2100,7 +2287,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -2135,7 +2329,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -2169,7 +2370,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -2203,7 +2411,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -2237,7 +2452,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -2271,7 +2493,14 @@ class BodyGenerator(
             indentationLevel += 1
             doIndentation()
             out.println("Decode_Status := Malformed;")
-            indentationLevel -= 1
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+            indentationLevel += 12
+            doIndentation()
+            out.println("CubedOS.Log_Server.API.Error,")
+            doIndentation()
+            out.println(""""Decode_Status is Malformed!");""");
+            indentationLevel -= 13
             doIndentation()
             out.println("end if;")
             indentationLevel -= 1
@@ -2309,6 +2538,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 12
           doIndentation()
           out.println(sf + "." + y + " := " + sp + "'First;")
           indentationLevel -= 1
@@ -2432,7 +2669,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2465,7 +2709,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2499,7 +2750,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2533,7 +2791,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2566,7 +2831,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2600,7 +2872,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2633,7 +2912,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2667,7 +2953,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2700,7 +2993,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2733,7 +3033,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2767,7 +3074,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2801,7 +3115,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2829,7 +3150,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           doIndentation()
@@ -2856,7 +3184,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2889,7 +3224,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2924,7 +3266,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2958,7 +3307,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -2969,7 +3325,6 @@ class BodyGenerator(
     }
     null
   }
-
   //Process same variable names for encodes as decodes based on struct elements.
   def processStructE(id: String, i: String, l: List[String], structNum: Int): Void = {
     if (structNum == 0) {
@@ -4903,6 +5258,14 @@ class BodyGenerator(
           doIndentation()
           out.println("Decode_Status := Malformed;")
           doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 12
+          doIndentation()
           out.println(i + "(I)" + " := " + s + "'First;")
           indentationLevel -= 1
           doIndentation()
@@ -5030,7 +5393,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -5064,7 +5434,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -5099,7 +5476,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -5133,7 +5517,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -5167,7 +5558,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -5202,7 +5600,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -5236,7 +5641,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -5271,7 +5683,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -5305,7 +5724,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -5339,7 +5765,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -5373,7 +5806,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -5407,7 +5847,14 @@ class BodyGenerator(
           indentationLevel += 1
           doIndentation()
           out.println("Decode_Status := Malformed;")
-          indentationLevel -= 1
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+          indentationLevel += 12
+          doIndentation()
+          out.println("CubedOS.Log_Server.API.Error,")
+          doIndentation()
+          out.println(""""Decode_Status is Malformed!");""");
+          indentationLevel -= 13
           doIndentation()
           out.println("end if;")
           indentationLevel -= 1
@@ -5442,6 +5889,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 12
         doIndentation()
         out.println(i + " := " + s + "'First;")
         indentationLevel -= 1
@@ -5550,7 +6005,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -5580,7 +6042,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -5611,7 +6080,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -5641,7 +6117,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -5671,7 +6154,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -5702,7 +6192,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -5732,7 +6229,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -5763,7 +6267,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -5793,7 +6304,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -5823,7 +6341,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -5853,7 +6378,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -5883,7 +6415,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -5911,7 +6450,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         doIndentation()
@@ -5935,7 +6481,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -5965,7 +6518,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -5997,7 +6557,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
-        indentationLevel -= 1
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 13
         doIndentation()
         out.println("end if;")
         indentationLevel -= 1
@@ -6031,6 +6598,14 @@ class BodyGenerator(
         indentationLevel += 1
         doIndentation()
         out.println("Decode_Status := Malformed;")
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Log_Message(Name_Resolver." + nameInResolver + ",")
+        indentationLevel += 12
+        doIndentation()
+        out.println("CubedOS.Log_Server.API.Error,")
+        doIndentation()
+        out.println(""""Decode_Status is Malformed!");""");
+        indentationLevel -= 12
         doIndentation()
         out.println(i + " := " + s + "'First;")
         indentationLevel -= 1

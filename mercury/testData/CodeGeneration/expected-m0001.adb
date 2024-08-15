@@ -10,6 +10,7 @@
 pragma SPARK_Mode(On);
 
 with CubedOS.Lib;
+with CubedOS.Log_Server.API;
 use  CubedOS.Lib;
 
 package body CubedOS.m0001.API is
@@ -58,6 +59,9 @@ package body CubedOS.m0001.API is
             Decode_Status := Success;
          else
             Decode_Status := Malformed;
+            CubedOS.Log_Server.API.Log_Message(Name_Resolver.m0001,
+                                                CubedOS.Log_Server.API.Error,
+                                                "Decode_Status is Malformed!");
          end if;
       end if;
    end Trivial_Request_Decode;
@@ -105,6 +109,9 @@ package body CubedOS.m0001.API is
             Decode_Status := Success;
          else
             Decode_Status := Malformed;
+            CubedOS.Log_Server.API.Log_Message(Name_Resolver.m0001,
+                                                CubedOS.Log_Server.API.Error,
+                                                "Decode_Status is Malformed!");
          end if;
       end if;
    end Trivial_Reply_Decode;
