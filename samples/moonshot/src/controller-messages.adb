@@ -25,7 +25,7 @@ package body Controller.Messages is
       Periodic_Message := CubedOS.Time_Server.API.Relative_Request_Encode
         (Sender_Address => Name_Resolver.Controller,
          Request_ID => 1,
-         Tick_Interval => Ada.Real_Time.Seconds(3),
+         Tick_Interval => Ada.Real_Time.Minutes(1),
          Request_Type => CubedOS.Time_Server.API.Periodic,
          Series_ID => 1);
       Message_Manager.Route_Message
