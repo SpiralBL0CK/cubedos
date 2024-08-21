@@ -13,7 +13,7 @@ with CubedOS.File_Server.API;
 with Ada.Real_Time;
 with CubedOS.Time_Server.API;
 with Camera.API;
-with Ada.Text_IO;
+with CubedOS.Lib.Space_Packets;
 use CubedOS.File_Server.API;
 
 package body Controller.Messages is
@@ -100,6 +100,9 @@ package body Controller.Messages is
    is
       Status : Message_Status_Type;
       Handle : CubedOS.File_Server.API.File_Handle_Type;
+      Read_Request : Message_Record;
+      Incomming_Message : Message_Record;
+      Header : CubedOS.Lib.Space_Packets.Primary_Header;
    begin
       CubedOS.File_Server.API.Open_Reply_Decode
         (Message => Message,
@@ -117,6 +120,32 @@ package body Controller.Messages is
          CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
                                             CubedOS.Log_Server.API.Informational,
                                             "File has been opened...");
+         -- encode a space packet of 512 octets
+         Header := CubedOS.Lib.Space_Packets.Format_Primary_Header
+           (APID => 42,
+            Packet_Type => CubedOS.Lib.Space_Packets.Telemetry,
+            Sequence_Count => 0,
+            Data_Length => 512);
+         -- encode a read request of 256 octets
+         Read_Request := CubedOS.File_Server.API.Read_Request_Encode
+           (Sender_Address => Name_Resolver.Controller,
+            Request_ID => 0,
+            Handle => Handle,
+            Amount => 256);
+         -- route message
+         Message_Manager.Route_Message(Read_Request);
+         loop
+            Message_Manager.Fetch_Message(Name_Resolver.Controller.Module_ID, Incomming_Message);
+            if CubedOS.File_Server.API.Is_Read_Reply(Incomming_Message) then
+               CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
+                                                  CubedOS.Log_Server.API.Informational,
+                                                  "Received a read reply");
+            else
+               CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
+                                                  CubedOS.Log_Server.API.Error,
+                                                  "Recieved message that was not a read reply!");
+            end if;
+         end loop;
       end if;
    end Handle_Open_Reply;
 
@@ -166,7 +195,9 @@ package body Controller.Messages is
       end loop;
    exception
       when others =>
-         Ada.Text_IO.Put_Line("Exception has been raised!!");
+         CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
+                                            CubedOS.Log_Server.API.Critical,
+                                            "Exception has been raised!!");
    end Message_Loop;
 
 end Controller.Messages;
