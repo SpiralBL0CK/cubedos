@@ -541,7 +541,7 @@ class BodyGenerator(
             doIndentation()
             out.println("end if;")
             doIndentation()
-            out.println("if " + sd + y + "_Size < 1 then")
+            out.println("if " + sd + y + "_Size >= 1 then")
             indentationLevel += 1
             doIndentation()
             out.println("XDR.Decode(Message.Payload, Position,")
@@ -1092,7 +1092,7 @@ class BodyGenerator(
           doIndentation()
           out.println("end if;")
           doIndentation()
-          out.println("if " + sd + y + "_Size < 1 then")
+          out.println("if " + sd + y + "_Size >= 1 then")
           indentationLevel += 1
           doIndentation()
           out.println("XDR.Decode(Message.Payload, Position,")
@@ -1946,7 +1946,7 @@ class BodyGenerator(
             doIndentation()
             out.println("end if;")
             doIndentation()
-            out.println("if " + sd + y + "_Size < 1 then")
+            out.println("if " + sd + y + "_Size >= 1 then")
             indentationLevel += 1
             doIndentation()
             out.println("XDR.Decode(Message.Payload, Position,")
@@ -2579,7 +2579,7 @@ class BodyGenerator(
           doIndentation()
           out.println("end if;")
           doIndentation()
-          out.println("if " + sd + y + "_Size < 1 then")
+          out.println("if " + sd + y + "_Size >= 1 then")
           indentationLevel += 1
           doIndentation()
           out.println("XDR.Decode(Message.Payload, Position,")
@@ -5926,7 +5926,7 @@ class BodyGenerator(
         doIndentation()
         out.println("end if;")
         doIndentation()
-        out.println("if " + i + "_Size < 1 then")
+        out.println("if " + i + "_Size >= 1 then")
         indentationLevel += 1
         doIndentation()
         out.println("XDR.Decode(Message.Payload, Position,")
