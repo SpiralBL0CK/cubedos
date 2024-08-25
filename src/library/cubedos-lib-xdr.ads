@@ -334,8 +334,7 @@ package CubedOS.Lib.XDR is
          Data'Length rem 4 = 0 and then
          Value'Length <= Octet_Array_Count'Last and then
          Position <= Data'Last - Length_With_Padding(Value'Length) - 1 and then
-         Value'Length <= Integer'Last - Position and then
-         Value'Length >= Value'Last - Value'First + 1,
+         Value'Length <= Integer'Last - Position,
        Post => Last = Position + (Length_With_Padding(Value'Length) - 1);
 
 end CubedOS.Lib.XDR;

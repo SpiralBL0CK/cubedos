@@ -102,7 +102,11 @@ package body Controller.Messages is
       Handle : CubedOS.File_Server.API.File_Handle_Type;
       Read_Request : Message_Record;
       Incomming_Message : Message_Record;
-      Header : CubedOS.Lib.Space_Packets.Primary_Header;
+      Amount_Read : Read_Result_Size_Type;
+      Data : CubedOS.Lib.Octet_Array(0 .. 256);   -- the data decoded from the image
+      Space_Packet : CubedOS.Lib.Space_Packets.Space_Packet(512);
+      Space_Data : CubedOS.Lib.Octet_Array(0 .. 512); -- the full data to send in the space packet
+      Position : CubedOS.Lib.Octet_Array_Index := 0;  -- the index to which Space_Data has been filled
    begin
       CubedOS.File_Server.API.Open_Reply_Decode
         (Message => Message,
@@ -115,13 +119,13 @@ package body Controller.Messages is
       elsif Handle = CubedOS.File_Server.API.Invalid_Handle then
          CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
                                             CubedOS.Log_Server.API.Error,
-                                            "File failed to open");
+                                            "Image file failed to open");
       else
          CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
                                             CubedOS.Log_Server.API.Informational,
-                                            "File has been opened...");
+                                            "Image file has been opened. Sending a read request...");
          -- encode a space packet of 512 octets
-         Header := CubedOS.Lib.Space_Packets.Format_Primary_Header
+         Space_Packet.Header := CubedOS.Lib.Space_Packets.Format_Primary_Header
            (APID => 42,
             Packet_Type => CubedOS.Lib.Space_Packets.Telemetry,
             Sequence_Count => 0,
@@ -140,6 +144,46 @@ package body Controller.Messages is
                CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
                                                   CubedOS.Log_Server.API.Informational,
                                                   "Received a read reply");
+               Read_Reply_Decode(Incomming_Message, Handle, Amount_Read, Data, Status);
+               if Status = Malformed then
+                  CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
+                                                     CubedOS.Log_Server.API.Error,
+                                                     "Read reply is malformed! Closing image...");
+                  Message_Manager.Route_Message
+                    (CubedOS.File_Server.API.Close_Request_Encode
+                       (Name_Resolver.Controller, 0, Handle));
+               else
+                  if Amount_Read = 0 then
+                     CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
+                                                        CubedOS.Log_Server.API.Informational,
+                                                        "Finished reading image, closing file...");
+                     Message_Manager.Route_Message
+                       (CubedOS.File_Server.API.Close_Request_Encode
+                          (Name_Resolver.Controller, 0, Handle));
+                     if Position > 0 then
+                        Space_Packet := CubedOS.Lib.Space_Packets.From_Raw_Array(Space_Data(Space_Data'First .. Position + Space_Data'First));
+                        -- TODO: send last space packet
+                     end if;
+                  elsif Position + Amount_Read > Space_Data'Last then
+                     Space_Data(Position + Space_Data'First .. Space_Data'Last)
+                       := Data(Data'First .. Space_Data'Last - Position + Data'First);
+                     Space_Packet := CubedOS.Lib.Space_Packets.From_Raw_Array(Space_Data);
+                     -- TODO: send space packet
+                     Space_Data(Space_Data'First ..  Data'Last - (Space_Data'Last - Position + Data'First))
+                       := Data(Space_Data'Last - Position + Data'First .. Data'Last);
+                     Position := Data'Last - (Space_Data'Last - Position) + 1;
+                     Message_Manager.Route_Message
+                       (CubedOS.File_Server.API.Read_Request_Encode(Name_Resolver.Controller, 0, Handle, 256));
+                  else
+                     Space_Data(Position .. Position + Data'Length) := Data;
+                     Position := Position + Data'Length + 1;
+                     CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
+                                                        CubedOS.Log_Server.API.Informational,
+                                                        "Loading space packet");
+                     Message_Manager.Route_Message
+                       (CubedOS.File_Server.API.Read_Request_Encode(Name_Resolver.Controller, 0, Handle, 256));
+                  end if;
+               end if;
             else
                CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
                                                   CubedOS.Log_Server.API.Error,
