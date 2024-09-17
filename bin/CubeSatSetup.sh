@@ -52,8 +52,14 @@ fi
 echo "Moving into ./AdaCore/"
 cd AdaCore
 
-# Find all the .tar.gz files and extract them
-find . -type f -name "*-bin.tar.gz" -exec tar -xzf {} \;
+ARCHIVE_COUNT=$(find . -type f -name "*-bin.tar.gz" | wc -l)
+EXTRACTED_COUNT=$(find ./*-bin -maxdepth 0 -type d | wc -l)
+if [[ $ARCHIVE_COUNT -ne $EXTRACTED_COUNT ]]; then
+    # Find all the .tar.gz files and extract them
+    echo
+    echo "Unpacking archives..."
+    find . -type f -name "*-bin.tar.gz" -exec tar -xzf {} \;
+fi
 
 # Install
 
@@ -69,13 +75,21 @@ fi
 
 for installer in *-bin/; do
     cd $installer
-    folder=$( echo $installer | cut -d"-" -f1 )ls
+    folder=$( echo $installer | cut -d"-" -f1 )
     sudo -u $RUN_USER ./doinstall $INSTALL_ROOT/$folder
     cd ..
 done
 
-echo "Please add the following directories to your path:"
-echo $INSTALL_ROOT/*/bin
+clear
+
+BIN_FOLDERS=$(echo $INSTALL_ROOT/*/bin)
+
+echo
+echo ">>>>>----------------------------------------<<<<<"
+echo "Please use the following in .bashrc/.profile"
+echo "to add bin directories to your path:"
+echo
+echo "export PATH=${BIN_FOLDERS// /:}:\$PATH"
 echo
 echo "Also include the following exports for Ada language libraries:"
 echo "GPR_PROJECT_PATH=$INSTALL_ROOT/libadalang/share/gpr:$GPR_PROJECT_PATH"
