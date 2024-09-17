@@ -58,19 +58,19 @@ find . -type f -name "*-bin.tar.gz" -exec tar -xzf {} \;
 # Install
 
 # Change our install context based on single user or all users
-alias run_context=""
+RUN_USER=$(whoami)
 INSTALL_ROOT="$HOME/.ada_spark"
 
 read -r -p "Would you like to install for all users? (Requires sudo privileges) [y/N] " response
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
-    alias run_context="sudo"
+    RUN_USER="root"
     INSTALL_ROOT="/opt"
 fi
 
 for installer in *-bin/; do
     cd $installer
     folder=$( echo $installer | cut -d"-" -f1 )ls
-    run_context ./doinstall $INSTALL_ROOT/$folder
+    sudo -u $RUN_USER ./doinstall $INSTALL_ROOT/$folder
     cd ..
 done
 
