@@ -15,17 +15,20 @@ with CubedOS.Time_Server.API;
 with Camera.API;
 with CubedOS.Lib.Space_Packets;
 use CubedOS.File_Server.API;
+with Ada.Exceptions;
 
 package body Controller.Messages is
    use Message_Manager;
 
+   -- Start the periodic ticks every minute.
+   -- This will prompt images from the camera.
    procedure Initialize is
       Periodic_Message : Message_Record;
    begin
       Periodic_Message := CubedOS.Time_Server.API.Relative_Request_Encode
         (Sender_Address => Name_Resolver.Controller,
          Request_ID => 1,
-         Tick_Interval => Ada.Real_Time.Minutes(1),
+         Tick_Interval => Ada.Real_Time.Seconds(10),
          Request_Type => CubedOS.Time_Server.API.Periodic,
          Series_ID => 1);
       Message_Manager.Route_Message
@@ -36,6 +39,7 @@ package body Controller.Messages is
    -- Message Handling
    -------------------
 
+   -- when a tick is received, a Take_Image_Request is sent to the camera
    procedure Handle_Tick_Reply(Message : in Message_Record)
      with Pre => CubedOS.Time_Server.API.Is_Tick_Reply(Message)
    is
@@ -64,6 +68,8 @@ package body Controller.Messages is
       end if;
    end Handle_Tick_Reply;
 
+   -- When an image reply is received from the camera,
+   -- an open request is sent to the File Server to open it.
    procedure Handle_Image_Reply(Message : in Message_Record)
      with Pre => Camera.API.Is_Take_Image_Reply(Message)
    is
@@ -95,6 +101,7 @@ package body Controller.Messages is
       end if;
    end Handle_Image_Reply;
 
+   -- When an open reply is received from the File Server, we start reading the file
    procedure Handle_Open_Reply(Message : in Message_Record)
      with Pre => CubedOS.File_Server.API.Is_Open_Reply(Message)
    is
@@ -103,8 +110,8 @@ package body Controller.Messages is
       Read_Request : Message_Record;
       Incomming_Message : Message_Record;
       Amount_Read : Read_Result_Size_Type;
-      Data : CubedOS.Lib.Octet_Array(0 .. 256);   -- the data decoded from the image
-      Space_Packet : CubedOS.Lib.Space_Packets.Space_Packet(512);
+      Data : CubedOS.Lib.Octet_Array(0 .. 255);   -- the data decoded from the image
+      Space_Packet : CubedOS.Lib.Space_Packets.Space_Packet(511);
       Space_Data : CubedOS.Lib.Octet_Array(0 .. 512); -- the full data to send in the space packet
       Position : CubedOS.Lib.Octet_Array_Index := 0;  -- the index to which Space_Data has been filled
    begin
@@ -136,14 +143,16 @@ package body Controller.Messages is
             Request_ID => 0,
             Handle => Handle,
             Amount => 256);
-         -- route message
+         -- route the read request message
          Message_Manager.Route_Message(Read_Request);
+
+         -- loop through until image is finished being read.
          loop
             Message_Manager.Fetch_Message(Name_Resolver.Controller.Module_ID, Incomming_Message);
             if CubedOS.File_Server.API.Is_Read_Reply(Incomming_Message) then
                CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
                                                   CubedOS.Log_Server.API.Informational,
-                                                  "Received a read reply");
+                                                  "Received a read reply " & integer'image(data'Length));
                Read_Reply_Decode(Incomming_Message, Handle, Amount_Read, Data, Status);
                if Status = Malformed then
                   CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
@@ -153,6 +162,11 @@ package body Controller.Messages is
                     (CubedOS.File_Server.API.Close_Request_Encode
                        (Name_Resolver.Controller, 0, Handle));
                else
+                  CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
+                                                     CubedOS.Log_Server.API.Informational,
+                                                     "sucessfully read " & Read_Result_Size_Type'Image(Amount_Read) & " octets. position = "
+                                                     & CubedOS.Lib.Octet_Array_Index'Image(Position) & " Space_Data'Last = " &
+                                                    CubedOS.Lib.Octet_Array_Count'Image(Space_Data'Last));
                   if Amount_Read = 0 then
                      CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
                                                         CubedOS.Log_Server.API.Informational,
@@ -175,8 +189,9 @@ package body Controller.Messages is
                      Message_Manager.Route_Message
                        (CubedOS.File_Server.API.Read_Request_Encode(Name_Resolver.Controller, 0, Handle, 256));
                   else
-                     Space_Data(Position .. Position + Data'Length) := Data;
-                     Position := Position + Data'Length + 1;
+                     -- loop through and set data to space data.
+                     Space_Data(Position .. Position + Amount_Read) := Data;
+                     Position := Position + Amount_Read + 1;
                      CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
                                                         CubedOS.Log_Server.API.Informational,
                                                         "Loading space packet");
@@ -238,10 +253,10 @@ package body Controller.Messages is
          Process(Incoming_Message);
       end loop;
    exception
-      when others =>
+      when E : others =>
          CubedOS.Log_Server.API.Log_Message(Name_Resolver.Controller,
                                             CubedOS.Log_Server.API.Critical,
-                                            "Exception has been raised!!");
+                                            Ada.Exceptions.Exception_Message(E));
    end Message_Loop;
 
 end Controller.Messages;

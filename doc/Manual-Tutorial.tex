@@ -154,8 +154,8 @@ devices. Specifically:
   \item The Radio module will simulate a radio that can send messages to and receive messages
   from the Earth.
 
-  \item A Thruster module will simulate maneuvering thrusters that can adjust the orbit and
-  orientation of the CubeSat. 
+  % \item A Thruster module will simulate maneuvering thrusters that can adjust the orbit and
+  % orientation of the CubeSat. 
 
   \item A Controller module that will server as the main control logic for the mission. It will
   coordinate the action of the other modules to fulfill the mission objectives.
@@ -170,7 +170,8 @@ we recommend that you do \emph{not} include it there. Instead, create a folder s
 your system for your application.
 
 It is often useful to use an existing application as a starting point for new work. The Echo
-sample in the CubedOS repository is a good reference. First, create a \filename{build} and
+sample in the CubedOS repository is a good reference. You may wish to look try running this sample 
+and look back at it while developing the Moonshot tutorial. First, create a \filename{build} and
 \filename{src} folder in your application folder. Also, create a folder \filename{src/mxdr} as a
 placeholder for the MXDR files you will create later. The precise folder structure you use isn't
 mandated by CubedOS, but this is what we recommend for CubedOS applications.
@@ -330,7 +331,7 @@ package Name_Resolver is
    -- Application-Specific Modules
    Camera                  : constant Message_Address := (0, 5);
    Radio                   : constant Message_Address := (0, 6);
-   Thruster                : constant Message_Address := (0, 7);
+  %  Thruster                : constant Message_Address := (0, 7);
    Controller              : constant Message_Address := (0, 8);
 
 end Name_Resolver;
@@ -361,7 +362,10 @@ However, in this case you will get compile-time warnings, so it is less likely t
 Finally, there is no requirement that the module IDs be contiguous or start at 1. For example,
 you could assign the core modules IDs 1 through 4 and the application-specific modules IDs 10
 through 13, leaving the range 5 through 9 reserved for future expansion without renumbering the
-existing modules. This does cause the mailboxes to use more memory than is necessary, since you
+existing modules. You may notice that the module ID of 7 is missing in the above example. This
+is because in a future version of this tutorial, we may want other modules (such as a thruster).
+Leaving a gap allows us to fill the module in, without having to renumber the existing ones.
+However, this does cause the mailboxes to use more memory than is necessary, since you
 are allocating mailboxes for modules you aren't using. Also, renumbering modules later in
 development is not necessarily a problem since the compiler will manage the module ID values for
 you when it rebuilds your application.
@@ -428,7 +432,7 @@ all about which messages that module receives (called ``Requests'') and sends (c
 Characterizing messages as requests and replies follows from the view of message passing as a
 kind of client/server interaction where the client makes a request, and the server replies to
 it. However, in CubedOS, modules can act as both clients and servers, depending on what they are
-doing. Also requests can be sent without expecting a reply, and replies can be sent without ever
+doing. Also, requests can be sent without expecting a reply, and replies can be sent without ever
 receiving a request (i.e., unsolicited replies).
 
 The |Messages| package contains a task that fetches a message from the module's mailbox,
@@ -474,12 +478,14 @@ with CubedOS.Time_Server.Messages;
 with CubedOS.File_Server.Messages;
 with CubedOS.Publish_Subscribe_Server.Messages;
 with Controller.Messages;
+with Camera.Messages; -- we'll make this later, so it doesn't have to be included yet
 
 pragma Unreferenced(CubedOS.Log_Server.Messages);
 pragma Unreferenced(CubedOS.Time_Server.Messages);
 pragma Unreferenced(CubedOS.File_Server.Messages);
 pragma Unreferenced(CubedOS.Publish_Subscribe_Server.Messages);
 pragma Unreferenced(Controller.Messages);
+pragma Unreferenced(Camera.Messages);
 
 procedure Main is
 begin
@@ -621,12 +627,17 @@ six subprograms:
 \begin{verbatim}
   function  Take_Image_Request_Encode(...) return Message_Record;
   function  Is_Take_Image_Request(...) return Boolean;
-  procedure Take_Image_Request_Decode(...);
 
   function  Take_Image_Reply_Encode(...) return Message_Record;
   function  Is_Take_Image_Reply(...) return Boolean;
   procedure Take_Image_Reply_Decode(...);
 \end{verbatim}
+
+You may notice that there is no |Take_Image_Request_Decode|. This is because, as you may
+remember, the request messages have no parameters. Thus, there is nothing to decode. Mercury 
+can detect this and will make no decode function. There is however, an encode function. This
+is because, even though there is no XDR encoding of parameters, an empty message still must be
+constructed with the correct sender address and request ID. 
 
 For clarity, the details of the subprogram parameters are left out. However, all CubedOS
 messages include a |Request_ID| parameter that the sender can use to mark messages with An
@@ -746,7 +757,7 @@ Once Mercury is ready, apply the shell script wrapper to your MXDR file to gener
 packages as follows:
 
 \begin{verbatim}
-  $ mercury.sh Camera.mxdr
+  $ ./mercury.sh Camera.mxdr
 \end{verbatim}
 
 Note that this only produces \filename{camera-api.ads} and \filename{camera-api.adb}. It does
@@ -833,9 +844,9 @@ enough for our purposes. We repeat it here for convenience:
   
 \todo{Finish Me!}
 
-\subsubsection{Thruster Module}
+% \subsubsection{Thruster Module}
 
-\todo{Finish Me!}
+% \todo{Finish Me!}
 
 \subsubsection{Controller Module}
 
@@ -844,6 +855,11 @@ Controller module plays the role of the ``main'' program of the application. It 
 activity of the rest of the system. As a result, it only acts like a client to the other modules
 and provides no services that the other modules will use. It accepts no request messages, and
 has no corresponding replies. It therefor has no MXDR interface definition and no API package.
+
+\subsection{Writing a publish/subscribe channel}
+\label{sec:manual-tutorial-pub-sub}
+
+...
 
 \subsection{Writing the Application}
 \label{sec:manual-tutorial-writing}
@@ -854,7 +870,7 @@ with the Camera module.
 
 \subsubsection{Camera Module}
 
-We have only one message to implement, |Take_Image_Request|. In this tutorial we will always
+We have only one message to implement, |Handle_Take_Image_Request|. In this tutorial we will always
 return one of two hard-coded images. The file \filename{Image-Copernicus.jpg} is a picture of
 the Copernicus crater \cite{Copernicus}, and the file \filename{Image-Korolev.jpg} is a picture
 of the Korolev crater \cite{Korolev} (on the far side of the Moon).
@@ -875,9 +891,9 @@ Mercury.
   
 \todo{Finish Me!}
 
-\subsubsection{Thruster Module}
+% \subsubsection{Thruster Module}
 
-\todo{Finish Me!}
+% \todo{Finish Me!}
 
 \subsubsection{Controller Module}
 

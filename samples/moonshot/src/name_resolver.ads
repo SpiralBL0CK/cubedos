@@ -17,7 +17,7 @@ package Name_Resolver is
    -- Application-Specific Modules
    Camera            : constant Message_Address := (0,1);
    Radio             : constant Message_Address := (0,2);
-   Thruster          : constant Message_Address := (0,3);
+   --  Thruster          : constant Message_Address := (0,3);
    Controller        : constant Message_Address := (0,4);
 
 end Name_Resolver;
